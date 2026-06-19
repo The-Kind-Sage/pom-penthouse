@@ -47,7 +47,11 @@ export function Navbar() {
       }}
     >
       <div className="mx-auto max-w-[1200px] px-6 lg:px-12 flex items-center justify-between">
-        <a href="#top" className="glitch-hover font-display text-2xl tracking-tight" aria-label="Pom PentHouse home">
+        <a
+          href="#top"
+          className="glitch-hover font-display text-2xl tracking-tight"
+          aria-label="Pom PentHouse home"
+        >
           Pom
         </a>
 
@@ -67,14 +71,13 @@ export function Navbar() {
           >
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
           </button>
-          <button onClick={ui.openBooking} className="hidden md:inline-flex btn-ghost !py-2.5 !px-5 text-sm">
+          <button
+            onClick={ui.openBooking}
+            className="hidden md:inline-flex btn-ghost !py-2.5 !px-5 text-sm"
+          >
             Book a Stay
           </button>
-          <button
-            className="md:hidden p-2"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-          >
+          <button className="md:hidden p-2" onClick={() => setOpen(true)} aria-label="Open menu">
             <Menu size={22} />
           </button>
         </div>
@@ -84,7 +87,9 @@ export function Navbar() {
         <div className="fixed inset-0 z-[60] bg-[var(--paper)] flex flex-col">
           <div className="flex justify-between items-center px-6 py-5 border-b">
             <span className="font-display text-2xl">Pom</span>
-            <button onClick={() => setOpen(false)} aria-label="Close menu"><X size={24} /></button>
+            <button onClick={() => setOpen(false)} aria-label="Close menu">
+              <X size={24} />
+            </button>
           </div>
           <nav className="flex-1 flex flex-col items-center justify-center gap-8">
             {links.map((l, i) => (
@@ -99,7 +104,10 @@ export function Navbar() {
               </a>
             ))}
             <button
-              onClick={() => { setOpen(false); ui.openBooking(); }}
+              onClick={() => {
+                setOpen(false);
+                ui.openBooking();
+              }}
               className="btn-primary mt-6"
             >
               Book a Stay

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { photo } from "@/lib/images";
+import { ui } from "@/lib/ui-store";
 
 function TiltShift({ p }: { p: ReturnType<typeof photo> }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -17,14 +18,25 @@ function TiltShift({ p }: { p: ReturnType<typeof photo> }) {
         mx.set((e.clientX - r.left) / r.width);
         my.set((e.clientY - r.top) / r.height);
       }}
-      onMouseLeave={() => { mx.set(0.5); my.set(0.5); }}
+      onMouseLeave={() => {
+        mx.set(0.5);
+        my.set(0.5);
+      }}
       style={{ rotateX: rx, rotateY: ry, transformPerspective: 1000 }}
       className="relative overflow-hidden rounded-[28px] shadow-[var(--shadow-soft)] aspect-[4/5]"
     >
-      <img src={p.src} alt={p.alt} loading="lazy" decoding="async" className="object-cover w-full h-full" />
+      <img
+        src={p.src}
+        alt={p.alt}
+        loading="lazy"
+        decoding="async"
+        className="object-cover w-full h-full"
+      />
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(circle at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%)" }}
+        style={{
+          background: "radial-gradient(circle at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%)",
+        }}
       />
     </motion.div>
   );
@@ -55,11 +67,19 @@ function SplitScreen({ p }: { p: ReturnType<typeof photo> }) {
       <style>{`
         .splitscreen-day { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
       `}</style>
-      <div className="absolute inset-0 transition-all duration-[550ms]" style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }} />
-      <div className="absolute inset-0 group-hover:[clip-path:polygon(0_0,0_0,0_100%,0_100%)] transition-all duration-[550ms] ease-[cubic-bezier(0.22,1,0.36,1)] bg-cover" style={{ backgroundImage: `url(${p.src})` }} />
+      <div
+        className="absolute inset-0 transition-all duration-[550ms]"
+        style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
+      />
+      <div
+        className="absolute inset-0 group-hover:[clip-path:polygon(0_0,0_0,0_100%,0_100%)] transition-all duration-[550ms] ease-[cubic-bezier(0.22,1,0.36,1)] bg-cover"
+        style={{ backgroundImage: `url(${p.src})` }}
+      />
       <div className="absolute inset-x-0 bottom-0 p-6 text-white bg-gradient-to-t from-black/70 to-transparent">
         <h3 className="h3-lux">Sunset Lounge</h3>
-        <p className="text-sm mt-1 opacity-90">Hover to see night. Low oak sofa. Hand-thrown ceramics. Vinyl.</p>
+        <p className="text-sm mt-1 opacity-90">
+          Hover to see night. Low oak sofa. Hand-thrown ceramics. Vinyl.
+        </p>
       </div>
     </div>
   );
@@ -76,7 +96,12 @@ export function Residence() {
             <div className="mt-6">
               <p className="eyebrow mb-2">Suite</p>
               <h3 className="h2-lux">Master Suite</h3>
-              <p className="mt-3 opacity-80 max-w-md">King linen bed. Lake-facing glass. Limestone soaking bath. Walk-in cedar closet.</p>
+              <p className="mt-3 opacity-80 max-w-md">
+                King linen bed. Lake-facing glass. Limestone soaking bath. Walk-in cedar closet.
+              </p>
+              <button onClick={ui.openBooking} className="btn-primary mt-4 text-sm py-2 px-5">
+                Book Now — $110 / night
+              </button>
             </div>
           </div>
           <div>
@@ -85,14 +110,23 @@ export function Residence() {
             <div className="mt-6">
               <p className="eyebrow mb-2">Lounge</p>
               <h3 className="h2-lux">Sunset Lounge</h3>
-              <p className="mt-3 opacity-80 max-w-md">Hover to see night. Low oak sofa. Hand-thrown ceramics. Vinyl.</p>
+              <p className="mt-3 opacity-80 max-w-md">
+                Hover to see night. Low oak sofa. Hand-thrown ceramics. Vinyl.
+              </p>
+              <button onClick={ui.openBooking} className="btn-primary mt-4 text-sm py-2 px-5">
+                Book Now — $189 / night
+              </button>
             </div>
           </div>
         </div>
 
         <div className="mt-20 border-t border-[var(--gold)]/30 pt-10 grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
           {[
-            ["3", "Beds"], ["3.5", "Baths"], ["2,150", "Sq ft"], ["420", "Terrace sq ft"], ["2", "Parking"],
+            ["3", "Beds"],
+            ["3.5", "Baths"],
+            ["2,150", "Sq ft"],
+            ["420", "Terrace sq ft"],
+            ["2", "Parking"],
           ].map(([n, l]) => (
             <div key={l}>
               <div className="font-display text-5xl">{n}</div>

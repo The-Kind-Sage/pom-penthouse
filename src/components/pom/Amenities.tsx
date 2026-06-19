@@ -4,7 +4,13 @@ import { photo } from "@/lib/images";
 function FadeToSolid({ p }: { p: ReturnType<typeof photo> }) {
   return (
     <div className="group relative aspect-[4/5] rounded-[28px] overflow-hidden shadow-[var(--shadow-soft)]">
-      <img src={p.src} alt={p.alt} loading="lazy" decoding="async" className="object-cover w-full h-full transition-opacity duration-[450ms] group-hover:opacity-0" />
+      <img
+        src={p.src}
+        alt={p.alt}
+        loading="lazy"
+        decoding="async"
+        className="object-cover w-full h-full transition-opacity duration-[450ms] group-hover:opacity-0"
+      />
       <div className="absolute inset-0 bg-[var(--gold)]/95 opacity-0 group-hover:opacity-100 transition-opacity duration-[450ms] flex flex-col justify-end p-7 text-[var(--charcoal)]">
         <Sunrise size={22} className="mb-3" />
         <h3 className="h3-lux">Rooftop Terrace</h3>
@@ -20,7 +26,13 @@ function FadeToSolid({ p }: { p: ReturnType<typeof photo> }) {
 function ColorWash({ p }: { p: ReturnType<typeof photo> }) {
   return (
     <div className="group relative aspect-[4/5] rounded-[28px] overflow-hidden shadow-[var(--shadow-soft)]">
-      <img src={p.src} alt={p.alt} loading="lazy" decoding="async" className="object-cover w-full h-full" />
+      <img
+        src={p.src}
+        alt={p.alt}
+        loading="lazy"
+        decoding="async"
+        className="object-cover w-full h-full"
+      />
       <div className="absolute inset-0 bg-[var(--lake-blue)] mix-blend-multiply translate-y-full group-hover:translate-y-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]" />
       <div className="absolute inset-x-0 bottom-0 p-6 text-white">
         <Mountain size={22} className="mb-2" />
@@ -36,7 +48,13 @@ function CardFlip({ p }: { p: ReturnType<typeof photo> }) {
     <div className="group relative aspect-[4/5] [perspective:1200px]">
       <div className="relative w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
         <div className="absolute inset-0 rounded-[28px] overflow-hidden shadow-[var(--shadow-soft)] [backface-visibility:hidden]">
-          <img src={p.src} alt={p.alt} loading="lazy" decoding="async" className="object-cover w-full h-full" />
+          <img
+            src={p.src}
+            alt={p.alt}
+            loading="lazy"
+            decoding="async"
+            className="object-cover w-full h-full"
+          />
           <div className="absolute inset-x-0 bottom-0 p-6 text-white bg-gradient-to-t from-black/70 to-transparent">
             <Cpu size={22} className="mb-2" />
             <h3 className="h3-lux">Smart Home</h3>
@@ -60,11 +78,19 @@ function CardFlip({ p }: { p: ReturnType<typeof photo> }) {
 function GrayscaleColor({ p }: { p: ReturnType<typeof photo> }) {
   return (
     <div className="group relative aspect-[4/5] rounded-[28px] overflow-hidden shadow-[var(--shadow-soft)]">
-      <img src={p.src} alt={p.alt} loading="lazy" decoding="async" className="object-cover w-full h-full transition-[filter] duration-[600ms] grayscale contrast-[1.05] group-hover:grayscale-0" />
+      <img
+        src={p.src}
+        alt={p.alt}
+        loading="lazy"
+        decoding="async"
+        className="object-cover w-full h-full transition-[filter] duration-[600ms] grayscale contrast-[1.05] group-hover:grayscale-0"
+      />
       <div className="absolute inset-x-0 bottom-0 p-6 text-white bg-gradient-to-t from-black/70 to-transparent">
         <Bell size={22} className="mb-2" />
         <h3 className="h3-lux">Concierge</h3>
-        <p className="text-sm mt-1 opacity-90">Airport transfer, trek guides, private chef — on message.</p>
+        <p className="text-sm mt-1 opacity-90">
+          Airport transfer, trek guides, private chef — on message.
+        </p>
       </div>
     </div>
   );

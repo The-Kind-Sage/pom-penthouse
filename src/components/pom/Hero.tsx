@@ -65,8 +65,12 @@ export function Hero() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#contact" className="btn-primary">Schedule a Private Viewing</a>
-            <button onClick={ui.openBooking} className="btn-ghost text-[var(--off-white)]">Book a Stay</button>
+            <a href="#contact" className="btn-primary">
+              Schedule a Private Viewing
+            </a>
+            <button onClick={ui.openBooking} className="btn-ghost text-[var(--off-white)]">
+              Book a Stay
+            </button>
           </div>
         </motion.div>
       </div>

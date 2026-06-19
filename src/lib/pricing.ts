@@ -1,16 +1,19 @@
 export type RoomKey = "entire" | "suite" | "long";
 
-export const ROOMS: Record<RoomKey, { label: string; rate: number; unit: "night" | "month"; blurb: string }> = {
-  entire: { label: "Entire Penthouse", rate: 189,  unit: "night", blurb: "Full 3-bed penthouse" },
-  suite:  { label: "Master Suite Only", rate: 110, unit: "night", blurb: "King bed + private bath" },
-  long:   { label: "Long Stay",         rate: 3900, unit: "month", blurb: "30 days+ · best for remote work" },
+export const ROOMS: Record<
+  RoomKey,
+  { label: string; rate: number; unit: "night" | "month"; blurb: string }
+> = {
+  entire: { label: "Entire Penthouse", rate: 189, unit: "night", blurb: "Full 3-bed penthouse" },
+  suite: { label: "Master Suite Only", rate: 110, unit: "night", blurb: "King bed + private bath" },
+  long: { label: "Long Stay", rate: 3900, unit: "month", blurb: "30 days+ · best for remote work" },
 };
 
 export const ADDONS = [
-  { key: "airport",  label: "Airport Pickup",         price: 25, perNight: false },
-  { key: "chef",     label: "Private Chef (1 evening)", price: 60, perNight: false },
-  { key: "cleaning", label: "Daily Cleaning",         price: 15, perNight: true },
-  { key: "trek",     label: "Trek Guide Day",         price: 45, perNight: false },
+  { key: "airport", label: "Airport Pickup", price: 25, perNight: false },
+  { key: "chef", label: "Private Chef (1 evening)", price: 60, perNight: false },
+  { key: "cleaning", label: "Daily Cleaning", price: 15, perNight: true },
+  { key: "trek", label: "Trek Guide Day", price: 45, perNight: false },
 ] as const;
 
 export type AddonKey = (typeof ADDONS)[number]["key"];

@@ -6,22 +6,35 @@ function LiquidSmooth({ p }: { p: ReturnType<typeof photo> }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
   return (
-    <div ref={ref} className="group relative aspect-[4/3] rounded-[28px] overflow-hidden shadow-[var(--shadow-soft)]">
+    <div
+      ref={ref}
+      className="group relative aspect-[4/3] rounded-[28px] overflow-hidden shadow-[var(--shadow-soft)]"
+    >
       <svg className="absolute w-0 h-0" aria-hidden>
         <defs>
           <clipPath id={`blob-${p.id}`} clipPathUnits="objectBoundingBox">
             <motion.path
               initial={{ d: "M0,0 L1,0 L1,1 L0,1 Z" }}
-              animate={inView ? { d: [
-                "M0,0 L1,0 L1,1 L0,1 Z",
-                "M0.02,0.05 C0.3,-0.02 0.7,0.02 1,0.04 L0.98,0.95 C0.7,1.02 0.3,0.98 0.02,0.96 Z",
-                "M0,0 L1,0 L1,1 L0,1 Z",
-              ] } : {}}
+              animate={
+                inView
+                  ? {
+                      d: [
+                        "M0,0 L1,0 L1,1 L0,1 Z",
+                        "M0.02,0.05 C0.3,-0.02 0.7,0.02 1,0.04 L0.98,0.95 C0.7,1.02 0.3,0.98 0.02,0.96 Z",
+                        "M0,0 L1,0 L1,1 L0,1 Z",
+                      ],
+                    }
+                  : {}
+              }
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             />
           </clipPath>
           <filter id={`turb-${p.id}`}>
-            <feTurbulence type="fractalNoise" numOctaves={2} baseFrequency={inView ? 0.024 : 0.012} />
+            <feTurbulence
+              type="fractalNoise"
+              numOctaves={2}
+              baseFrequency={inView ? 0.024 : 0.012}
+            />
             <feDisplacementMap in="SourceGraphic" scale="4" />
           </filter>
         </defs>
@@ -48,7 +61,8 @@ export function Location() {
           <p className="eyebrow mb-5">Pokhara Lakeside</p>
           <h2 className="h1-lux">180 meters to the water.</h2>
           <p className="mt-6 opacity-85 max-w-lg">
-            Four minute walk to Lakeside Street. Cafés, boats, yoga. Twenty-five minutes to Pokhara International Airport. Annapurna trailheads one hour north.
+            Four minute walk to Lakeside Street. Cafés, boats, yoga. Twenty-five minutes to Pokhara
+            International Airport. Annapurna trailheads one hour north.
           </p>
           <ul className="mt-8 space-y-3 text-sm">
             <li>📍 180m Phewa Lake</li>
@@ -56,7 +70,9 @@ export function Location() {
             <li>✈ 25 min PKR Airport</li>
             <li>⛰ Annapurna views</li>
           </ul>
-          <p className="mt-8 accent-italic text-xl text-[var(--gold)]">Lakeside Road, Pokhara 33700, Nepal</p>
+          <p className="mt-8 accent-italic text-xl text-[var(--gold)]">
+            Lakeside Road, Pokhara 33700, Nepal
+          </p>
         </div>
       </div>
 

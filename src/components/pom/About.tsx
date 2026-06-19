@@ -30,21 +30,37 @@ export function About() {
     return () => el.removeEventListener("mousemove", onMove);
   }, []);
 
-  const p4 = photo(4), p5 = photo(5), p6 = photo(6);
+  const p4 = photo(4),
+    p5 = photo(5),
+    p6 = photo(6);
 
   return (
     <section id="about" className="relative py-32 md:py-48">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-12 grid lg:grid-cols-2 gap-16 lg:gap-24">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <p className="eyebrow mb-6">Lakeside Sanctuary</p>
-          <h2 className="h1-lux mb-8">Stillness,<br/>with a view.</h2>
+          <h2 className="h1-lux mb-8">
+            Stillness,
+            <br />
+            with a view.
+          </h2>
           <div className="space-y-5 text-lg opacity-85 max-w-[520px]">
             <p>Three bedrooms above Phewa Lake. Floor-to-ceiling glass facing the Annapurnas.</p>
             <p>Limestone, cedar, and hand-woven linen. Quiet by design.</p>
-            <p>180 meters to the water. Four minutes to Lakeside Street cafés. Twenty-five minutes to Pokhara Airport.</p>
+            <p>
+              180 meters to the water. Four minutes to Lakeside Street cafés. Twenty-five minutes to
+              Pokhara Airport.
+            </p>
           </div>
-          <p className="accent-italic mt-8 text-xl text-[var(--gold)]">3 Beds · 3.5 Baths · 2,150 sq ft</p>
-          <a href="#gallery" className="link-underline mt-8 inline-block text-sm uppercase tracking-[0.2em]">View Gallery →</a>
+          <p className="accent-italic mt-8 text-xl text-[var(--gold)]">
+            3 Beds · 3.5 Baths · 2,150 sq ft
+          </p>
+          <a
+            href="#gallery"
+            className="link-underline mt-8 inline-block text-sm uppercase tracking-[0.2em]"
+          >
+            View Gallery →
+          </a>
         </div>
 
         <div className="space-y-10">
@@ -71,7 +87,16 @@ export function About() {
                 <defs>
                   <clipPath id="circle-mask" clipPathUnits="objectBoundingBox">
                     <circle ref={maskRef} cx="0.5" cy="0.5" r={maskInView ? 0.75 : 0}>
-                      <animate attributeName="r" from="0" to="0.75" dur="1.4s" begin={maskInView ? "0s" : "indefinite"} fill="freeze" calcMode="spline" keySplines="0.22 1 0.36 1" />
+                      <animate
+                        attributeName="r"
+                        from="0"
+                        to="0.75"
+                        dur="1.4s"
+                        begin={maskInView ? "0s" : "indefinite"}
+                        fill="freeze"
+                        calcMode="spline"
+                        keySplines="0.22 1 0.36 1"
+                      />
                     </circle>
                   </clipPath>
                 </defs>
@@ -89,7 +114,10 @@ export function About() {
           </figure>
 
           {/* Photo 6/20 — Distortion Wave */}
-          <figure ref={waveWrapRef} className="relative overflow-hidden rounded-[28px] shadow-[var(--shadow-soft)]">
+          <figure
+            ref={waveWrapRef}
+            className="relative overflow-hidden rounded-[28px] shadow-[var(--shadow-soft)]"
+          >
             <svg className="absolute w-0 h-0">
               <filter id="liquid-distort">
                 <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="3" />

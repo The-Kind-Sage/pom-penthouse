@@ -11,7 +11,10 @@ export function FloatingBook() {
   }, []);
   if (!show) return null;
   return (
-    <button onClick={ui.openBooking} className="md:hidden fixed bottom-5 right-5 z-40 btn-primary !py-3 !px-5 text-sm shadow-[var(--shadow-lift)]">
+    <button
+      onClick={ui.openBooking}
+      className="md:hidden fixed bottom-5 right-5 z-40 btn-primary !py-3 !px-5 text-sm shadow-[var(--shadow-lift)]"
+    >
       Book
     </button>
   );

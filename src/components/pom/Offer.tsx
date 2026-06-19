@@ -10,7 +10,11 @@ export function Offer() {
   const p20 = photo(20);
 
   return (
-    <section ref={ref} className="relative overflow-hidden py-32 md:py-48 text-[var(--sand)]" style={{ background: "var(--charcoal)" }}>
+    <section
+      ref={ref}
+      className="relative overflow-hidden py-32 md:py-48 text-[var(--sand)]"
+      style={{ background: "var(--charcoal)" }}
+    >
       {/* Photo 20/20 — Parallax + Liquid Smooth background */}
       <motion.img
         src={p20.src}
@@ -27,10 +31,16 @@ export function Offer() {
         <p className="font-display text-5xl text-[var(--gold)]">$50,000 USD</p>
         <p className="mt-6 opacity-80">Ready to move · Full ownership · Lakeside Road, Pokhara</p>
         <div className="mt-10 flex flex-wrap gap-3 justify-center">
-          <button onClick={ui.openBooking} className="btn-primary">Book a Stay</button>
-          <a href="#contact" className="btn-ghost text-[var(--sand)]">Purchase Inquiry</a>
+          <button onClick={ui.openBooking} className="btn-primary">
+            Book a Stay
+          </button>
+          <a href="#contact" className="btn-ghost text-[var(--sand)]">
+            Purchase Inquiry
+          </a>
         </div>
-        <p className="mt-6 text-sm opacity-60 accent-italic">Prefer to try before you buy? Book a stay from $189/night.</p>
+        <p className="mt-6 text-sm opacity-60 accent-italic">
+          Prefer to try before you buy? Book a stay from $189/night.
+        </p>
       </div>
     </section>
   );
