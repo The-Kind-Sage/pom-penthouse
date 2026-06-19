@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
 
 const faqs = [
-  { q: "Is the $50,000 price freehold?", a: "Yes, full freehold ownership. Ready to transfer." },
+  { q: "Is it freehold?", a: "Yes, full freehold ownership. Ready to transfer." },
   { q: "Can I book nightly stays?", a: "Yes, via Book a Stay. 2-night minimum. Instant request." },
   { q: "How far is the lake really?", a: "180 meters, about a 3-minute walk to Phewa Lake." },
   { q: "Airport transfer?", a: "Yes, $25 add-on at booking. 25 minutes from PKR." },

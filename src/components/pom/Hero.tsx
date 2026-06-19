@@ -61,7 +61,7 @@ export function Hero() {
 
           <div className="mt-6 inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[var(--gold)]/60 backdrop-blur bg-white/10 text-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold)]" />
-            $50,000 USD · Freehold
+            Freehold
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">

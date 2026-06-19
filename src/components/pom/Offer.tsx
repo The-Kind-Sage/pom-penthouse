@@ -28,7 +28,7 @@ export function Offer() {
       <div className="relative z-10 max-w-2xl mx-auto text-center px-6">
         <p className="eyebrow mb-5">Freehold</p>
         <h2 className="display-xl mb-3">Pom PentHouse</h2>
-        <p className="font-display text-5xl text-[var(--gold)]">$50,000 USD</p>
+        <p className="font-display text-5xl text-[var(--gold)]">Freehold</p>
         <p className="mt-6 opacity-80">Ready to move · Full ownership · Lakeside Road, Pokhara</p>
         <div className="mt-10 flex flex-wrap gap-3 justify-center">
           <button onClick={ui.openBooking} className="btn-primary">

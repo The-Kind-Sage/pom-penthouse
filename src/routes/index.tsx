@@ -24,10 +24,10 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A $50,000 luxury penthouse 180m from Phewa Lake, Pokhara. 3 beds, Annapurna views. Book a stay from $189/night.",
+          "A luxury penthouse 180m from Phewa Lake, Pokhara. 3 beds, Annapurna views. Book a stay from $189/night.",
       },
       { property: "og:title", content: "Pom PentHouse — Pokhara" },
-      { property: "og:description", content: "A Lakeside Sanctuary — $50,000 USD Freehold" },
+      { property: "og:description", content: "A Lakeside Sanctuary — Pokhara, Nepal" },
       { property: "og:type", content: "website" },
       {
         property: "og:image",
