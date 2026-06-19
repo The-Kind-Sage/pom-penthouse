@@ -2,6 +2,9 @@ import { useEffect } from "react";
 
 export function SmoothScroll() {
   useEffect(() => {
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
+    if (isMobile) return;
+
     let raf = 0;
     let lenis: { raf: (t: number) => void; destroy: () => void } | null = null;
     (async () => {
