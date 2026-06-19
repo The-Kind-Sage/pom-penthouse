@@ -72,7 +72,7 @@ export function About() {
               alt={p4.alt}
               loading="lazy"
               decoding="async"
-              className="object-cover w-full h-[420px]"
+              className="object-cover w-full h-[260px] sm:h-[320px] md:h-[420px]"
               initial={{ x: 80, scale: 0.96, opacity: 0 }}
               animate={pushInView ? { x: 0, scale: 1, opacity: 1 } : {}}
               transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
@@ -106,7 +106,7 @@ export function About() {
                 alt={p5.alt}
                 loading="lazy"
                 decoding="async"
-                className="object-cover w-full h-[420px]"
+              className="object-cover w-full h-[260px] sm:h-[320px] md:h-[420px]"
                 style={{ clipPath: "url(#circle-mask)" }}
               />
             </div>
@@ -129,7 +129,7 @@ export function About() {
               alt={p6.alt}
               loading="lazy"
               decoding="async"
-              className="object-cover w-full h-[420px]"
+              className="object-cover w-full h-[260px] sm:h-[320px] md:h-[420px]"
               style={{ filter: "url(#liquid-distort)" }}
             />
             <figcaption className="mt-3 text-sm opacity-60">Cedar detail</figcaption>

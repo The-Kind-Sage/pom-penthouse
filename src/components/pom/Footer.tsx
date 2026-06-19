@@ -10,7 +10,7 @@ export function Footer() {
 
   return (
     <footer id="contact" className="border-t py-24">
-      <div className="mx-auto max-w-[1200px] px-6 lg:px-12 grid lg:grid-cols-2 gap-16">
+      <div className="mx-auto max-w-[1200px] px-6 lg:px-12 grid lg:grid-cols-2 gap-10 lg:gap-16">
         <form onSubmit={handleContact} className="space-y-4">
           <p className="eyebrow mb-2">Contact</p>
           <h2 className="h2-lux mb-6">Write to Pom</h2>

@@ -132,7 +132,7 @@ export function BookingSection() {
           {/* Booking form */}
           <motion.form
             onSubmit={handleBook}
-            className="rounded-[28px] p-8 space-y-6"
+            className="rounded-[28px] p-6 md:p-8 space-y-6"
             style={{ background: "var(--paper)", boxShadow: "var(--shadow-soft)" }}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}

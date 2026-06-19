@@ -39,7 +39,7 @@ export function Lightbox() {
               e.stopPropagation();
               ui.closeLightbox();
             }}
-            className="absolute top-5 right-5 text-white p-2"
+            className="absolute top-5 right-5 text-white p-3 md:p-2"
             aria-label="Close"
           >
             <X />
@@ -49,7 +49,7 @@ export function Lightbox() {
               e.stopPropagation();
               ui.setLightbox((lightboxIndex! - 1 + IMAGES.length) % IMAGES.length);
             }}
-            className="absolute left-4 text-white p-2"
+            className="absolute left-4 text-white p-3 md:p-2"
             aria-label="Previous"
           >
             <ChevronLeft />
@@ -59,7 +59,7 @@ export function Lightbox() {
               e.stopPropagation();
               ui.setLightbox((lightboxIndex! + 1) % IMAGES.length);
             }}
-            className="absolute right-4 text-white p-2"
+            className="absolute right-4 text-white p-3 md:p-2"
             aria-label="Next"
           >
             <ChevronRight />

@@ -120,7 +120,7 @@ export function Residence() {
           </div>
         </div>
 
-        <div className="mt-20 border-t border-[var(--gold)]/30 pt-10 grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
+        <div className="mt-20 border-t border-[var(--gold)]/30 pt-10 grid grid-cols-3 md:grid-cols-5 gap-6 md:gap-8 text-center">
           {[
             ["3", "Beds"],
             ["3.5", "Baths"],

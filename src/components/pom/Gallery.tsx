@@ -115,8 +115,8 @@ function CubeFlip({ src, alt, back }: { src: string; alt: string; back: string }
             decoding="async"
             className="object-cover w-full h-full"
           />
-          <span className="absolute top-3 right-3 text-[10px] uppercase tracking-[0.2em] px-2 py-1 rounded-full bg-black/50 text-white">
-            Click to flip
+          <span className="absolute top-3 right-3 text-[11px] md:text-[10px] uppercase tracking-[0.2em] px-2 py-1 rounded-full bg-black/50 text-white">
+            Tap to flip
           </span>
         </div>
         <div
@@ -171,42 +171,42 @@ export function Gallery() {
     {
       key: "p7",
       el: <Wipe src={p7.src} alt={p7.alt} />,
-      cls: "md:row-span-2 h-[460px] md:h-full",
+      cls: "md:row-span-2 min-h-[220px] md:min-h-0 md:h-full",
       idx: 6,
       label: "Living Room",
     },
     {
       key: "p8",
       el: <ZoomIn src={p8.src} alt={p8.alt} />,
-      cls: "h-[300px]",
+      cls: "min-h-[200px] md:h-[300px]",
       idx: 7,
       label: "Kitchen",
     },
     {
       key: "p9",
       el: <ZoomOut src={p9.src} alt={p9.alt} />,
-      cls: "h-[300px]",
+      cls: "min-h-[200px] md:h-[300px]",
       idx: 8,
       label: "Lounge",
     },
     {
       key: "p10",
       el: <BlurDissolve src={p10.src} alt={p10.alt} />,
-      cls: "h-[460px] lg:row-span-2",
+      cls: "min-h-[220px] md:h-[460px] lg:row-span-2",
       idx: 9,
       label: "Bedroom",
     },
     {
       key: "p11",
       el: <CubeFlip src={p11.src} alt={p11.alt} back={p2.src} />,
-      cls: "h-[300px]",
+      cls: "min-h-[200px] md:h-[300px]",
       idx: 10,
       label: "Terrace",
     },
     {
       key: "p12",
       el: <PageTurn src={p12.src} alt={p12.alt} />,
-      cls: "h-[300px]",
+      cls: "min-h-[200px] md:h-[300px]",
       idx: 11,
       label: "Bathroom",
     },
@@ -224,7 +224,7 @@ export function Gallery() {
           </h2>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[300px] gap-7">
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-auto md:auto-rows-[300px] gap-7">
           {tiles.map((t) => (
             <div key={t.key} className={`relative group ${t.cls}`}>
               <div

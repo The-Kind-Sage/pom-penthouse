@@ -97,7 +97,7 @@ export function Navbar() {
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="font-display text-4xl animate-[fade-in_0.5s_ease-out_both]"
+                className="font-display text-3xl md:text-4xl animate-[fade-in_0.5s_ease-out_both]"
                 style={{ animationDelay: `${i * 0.05}s` }}
               >
                 {l.label}
