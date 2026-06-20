@@ -162,7 +162,7 @@ export function BookingSection() {
                         <div className="flex justify-between">
                           <span className="font-medium text-sm">{r.label}</span>
                           <span className="text-sm">
-                            ${r.rate.toLocaleString()}{" "}
+                            रू{r.rate.toLocaleString("en-IN")}{" "}
                             <span className="opacity-60 text-xs">/ {r.unit}</span>
                           </span>
                         </div>
@@ -215,7 +215,7 @@ export function BookingSection() {
                     <div>
                       <span className="text-sm">{a.label}</span>
                       <span className="text-xs opacity-60 ml-2">
-                        ${a.price}
+                        रू{a.price}
                         {a.perNight ? " / night" : ""}
                       </span>
                     </div>

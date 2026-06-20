@@ -4,7 +4,7 @@ import { E as ChevronLeft, M as ArrowUp, T as ChevronRight, c as Sparkles, d as 
 import { n as toast, t as Toaster } from "../_libs/sonner.mjs";
 import { a as useScroll, i as useMotionValue, n as useSpring, o as motion, r as useTransform, s as AnimatePresence, t as useInView } from "../_libs/framer-motion.mjs";
 import { t as DayPicker } from "../_libs/react-day-picker.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BP03hiSe.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BPN_E9BA.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var state = {
@@ -1494,8 +1494,8 @@ function BookingSection() {
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 												className: "text-sm",
 												children: [
-													"$",
-													r.rate.toLocaleString(),
+													"रू",
+													r.rate.toLocaleString("en-IN"),
 													" ",
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 														className: "opacity-60 text-xs",
@@ -1572,7 +1572,7 @@ function BookingSection() {
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 									className: "text-xs opacity-60 ml-2",
 									children: [
-										"$",
+										"रू",
 										a.price,
 										a.perNight ? " / night" : ""
 									]
@@ -2298,8 +2298,8 @@ function BookingModal() {
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 												className: "text-sm",
 												children: [
-													"$",
-													r.rate.toLocaleString(),
+													"रू",
+													r.rate.toLocaleString("en-IN"),
 													" ",
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 														className: "opacity-60",
@@ -2387,7 +2387,7 @@ function BookingModal() {
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 									className: "text-xs opacity-60 ml-2",
 									children: [
-										"$",
+										"रू",
 										a.price,
 										a.perNight ? " / night" : ""
 									]
