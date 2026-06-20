@@ -3,7 +3,7 @@ import { a as require_jsx_runtime, o as require_react } from "../_libs/@radix-ui
 import { n as useAdmin, t as adminStore } from "./admin-store-BDq1FTcs.mjs";
 import { f as Outlet, g as Link, l as useLocation } from "../_libs/@tanstack/react-router+[...].mjs";
 import { A as Building2, E as ChevronLeft, O as ChartColumn, T as ChevronRight, b as LayoutDashboard, h as Moon, j as Bell, k as CalendarCheck, l as Settings, n as Users, r as User, s as Sun, u as Search, v as Menu, y as LogOut } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/admin-BzqX1_vv.js
+//#region node_modules/.nitro/vite/services/ssr/assets/admin-DwHR33_q.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var navItems = [
@@ -46,6 +46,7 @@ function AdminLayout() {
 	const [notifOpen, setNotifOpen] = (0, import_react.useState)(false);
 	const [profileOpen, setProfileOpen] = (0, import_react.useState)(false);
 	const location = useLocation();
+	const isLoginPage = location.pathname === "/admin/login";
 	(0, import_react.useEffect)(() => {
 		document.documentElement.setAttribute("data-theme", theme);
 	}, [theme]);
@@ -58,6 +59,7 @@ function AdminLayout() {
 		if (item.exact) return location.pathname === item.to;
 		return location.pathname.startsWith(item.to);
 	};
+	if (isLoginPage) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-screen bg-background text-foreground flex",
 		children: [
@@ -147,14 +149,10 @@ function AdminLayout() {
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "px-4 py-2 text-sm font-medium border-b",
 										children: "Notifications"
-									}), [
-										"Booking confirmed",
-										"Payment received",
-										"New review"
-									].map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "px-4 py-2.5 text-sm hover:bg-muted cursor-pointer",
-										children: n
-									}, i))]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "px-4 py-6 text-sm text-foreground/40 text-center",
+										children: "No notifications"
+									})]
 								})] })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

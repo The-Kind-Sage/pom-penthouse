@@ -1,17 +1,17 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-C9O_kGVM.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-fvJk2b2R.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "D:/DrillThru Projects/pom-penthouse/src/routes/__root.tsx",
 		children: ["/", "/admin"],
 		preloads: [
-			"/assets/index-BcJBCkq3.js",
+			"/assets/index-DslW5Lgd.js",
 			"/assets/jsx-runtime-DVpe7PXp.js",
 			"/assets/react-ByFLoWig.js"
 		],
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-BcJBCkq3.js"
+			src: "/assets/index-DslW5Lgd.js"
 		} }]
 	},
 	"/": {
@@ -19,12 +19,12 @@ var tsrStartManifest = () => ({ routes: {
 		children: void 0,
 		css: ["/assets/routes-BxgC7ZK2.css"],
 		preloads: [
-			"/assets/routes-2CkQE3ma.js",
+			"/assets/routes-D2rUdTxr.js",
 			"/assets/createLucideIcon-Ck0t4YiT.js",
 			"/assets/sun-Cgc50Vt2.js",
 			"/assets/plus-BJ-JnsDl.js",
 			"/assets/x-DHv-aFUh.js",
-			"/assets/dist-D5apzzr_.js"
+			"/assets/dist-Bvd5ZEZF.js"
 		]
 	},
 	"/admin": {
@@ -39,7 +39,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/admin/"
 		],
 		preloads: [
-			"/assets/admin-BGRCGrGw.js",
+			"/assets/admin-CoD0h7wC.js",
 			"/assets/createLucideIcon-Ck0t4YiT.js",
 			"/assets/sun-Cgc50Vt2.js",
 			"/assets/calendar-check-BzcDRvIz.js",
@@ -56,34 +56,34 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "D:/DrillThru Projects/pom-penthouse/src/routes/admin.bookings.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/admin.bookings-oNK6TS4A.js",
+			"/assets/admin.bookings-etaeDOIj.js",
 			"/assets/x-DHv-aFUh.js",
-			"/assets/dist-D5apzzr_.js"
+			"/assets/dist-Bvd5ZEZF.js"
 		]
 	},
 	"/admin/login": {
 		filePath: "D:/DrillThru Projects/pom-penthouse/src/routes/admin.login.tsx",
 		children: void 0,
-		preloads: ["/assets/admin.login-CiOKBh_I.js"]
+		preloads: ["/assets/admin.login-6eo8FgjQ.js"]
 	},
 	"/admin/penthouses": {
 		filePath: "D:/DrillThru Projects/pom-penthouse/src/routes/admin.penthouses.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/admin.penthouses-qWCmHd6I.js",
+			"/assets/admin.penthouses-DuzyCL2u.js",
 			"/assets/plus-BJ-JnsDl.js",
-			"/assets/dist-D5apzzr_.js"
+			"/assets/dist-Bvd5ZEZF.js"
 		]
 	},
 	"/admin/settings": {
 		filePath: "D:/DrillThru Projects/pom-penthouse/src/routes/admin.settings.tsx",
 		children: void 0,
-		preloads: ["/assets/admin.settings-k78qFlo3.js", "/assets/dist-D5apzzr_.js"]
+		preloads: ["/assets/admin.settings-D9Mo0Xhu.js", "/assets/dist-Bvd5ZEZF.js"]
 	},
 	"/admin/users": {
 		filePath: "D:/DrillThru Projects/pom-penthouse/src/routes/admin.users.tsx",
 		children: void 0,
-		preloads: ["/assets/admin.users-CtfsVT3y.js", "/assets/dist-D5apzzr_.js"]
+		preloads: ["/assets/admin.users-Ba1-shZC.js", "/assets/dist-Bvd5ZEZF.js"]
 	},
 	"/admin/": {
 		filePath: "D:/DrillThru Projects/pom-penthouse/src/routes/admin.index.tsx",

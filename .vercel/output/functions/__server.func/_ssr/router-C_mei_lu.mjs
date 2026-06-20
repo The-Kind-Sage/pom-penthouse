@@ -3,7 +3,7 @@ import { a as require_jsx_runtime, o as require_react } from "../_libs/@radix-ui
 import { A as redirect, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, m as createFileRoute, p as lazyRouteComponent, s as Scripts, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CcDpIlBG.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-C_mei_lu.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-laqxiwve.css";
@@ -176,14 +176,13 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
 	});
 }
-var $$splitComponentImporter$8 = () => import("./admin-BzqX1_vv.mjs");
+var $$splitComponentImporter$8 = () => import("./admin-DwHR33_q.mjs");
 var Route$8 = createFileRoute("/admin")({
 	component: lazyRouteComponent($$splitComponentImporter$8, "component"),
+	ssr: false,
 	beforeLoad: ({ location }) => {
-		if (typeof window !== "undefined") {
-			if (location.pathname === "/admin/login") return;
-			if (!localStorage.getItem("pom-admin-auth")) throw redirect({ to: "/admin/login" });
-		}
+		if (location.pathname === "/admin/login") return;
+		if (!localStorage.getItem("pom-admin-auth")) throw redirect({ to: "/admin/login" });
 	}
 });
 var $$splitComponentImporter$7 = () => import("./routes-DgkqjfV4.mjs");
@@ -239,7 +238,7 @@ var $$splitComponentImporter$4 = () => import("./admin.settings-BzZiOHRA.mjs");
 var Route$4 = createFileRoute("/admin/settings")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
 var $$splitComponentImporter$3 = () => import("./admin.penthouses-D7gW4HIg.mjs");
 var Route$3 = createFileRoute("/admin/penthouses")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
-var $$splitComponentImporter$2 = () => import("./admin.login-BYjJ8nWZ.mjs");
+var $$splitComponentImporter$2 = () => import("./admin.login-DUYOIojn.mjs");
 var Route$2 = createFileRoute("/admin/login")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
 var $$splitComponentImporter$1 = () => import("./admin.bookings-GYh2DuVQ.mjs");
 var Route$1 = createFileRoute("/admin/bookings")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });

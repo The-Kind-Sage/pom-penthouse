@@ -4,7 +4,7 @@ import { useAdmin, adminStore } from "@/lib/admin-store";
 import {
   LayoutDashboard, CalendarCheck, Building2, Users, BarChart3, Settings,
   ChevronLeft, ChevronRight, Bell, Search, Moon, Sun, LogOut, User,
-  Menu, X,
+  Menu,
 } from "lucide-react";
 
 const navItems = [
@@ -18,12 +18,11 @@ const navItems = [
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
+  ssr: false,
   beforeLoad: ({ location }) => {
-    if (typeof window !== "undefined") {
-      if (location.pathname === "/admin/login") return;
-      const stored = localStorage.getItem("pom-admin-auth");
-      if (!stored) throw redirect({ to: "/admin/login" });
-    }
+    if (location.pathname === "/admin/login") return;
+    const stored = localStorage.getItem("pom-admin-auth");
+    if (!stored) throw redirect({ to: "/admin/login" });
   },
 });
 
@@ -34,6 +33,8 @@ function AdminLayout() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const location = useLocation();
+
+  const isLoginPage = location.pathname === "/admin/login";
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -49,6 +50,8 @@ function AdminLayout() {
     if (item.exact) return location.pathname === item.to;
     return location.pathname.startsWith(item.to);
   };
+
+  if (isLoginPage) return <Outlet />;
 
   return (
     <div className="min-h-screen bg-background text-foreground flex">
@@ -127,11 +130,7 @@ function AdminLayout() {
                   <div className="fixed inset-0 z-10" onClick={() => setNotifOpen(false)} />
                   <div className="absolute right-0 top-full mt-2 w-72 bg-paper border rounded-xl shadow-lg z-20 py-2">
                     <p className="px-4 py-2 text-sm font-medium border-b">Notifications</p>
-                    {["Booking confirmed", "Payment received", "New review"].map((n, i) => (
-                      <div key={i} className="px-4 py-2.5 text-sm hover:bg-muted cursor-pointer">
-                        {n}
-                      </div>
-                    ))}
+                    <div className="px-4 py-6 text-sm text-foreground/40 text-center">No notifications</div>
                   </div>
                 </>
               )}

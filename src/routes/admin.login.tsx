@@ -1,14 +1,17 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { adminStore } from "@/lib/admin-store";
+
+const DEFAULT_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || "admin@pompenthouse.np";
+const DEFAULT_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "admin123";
 
 export const Route = createFileRoute("/admin/login")({
   component: LoginPage,
 });
 
 function LoginPage() {
-  const [email, setEmail] = useState("admin@pompenthouse.np");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState(DEFAULT_EMAIL);
+  const [password, setPassword] = useState(DEFAULT_PASSWORD);
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
@@ -32,7 +35,7 @@ function LoginPage() {
             className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
         </div>
         <button type="submit" className="btn-primary w-full justify-center">Sign In</button>
-        <p className="text-xs text-foreground/40 text-center">Demo: admin@pompenthouse.np / admin123</p>
+        <p className="text-xs text-foreground/40 text-center">Demo: {DEFAULT_EMAIL} / {DEFAULT_PASSWORD}</p>
       </form>
     </div>
   );

@@ -2,12 +2,14 @@ import { o as __toESM } from "../_runtime.mjs";
 import { a as require_jsx_runtime, o as require_react } from "../_libs/@radix-ui/react-collection+[...].mjs";
 import { t as adminStore } from "./admin-store-BDq1FTcs.mjs";
 import { _ as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/admin.login-BYjJ8nWZ.js
+//#region node_modules/.nitro/vite/services/ssr/assets/admin.login-DUYOIojn.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
+var DEFAULT_EMAIL = "admin@pompenthouse.np";
+var DEFAULT_PASSWORD = "admin123";
 function LoginPage() {
-	const [email, setEmail] = (0, import_react.useState)("admin@pompenthouse.np");
-	const [password, setPassword] = (0, import_react.useState)("admin123");
+	const [email, setEmail] = (0, import_react.useState)(DEFAULT_EMAIL);
+	const [password, setPassword] = (0, import_react.useState)(DEFAULT_PASSWORD);
 	const navigate = useNavigate();
 	const handleLogin = (e) => {
 		e.preventDefault();
@@ -54,9 +56,14 @@ function LoginPage() {
 					className: "btn-primary w-full justify-center",
 					children: "Sign In"
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 					className: "text-xs text-foreground/40 text-center",
-					children: "Demo: admin@pompenthouse.np / admin123"
+					children: [
+						"Demo: ",
+						DEFAULT_EMAIL,
+						" / ",
+						DEFAULT_PASSWORD
+					]
 				})
 			]
 		})
