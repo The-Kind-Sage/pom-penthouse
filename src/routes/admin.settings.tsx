@@ -37,9 +37,9 @@ function SettingsPage() {
 }
 
 function PricingTab() {
-  const [peakMultiplier, setPeakMultiplier] = useState(20);
-  const [minStay, setMinStay] = useState(2);
-  const [holidayRate, setHolidayRate] = useState(30);
+  const [peakMultiplier, setPeakMultiplier] = useState(0);
+  const [minStay, setMinStay] = useState(1);
+  const [holidayRate, setHolidayRate] = useState(0);
 
   const save = () => {
     toast.success("Pricing rules saved");
@@ -77,10 +77,10 @@ function PricingTab() {
 }
 
 function CMSTab() {
-  const [heroTitle, setHeroTitle] = useState("Pom PentHouse");
-  const [heroSubtitle, setHeroSubtitle] = useState("A Lakeside Sanctuary — 180 meters from Phewa Lake");
-  const [contactEmail, setContactEmail] = useState("hello@pompenthouse.np");
-  const [contactPhone, setContactPhone] = useState("+977 61-XXXXXX");
+  const [heroTitle, setHeroTitle] = useState("");
+  const [heroSubtitle, setHeroSubtitle] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
 
   const save = () => {
     toast.success("Site content updated");
@@ -90,22 +90,22 @@ function CMSTab() {
     <div className="bg-paper border rounded-xl p-6 space-y-4 max-w-xl">
       <div>
         <label className="text-sm font-medium mb-1 block">Hero Title</label>
-        <input value={heroTitle} onChange={(e) => setHeroTitle(e.target.value)}
+        <input value={heroTitle} onChange={(e) => setHeroTitle(e.target.value)} placeholder="Enter hero title"
           className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
       </div>
       <div>
         <label className="text-sm font-medium mb-1 block">Hero Subtitle</label>
-        <input value={heroSubtitle} onChange={(e) => setHeroSubtitle(e.target.value)}
+        <input value={heroSubtitle} onChange={(e) => setHeroSubtitle(e.target.value)} placeholder="Enter hero subtitle"
           className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
       </div>
       <div>
         <label className="text-sm font-medium mb-1 block">Contact Email</label>
-        <input value={contactEmail} onChange={(e) => setContactEmail(e.target.value)}
+        <input value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="email@example.com"
           className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
       </div>
       <div>
         <label className="text-sm font-medium mb-1 block">Contact Phone</label>
-        <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)}
+        <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="+977 ..."
           className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
       </div>
       <button onClick={save} className="btn-primary text-sm py-2 px-4">Save Content</button>
@@ -114,41 +114,9 @@ function CMSTab() {
 }
 
 function EmailTab() {
-  const [templates] = useState([
-    { key: "confirmation", label: "Booking Confirmation", subject: "Your Pom PentHouse booking is confirmed", body: "Dear {name},\n\nYour booking at {penthouse} from {checkin} to {checkout} is confirmed.\n\nTotal: ${total}\n\nSee you soon,\nPom PentHouse" },
-    { key: "welcome", label: "Welcome Email", subject: "Welcome to Pom PentHouse", body: "Dear {name},\n\nThank you for choosing Pom PentHouse.\n\nWe look forward to hosting you.\n\nBest,\nPom PentHouse" },
-    { key: "reminder", label: "Payment Reminder", subject: "Payment reminder for your booking", body: "Dear {name},\n\nThis is a reminder that your payment of ${total} for {penthouse} is due.\n\nPlease complete your booking.\n\nThank you,\nPom PentHouse" },
-  ]);
-  const [active, setActive] = useState(templates[0]);
-
-  const save = () => {
-    toast.success("Email template saved");
-  };
-
   return (
-    <div className="grid lg:grid-cols-[240px_1fr] gap-6">
-      <div className="space-y-1">
-        {templates.map((t) => (
-          <button key={t.key} onClick={() => setActive(t)}
-            className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition ${active.key === t.key ? "bg-primary text-primary-foreground font-medium" : "hover:bg-muted"}`}>
-            {t.label}
-          </button>
-        ))}
-      </div>
-      <div className="bg-paper border rounded-xl p-6 space-y-4">
-        <div>
-          <label className="text-sm font-medium mb-1 block">Subject</label>
-          <input value={active.subject} onChange={(e) => setActive({ ...active, subject: e.target.value })}
-            className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
-        </div>
-        <div>
-          <label className="text-sm font-medium mb-1 block">Body</label>
-          <textarea rows={10} value={active.body} onChange={(e) => setActive({ ...active, body: e.target.value })}
-            className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm resize-none font-mono" />
-        </div>
-        <p className="text-xs text-foreground/40">Available variables: {'{name}'}, {'{penthouse}'}, {'{checkin}'}, {'{checkout}'}, {'{total}'}</p>
-        <button onClick={save} className="btn-primary text-sm py-2 px-4">Save Template</button>
-      </div>
+    <div className="flex items-center justify-center py-16 text-sm text-foreground/40">
+      No email templates configured yet
     </div>
   );
 }

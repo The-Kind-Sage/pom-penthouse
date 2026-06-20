@@ -18,8 +18,9 @@ const navItems = [
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
-  beforeLoad: () => {
+  beforeLoad: ({ location }) => {
     if (typeof window !== "undefined") {
+      if (location.pathname === "/admin/login") return;
       const stored = localStorage.getItem("pom-admin-auth");
       if (!stored) throw redirect({ to: "/admin/login" });
     }

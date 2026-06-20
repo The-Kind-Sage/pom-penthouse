@@ -8,8 +8,8 @@ type AdminState = {
 };
 
 let state: AdminState = {
-  isAuthenticated: true,
-  user: { name: "Admin", email: "admin@pompenthouse.np", role: "admin", avatar: "" },
+  isAuthenticated: false,
+  user: null,
   sidebarOpen: true,
   theme: "light",
 };

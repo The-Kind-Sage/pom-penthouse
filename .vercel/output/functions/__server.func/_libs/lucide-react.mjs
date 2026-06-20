@@ -721,32 +721,6 @@ var Trash2 = createLucideIcon("trash-2", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-var TrendingDown = createLucideIcon("trending-down", [["path", {
-	d: "M16 17h6v-6",
-	key: "t6n2it"
-}], ["path", {
-	d: "m22 17-8.5-8.5-5 5L2 7",
-	key: "x473p"
-}]]);
-/**
-* @license lucide-react v0.575.0 - ISC
-*
-* This source code is licensed under the ISC license.
-* See the LICENSE file in the root directory of this source tree.
-*/
-var TrendingUp = createLucideIcon("trending-up", [["path", {
-	d: "M16 7h6v6",
-	key: "box55l"
-}], ["path", {
-	d: "m22 7-8.5 8.5-5-5L2 17",
-	key: "1t1m79"
-}]]);
-/**
-* @license lucide-react v0.575.0 - ISC
-*
-* This source code is licensed under the ISC license.
-* See the LICENSE file in the root directory of this source tree.
-*/
 var Upload = createLucideIcon("upload", [
 	["path", {
 		d: "M12 3v12",
@@ -816,4 +790,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { ChartColumn as A, Eye as C, ChevronRight as D, Cpu as E, Building2 as M, Bell as N, ChevronLeft as O, ArrowUp as P, LayoutDashboard as S, DollarSign as T, Moon as _, TrendingUp as a, Menu as b, Sunrise as c, Settings as d, Search as f, Mountain as g, Pencil as h, Upload as i, CalendarCheck as j, Check as k, Sun as l, Percent as m, Users as n, TrendingDown as o, Plus as p, User as r, Trash2 as s, X as t, Sparkles as u, Minus as v, Download as w, LogOut as x, MessageCircle as y };
+export { Building2 as A, DollarSign as C, Check as D, ChevronLeft as E, ArrowUp as M, ChartColumn as O, Download as S, ChevronRight as T, MessageCircle as _, Trash2 as a, LayoutDashboard as b, Sparkles as c, Plus as d, Percent as f, Minus as g, Moon as h, Upload as i, Bell as j, CalendarCheck as k, Settings as l, Mountain as m, Users as n, Sunrise as o, Pencil as p, User as r, Sun as s, X as t, Search as u, Menu as v, Cpu as w, Eye as x, LogOut as y };

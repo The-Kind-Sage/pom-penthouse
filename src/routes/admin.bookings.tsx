@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { MOCK_BOOKINGS, type Booking, type BookingStatus, type PaymentStatus } from "@/lib/admin-types";
-import { Check, X, ChevronDown, Download, Search, Eye } from "lucide-react";
+import { type Booking, type BookingStatus, type PaymentStatus } from "@/lib/admin-types";
+import { Check, X, Download, Search, Eye } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/bookings")({
@@ -27,7 +27,7 @@ function Badge({ label, style }: { label: string; style: string }) {
 }
 
 function BookingsPage() {
-  const [bookings, setBookings] = useState(MOCK_BOOKINGS);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<BookingStatus | "all">("all");
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -44,6 +44,7 @@ function BookingsPage() {
   };
 
   const downloadCSV = () => {
+    if (filtered.length === 0) { toast.error("No bookings to export"); return; }
     const headers = "ID,Guest,Penthouse,Check-in,Check-out,Total,Status\n";
     const rows = filtered.map((b) => `${b.id},${b.guestName},${b.penthouseName},${b.checkIn},${b.checkOut},${b.total},${b.status}`).join("\n");
     const blob = new Blob([headers + rows], { type: "text/csv" });
@@ -67,7 +68,6 @@ function BookingsPage() {
         </div>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2 bg-muted rounded-lg px-3 py-1.5 text-sm flex-1 min-w-[200px] max-w-sm">
           <Search size={16} className="text-foreground/40" />
@@ -83,7 +83,6 @@ function BookingsPage() {
         </select>
       </div>
 
-      {/* Table */}
       <div className="bg-paper border rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -132,11 +131,10 @@ function BookingsPage() {
           </table>
         </div>
         {filtered.length === 0 && (
-          <p className="text-center py-8 text-sm text-foreground/60">No bookings found</p>
+          <p className="text-center py-8 text-sm text-foreground/60">No bookings yet</p>
         )}
       </div>
 
-      {/* Detail Modal */}
       {selectedBooking && (
         <>
           <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setSelectedBooking(null)} />

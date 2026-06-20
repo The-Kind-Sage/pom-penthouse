@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { MOCK_PENTHOUSES, type Penthouse, type PenthouseStatus } from "@/lib/admin-types";
-import { Plus, Pencil, Trash2, GripVertical, Upload } from "lucide-react";
+import { type Penthouse, type PenthouseStatus } from "@/lib/admin-types";
+import { Plus, Pencil, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/penthouses")({
@@ -19,7 +19,7 @@ function Badge({ label, style }: { label: string; style: string }) {
 }
 
 function PenthousesPage() {
-  const [penthouses, setPenthouses] = useState(MOCK_PENTHOUSES);
+  const [penthouses, setPenthouses] = useState<Penthouse[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Penthouse | null>(null);
   const [form, setForm] = useState({ name: "", location: "", pricePerNight: 0, description: "", maxGuests: 0, bedrooms: 0, bathrooms: 0, status: "available" as PenthouseStatus, amenities: "", rules: "" });
@@ -102,9 +102,11 @@ function PenthousesPage() {
             </tbody>
           </table>
         </div>
+        {penthouses.length === 0 && (
+          <p className="text-center py-8 text-sm text-foreground/60">No penthouses yet — add your first one</p>
+        )}
       </div>
 
-      {/* Add/Edit Modal */}
       {showForm && (
         <>
           <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setShowForm(false)} />
@@ -141,7 +143,6 @@ function PenthousesPage() {
                 <input placeholder="Rules (comma separated)" value={form.rules} onChange={(e) => setForm({ ...form, rules: e.target.value })}
                   className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
 
-                {/* Media Uploader */}
                 <div className="border-2 border-dashed rounded-xl p-6 text-center cursor-pointer hover:bg-muted/30 transition">
                   <Upload size={24} className="mx-auto text-foreground/40 mb-2" />
                   <p className="text-sm text-foreground/60">Drag & drop property images here</p>

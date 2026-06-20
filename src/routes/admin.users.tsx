@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { MOCK_USERS, type User, type UserRole } from "@/lib/admin-types";
-import { Search, Download } from "lucide-react";
+import { type User, type UserRole } from "@/lib/admin-types";
+import { Search } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/users")({
@@ -19,7 +19,7 @@ function Badge({ label, style }: { label: string; style: string }) {
 }
 
 function UsersPage() {
-  const [users, setUsers] = useState(MOCK_USERS);
+  const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
 
   const filtered = users.filter((u) =>
@@ -92,6 +92,9 @@ function UsersPage() {
             </tbody>
           </table>
         </div>
+        {filtered.length === 0 && (
+          <p className="text-center py-8 text-sm text-foreground/60">No users yet</p>
+        )}
       </div>
     </div>
   );
