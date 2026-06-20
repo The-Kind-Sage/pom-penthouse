@@ -1,9 +1,9 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { a as require_jsx_runtime, o as require_react } from "../_libs/@radix-ui/react-collection+[...].mjs";
-import { n as useAdmin } from "./admin-store-CLBgHqxF.mjs";
+import { n as useAdmin, t as adminStore } from "./admin-store-CLBgHqxF.mjs";
 import { f as Outlet, g as Link, l as useLocation } from "../_libs/@tanstack/react-router+[...].mjs";
 import { A as ChartColumn, D as ChevronRight, M as Building2, N as Bell, O as ChevronLeft, S as LayoutDashboard, _ as Moon, b as Menu, d as Settings, f as Search, j as CalendarCheck, l as Sun, n as Users, r as User, x as LogOut } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/admin-DXW4AbbA.js
+//#region node_modules/.nitro/vite/services/ssr/assets/admin-8zPddR8o.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var navItems = [
@@ -40,11 +40,9 @@ var navItems = [
 	}
 ];
 function AdminLayout() {
-	const { sidebarOpen, toggleSidebar } = useAdmin();
+	const { sidebarOpen } = useAdmin();
 	const [mobileOpen, setMobileOpen] = (0, import_react.useState)(false);
-	const [theme, setTheme] = (0, import_react.useState)(() => {
-		return localStorage.getItem("pom-admin-theme") || "light";
-	});
+	const [theme, setTheme] = (0, import_react.useState)("light");
 	const [notifOpen, setNotifOpen] = (0, import_react.useState)(false);
 	const [profileOpen, setProfileOpen] = (0, import_react.useState)(false);
 	const location = useLocation();
@@ -78,7 +76,7 @@ function AdminLayout() {
 							children: "Pom Admin"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							onClick: () => {
-								toggleSidebar();
+								adminStore.toggleSidebar();
 								setMobileOpen(false);
 							},
 							className: "p-1.5 rounded-lg hover:bg-muted transition",

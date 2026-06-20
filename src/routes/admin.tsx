@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute, redirect, Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { useAdmin } from "@/lib/admin-store";
+import { useAdmin, adminStore } from "@/lib/admin-store";
 import {
   LayoutDashboard, CalendarCheck, Building2, Users, BarChart3, Settings,
   ChevronLeft, ChevronRight, Bell, Search, Moon, Sun, LogOut, User,
@@ -19,17 +19,17 @@ const navItems = [
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
   beforeLoad: () => {
-    const stored = localStorage.getItem("pom-admin-auth");
-    if (!stored) throw redirect({ to: "/admin/login" });
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("pom-admin-auth");
+      if (!stored) throw redirect({ to: "/admin/login" });
+    }
   },
 });
 
 function AdminLayout() {
-  const { sidebarOpen, toggleSidebar } = useAdmin();
+  const { sidebarOpen } = useAdmin();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    return (localStorage.getItem("pom-admin-theme") as "light" | "dark") || "light";
-  });
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [notifOpen, setNotifOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const location = useLocation();
@@ -66,7 +66,7 @@ function AdminLayout() {
           {sidebarOpen && (
             <Link to="/" className="font-display text-xl tracking-tight">Pom Admin</Link>
           )}
-          <button onClick={() => { toggleSidebar(); setMobileOpen(false); }}
+          <button onClick={() => { adminStore.toggleSidebar(); setMobileOpen(false); }}
             className="p-1.5 rounded-lg hover:bg-muted transition">
             {sidebarOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
           </button>
