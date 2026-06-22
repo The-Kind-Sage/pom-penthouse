@@ -2,7 +2,7 @@ import { o as __toESM } from "../_runtime.mjs";
 import { a as require_jsx_runtime, o as require_react } from "../_libs/@radix-ui/react-collection+[...].mjs";
 import { n as useAdmin, t as adminStore } from "./admin-store-BHBSC3CO.mjs";
 import { _ as useNavigate, f as Outlet, g as Link, l as useLocation } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Building2, E as ChevronLeft, O as ChartColumn, T as ChevronRight, b as LayoutDashboard, h as Moon, j as Bell, k as CalendarCheck, l as Settings, n as Users, r as User, s as Sun, u as Search, v as Menu, y as LogOut } from "../_libs/lucide-react.mjs";
+import { A as CalendarCheck, E as ChevronLeft, M as Bell, O as ChartColumn, T as ChevronRight, b as LayoutDashboard, h as Moon, j as Building2, l as Settings, n as Users, r as User, s as Sun, u as Search, v as Menu, y as LogOut } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/admin-D6ik5Jta.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();

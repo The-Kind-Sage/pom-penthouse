@@ -1,10 +1,10 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { a as require_jsx_runtime, o as require_react } from "../_libs/@radix-ui/react-collection+[...].mjs";
-import { E as ChevronLeft, M as ArrowUp, T as ChevronRight, c as Sparkles, d as Plus, g as Minus, h as Moon, j as Bell, m as Mountain, o as Sunrise, s as Sun, t as X, v as Menu, w as Cpu } from "../_libs/lucide-react.mjs";
+import { E as ChevronLeft, M as Bell, N as ArrowUp, T as ChevronRight, c as Sparkles, d as Plus, g as Minus, h as Moon, k as Calendar, m as Mountain, o as Sunrise, s as Sun, t as X, v as Menu, w as Cpu } from "../_libs/lucide-react.mjs";
 import { n as toast, t as Toaster } from "../_libs/sonner.mjs";
 import { a as useScroll, i as useMotionValue, n as useSpring, o as motion, r as useTransform, s as AnimatePresence, t as useInView } from "../_libs/framer-motion.mjs";
 import { t as DayPicker } from "../_libs/react-day-picker.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CJw8X63D.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CtNw_VnT.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var state = {
@@ -2115,7 +2115,9 @@ function Toggle({ on, onChange, label }) {
 function BookingModal() {
 	const { bookingOpen } = useUI();
 	const [room, setRoom] = (0, import_react.useState)("entire");
-	const [range, setRange] = (0, import_react.useState)();
+	const [checkIn, setCheckIn] = (0, import_react.useState)();
+	const [checkOut, setCheckOut] = (0, import_react.useState)();
+	const [openCal, setOpenCal] = (0, import_react.useState)(null);
 	const [adults, setAdults] = (0, import_react.useState)(2);
 	const [children, setChildren] = (0, import_react.useState)(0);
 	const [infants, setInfants] = (0, import_react.useState)(0);
@@ -2135,6 +2137,17 @@ function BookingModal() {
 	const [carouselI, setCarouselI] = (0, import_react.useState)(0);
 	const previewSrcs = (0, import_react.useMemo)(() => [photo(17).src, photo(18).src], []);
 	(0, import_react.useEffect)(() => {
+		if (!openCal) return;
+		const close = (e) => {
+			if (!e.target.closest("[data-calendar-popup]")) setOpenCal(null);
+		};
+		const t = setTimeout(() => document.addEventListener("mousedown", close), 0);
+		return () => {
+			clearTimeout(t);
+			document.removeEventListener("mousedown", close);
+		};
+	}, [openCal]);
+	(0, import_react.useEffect)(() => {
 		if (!bookingOpen) return;
 		const t = setInterval(() => setCarouselI((p) => (p + 1) % previewSrcs.length), 5e3);
 		return () => clearInterval(t);
@@ -2145,13 +2158,19 @@ function BookingModal() {
 			if (e.key === "Escape") ui.closeBooking();
 		};
 		window.addEventListener("keydown", onKey);
-		document.body.style.overflow = "hidden";
+		const html = document.documentElement;
+		const prev = html.style.overflow;
+		html.style.overflow = "hidden";
+		html.style.position = "fixed";
+		html.style.width = "100%";
 		return () => {
 			window.removeEventListener("keydown", onKey);
-			document.body.style.overflow = "";
+			html.style.overflow = prev;
+			html.style.position = "";
+			html.style.width = "";
 		};
 	}, [bookingOpen]);
-	const nights = range?.from && range?.to ? Math.max(0, differenceInDays(range.to, range.from)) : 0;
+	const nights = checkIn && checkOut ? Math.max(0, differenceInDays(checkOut, checkIn)) : 0;
 	const price = calcPrice({
 		room,
 		nights: room === "long" ? 30 : nights,
@@ -2159,7 +2178,9 @@ function BookingModal() {
 	});
 	const resetAll = () => {
 		setRoom("entire");
-		setRange(void 0);
+		setCheckIn(void 0);
+		setCheckOut(void 0);
+		setOpenCal(null);
 		setAdults(2);
 		setChildren(0);
 		setInfants(0);
@@ -2181,7 +2202,7 @@ function BookingModal() {
 	const [whatsappLink, setWhatsappLink] = (0, import_react.useState)("");
 	const submit = async (e) => {
 		e.preventDefault();
-		if (room !== "long" && (!range?.from || !range?.to || nights < 2)) {
+		if (room !== "long" && (!checkIn || !checkOut || nights < 2)) {
 			toast.error("Select valid dates — 2-night minimum");
 			return;
 		}
@@ -2199,8 +2220,8 @@ function BookingModal() {
 					guest_name: `${form.firstName} ${form.lastName}`,
 					guest_email: form.email,
 					guest_phone: form.phone,
-					check_in: room === "long" ? (/* @__PURE__ */ new Date()).toISOString().split("T")[0] : range.from.toISOString().split("T")[0],
-					check_out: room === "long" ? new Date(Date.now() + 30 * 864e5).toISOString().split("T")[0] : range.to.toISOString().split("T")[0],
+					check_in: room === "long" ? (/* @__PURE__ */ new Date()).toISOString().split("T")[0] : checkIn.toISOString().split("T")[0],
+					check_out: room === "long" ? new Date(Date.now() + 30 * 864e5).toISOString().split("T")[0] : checkOut.toISOString().split("T")[0],
 					nights: room === "long" ? 30 : nights,
 					total: price.total,
 					guests: adults + children,
@@ -2213,8 +2234,8 @@ function BookingModal() {
 			setWhatsappLink(getWhatsAppLink({
 				guestName: `${form.firstName} ${form.lastName}`,
 				penthouseName: ROOMS[room].label,
-				checkIn: room === "long" ? "Flexible" : range.from.toLocaleDateString(),
-				checkOut: room === "long" ? "30+ days" : range.to.toLocaleDateString(),
+				checkIn: room === "long" ? "Flexible" : checkIn.toLocaleDateString(),
+				checkOut: room === "long" ? "30+ days" : checkOut.toLocaleDateString(),
 				nights: room === "long" ? 30 : nights,
 				total: price.total
 			}));
@@ -2239,11 +2260,13 @@ function BookingModal() {
 		exit: { opacity: 0 },
 		transition: { duration: .22 },
 		onClick: ui.closeBooking,
+		onWheel: (e) => e.stopPropagation(),
 		role: "dialog",
 		"aria-modal": "true",
 		"aria-labelledby": "booking-title",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
 			className: "relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-[32px] bg-[var(--paper)] shadow-2xl",
+			style: { overscrollBehavior: "contain" },
 			initial: {
 				scale: .96,
 				y: 16,
@@ -2381,27 +2404,103 @@ function BookingModal() {
 								className: "eyebrow mb-3",
 								children: "Dates"
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "rounded-xl border p-2 overflow-x-auto",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DayPicker, {
-									mode: "range",
-									numberOfMonths: typeof window !== "undefined" && window.innerWidth < 768 ? 1 : 2,
-									disabled: { before: /* @__PURE__ */ new Date() },
-									min: 2,
-									selected: range,
-									onSelect: setRange,
-									modifiers: { festival: {
-										from: new Date(2026, 11, 28),
-										to: new Date(2027, 0, 2)
-									} },
-									modifiersClassNames: { festival: "festival" }
-								})
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid grid-cols-2 gap-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "text-xs opacity-60 mb-1 block",
+											children: "From"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											onClick: () => setOpenCal(openCal === "in" ? null : "in"),
+											className: "w-full flex items-center gap-2 rounded-xl border px-4 py-3 bg-transparent text-left focus:ring-2 focus:ring-[var(--gold)] outline-none text-sm",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
+												size: 14,
+												className: "opacity-50 shrink-0"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: checkIn ? checkIn.toLocaleDateString("en-US", {
+												month: "short",
+												day: "numeric",
+												year: "numeric"
+											}) : "Select" })]
+										}),
+										openCal === "in" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											"data-calendar-popup": true,
+											className: "absolute z-50 mt-1 bg-[var(--paper)] border rounded-xl shadow-xl p-2",
+											onClick: (e) => e.stopPropagation(),
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DayPicker, {
+												mode: "single",
+												disabled: { before: /* @__PURE__ */ new Date() },
+												selected: checkIn,
+												onSelect: (d) => {
+													setCheckIn(d);
+													if (d && checkOut && differenceInDays(checkOut, d) >= 2) setOpenCal(null);
+													else if (d) {
+														setCheckOut(void 0);
+														setOpenCal("out");
+													}
+												},
+												numberOfMonths: 1
+											})
+										})
+									]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "text-xs opacity-60 mb-1 block",
+											children: "To"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											onClick: () => {
+												if (checkIn) setOpenCal(openCal === "out" ? null : "out");
+											},
+											className: `w-full flex items-center gap-2 rounded-xl border px-4 py-3 bg-transparent text-left focus:ring-2 focus:ring-[var(--gold)] outline-none text-sm ${!checkIn ? "opacity-40 cursor-not-allowed" : ""}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, {
+												size: 14,
+												className: "opacity-50 shrink-0"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: checkOut ? checkOut.toLocaleDateString("en-US", {
+												month: "short",
+												day: "numeric",
+												year: "numeric"
+											}) : "Select" })]
+										}),
+										openCal === "out" && checkIn && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											"data-calendar-popup": true,
+											className: "absolute z-50 mt-1 bg-[var(--paper)] border rounded-xl shadow-xl p-2",
+											onClick: (e) => e.stopPropagation(),
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DayPicker, {
+												mode: "single",
+												disabled: { before: new Date(checkIn.getTime() + 2 * 864e5) },
+												selected: checkOut,
+												onSelect: (d) => {
+													setCheckOut(d);
+													if (d) setOpenCal(null);
+												},
+												numberOfMonths: 1
+											})
+										})
+									]
+								})]
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							checkIn && checkOut ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 								className: "text-xs mt-2 opacity-70",
-								children: range?.from && range?.to ? `${range.from.toLocaleDateString()} → ${range.to.toLocaleDateString()} · ${nights} nights` : "Select dates — 2-night minimum"
+								children: [
+									checkIn.toLocaleDateString(),
+									" → ",
+									checkOut.toLocaleDateString(),
+									" · ",
+									nights,
+									" nights"
+								]
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs mt-2 opacity-70",
+								children: "Select dates — 2-night minimum"
 							}),
-							range?.from && range?.to && nights < 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							checkIn && checkOut && nights < 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "text-xs text-red-600 mt-1",
 								children: "2-night minimum"
 							})

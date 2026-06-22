@@ -201,6 +201,34 @@ var CalendarCheck = createLucideIcon("calendar-check", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Calendar = createLucideIcon("calendar", [
+	["path", {
+		d: "M8 2v4",
+		key: "1cmpym"
+	}],
+	["path", {
+		d: "M16 2v4",
+		key: "4m81vk"
+	}],
+	["rect", {
+		width: "18",
+		height: "18",
+		x: "3",
+		y: "4",
+		rx: "2",
+		key: "1hopcy"
+	}],
+	["path", {
+		d: "M3 10h18",
+		key: "8toen8"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var ChartColumn = createLucideIcon("chart-column", [
 	["path", {
 		d: "M3 3v16a2 2 0 0 0 2 2h16",
@@ -790,4 +818,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { Building2 as A, DollarSign as C, Check as D, ChevronLeft as E, ArrowUp as M, ChartColumn as O, Download as S, ChevronRight as T, MessageCircle as _, Trash2 as a, LayoutDashboard as b, Sparkles as c, Plus as d, Percent as f, Minus as g, Moon as h, Upload as i, Bell as j, CalendarCheck as k, Settings as l, Mountain as m, Users as n, Sunrise as o, Pencil as p, User as r, Sun as s, X as t, Search as u, Menu as v, Cpu as w, Eye as x, LogOut as y };
+export { CalendarCheck as A, DollarSign as C, Check as D, ChevronLeft as E, Bell as M, ArrowUp as N, ChartColumn as O, Download as S, ChevronRight as T, MessageCircle as _, Trash2 as a, LayoutDashboard as b, Sparkles as c, Plus as d, Percent as f, Minus as g, Moon as h, Upload as i, Building2 as j, Calendar as k, Settings as l, Mountain as m, Users as n, Sunrise as o, Pencil as p, User as r, Sun as s, X as t, Search as u, Menu as v, Cpu as w, Eye as x, LogOut as y };

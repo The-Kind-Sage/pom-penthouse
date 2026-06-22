@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { DayPicker, type DateRange } from "react-day-picker";
+import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
-import { X, Plus, Minus } from "lucide-react";
+import { X, Plus, Minus, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { ui, useUI } from "@/lib/ui-store";
 import { ROOMS, ADDONS, calcPrice, fmtNPR, type RoomKey, type AddonKey } from "@/lib/pricing";
@@ -82,7 +82,9 @@ function Toggle({
 export function BookingModal() {
   const { bookingOpen } = useUI();
   const [room, setRoom] = useState<RoomKey>("entire");
-  const [range, setRange] = useState<DateRange | undefined>();
+  const [checkIn, setCheckIn] = useState<Date | undefined>();
+  const [checkOut, setCheckOut] = useState<Date | undefined>();
+  const [openCal, setOpenCal] = useState<"in" | "out" | null>(null);
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
@@ -102,6 +104,17 @@ export function BookingModal() {
   const [carouselI, setCarouselI] = useState(0);
 
   const previewSrcs = useMemo(() => [photo(17).src, photo(18).src], []);
+
+  useEffect(() => {
+    if (!openCal) return;
+    const close = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("[data-calendar-popup]")) setOpenCal(null);
+    };
+    const t = setTimeout(() => document.addEventListener("mousedown", close), 0);
+    return () => { clearTimeout(t); document.removeEventListener("mousedown", close); };
+  }, [openCal]);
+
   useEffect(() => {
     if (!bookingOpen) return;
     const t = setInterval(() => setCarouselI((p) => (p + 1) % previewSrcs.length), 5000);
@@ -114,19 +127,27 @@ export function BookingModal() {
       if (e.key === "Escape") ui.closeBooking();
     };
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
+    const html = document.documentElement;
+    const prev = html.style.overflow;
+    html.style.overflow = "hidden";
+    html.style.position = "fixed";
+    html.style.width = "100%";
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      html.style.overflow = prev;
+      html.style.position = "";
+      html.style.width = "";
     };
   }, [bookingOpen]);
 
-  const nights = range?.from && range?.to ? Math.max(0, differenceInDays(range.to, range.from)) : 0;
+  const nights = checkIn && checkOut ? Math.max(0, differenceInDays(checkOut, checkIn)) : 0;
   const price = calcPrice({ room, nights: room === "long" ? 30 : nights, addons });
 
   const resetAll = () => {
     setRoom("entire");
-    setRange(undefined);
+    setCheckIn(undefined);
+    setCheckOut(undefined);
+    setOpenCal(null);
     setAdults(2);
     setChildren(0);
     setInfants(0);
@@ -139,7 +160,7 @@ export function BookingModal() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (room !== "long" && (!range?.from || !range?.to || nights < 2)) {
+    if (room !== "long" && (!checkIn || !checkOut || nights < 2)) {
       toast.error("Select valid dates — 2-night minimum");
       return;
     }
@@ -157,8 +178,8 @@ export function BookingModal() {
           guest_name: `${form.firstName} ${form.lastName}`,
           guest_email: form.email,
           guest_phone: form.phone,
-          check_in: room === "long" ? new Date().toISOString().split("T")[0] : range!.from!.toISOString().split("T")[0],
-          check_out: room === "long" ? new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0] : range!.to!.toISOString().split("T")[0],
+          check_in: room === "long" ? new Date().toISOString().split("T")[0] : checkIn!.toISOString().split("T")[0],
+          check_out: room === "long" ? new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0] : checkOut!.toISOString().split("T")[0],
           nights: room === "long" ? 30 : nights,
           total: price.total,
           guests: adults + children,
@@ -172,8 +193,8 @@ export function BookingModal() {
       const link = getWhatsAppLink({
         guestName: `${form.firstName} ${form.lastName}`,
         penthouseName: ROOMS[room].label,
-        checkIn: room === "long" ? "Flexible" : range!.from!.toLocaleDateString(),
-        checkOut: room === "long" ? "30+ days" : range!.to!.toLocaleDateString(),
+        checkIn: room === "long" ? "Flexible" : checkIn!.toLocaleDateString(),
+        checkOut: room === "long" ? "30+ days" : checkOut!.toLocaleDateString(),
         nights: room === "long" ? 30 : nights,
         total: price.total,
       });
@@ -203,12 +224,14 @@ export function BookingModal() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.22 }}
           onClick={ui.closeBooking}
+          onWheel={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-labelledby="booking-title"
         >
           <motion.div
             className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-[32px] bg-[var(--paper)] shadow-2xl"
+            style={{ overscrollBehavior: "contain" }}
             initial={{ scale: 0.96, y: 16, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.96, y: 16, opacity: 0 }}
@@ -303,28 +326,71 @@ export function BookingModal() {
                 {room !== "long" && (
                   <fieldset>
                     <legend className="eyebrow mb-3">Dates</legend>
-                    <div className="rounded-xl border p-2 overflow-x-auto">
-                      <DayPicker
-                        mode="range"
-                        numberOfMonths={
-                          typeof window !== "undefined" && window.innerWidth < 768 ? 1 : 2
-                        }
-                        disabled={{ before: new Date() }}
-                        min={2}
-                        selected={range}
-                        onSelect={setRange}
-                        modifiers={{
-                          festival: { from: new Date(2026, 11, 28), to: new Date(2027, 0, 2) },
-                        }}
-                        modifiersClassNames={{ festival: "festival" }}
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="relative">
+                        <label className="text-xs opacity-60 mb-1 block">From</label>
+                        <button
+                          type="button"
+                          onClick={() => setOpenCal(openCal === "in" ? null : "in")}
+                          className="w-full flex items-center gap-2 rounded-xl border px-4 py-3 bg-transparent text-left focus:ring-2 focus:ring-[var(--gold)] outline-none text-sm"
+                        >
+                          <Calendar size={14} className="opacity-50 shrink-0" />
+                          <span>{checkIn ? checkIn.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Select"}</span>
+                        </button>
+                        {openCal === "in" && (
+                          <div data-calendar-popup className="absolute z-50 mt-1 bg-[var(--paper)] border rounded-xl shadow-xl p-2" onClick={(e) => e.stopPropagation()}>
+                            <DayPicker
+                              mode="single"
+                              disabled={{ before: new Date() }}
+                              selected={checkIn}
+                              onSelect={(d) => {
+                                setCheckIn(d);
+                                if (d && checkOut && differenceInDays(checkOut, d) >= 2) {
+                                  setOpenCal(null);
+                                } else if (d) {
+                                  setCheckOut(undefined);
+                                  setOpenCal("out");
+                                }
+                              }}
+                              numberOfMonths={1}
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div className="relative">
+                        <label className="text-xs opacity-60 mb-1 block">To</label>
+                        <button
+                          type="button"
+                          onClick={() => { if (checkIn) setOpenCal(openCal === "out" ? null : "out"); }}
+                          className={`w-full flex items-center gap-2 rounded-xl border px-4 py-3 bg-transparent text-left focus:ring-2 focus:ring-[var(--gold)] outline-none text-sm ${!checkIn ? "opacity-40 cursor-not-allowed" : ""}`}
+                        >
+                          <Calendar size={14} className="opacity-50 shrink-0" />
+                          <span>{checkOut ? checkOut.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Select"}</span>
+                        </button>
+                        {openCal === "out" && checkIn && (
+                          <div data-calendar-popup className="absolute z-50 mt-1 bg-[var(--paper)] border rounded-xl shadow-xl p-2" onClick={(e) => e.stopPropagation()}>
+                            <DayPicker
+                              mode="single"
+                              disabled={{ before: new Date(checkIn.getTime() + 2 * 86400000) }}
+                              selected={checkOut}
+                              onSelect={(d) => {
+                                setCheckOut(d);
+                                if (d) setOpenCal(null);
+                              }}
+                              numberOfMonths={1}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <p className="text-xs mt-2 opacity-70">
-                      {range?.from && range?.to
-                        ? `${range.from.toLocaleDateString()} → ${range.to.toLocaleDateString()} · ${nights} nights`
-                        : "Select dates — 2-night minimum"}
-                    </p>
-                    {range?.from && range?.to && nights < 2 && (
+                    {checkIn && checkOut ? (
+                      <p className="text-xs mt-2 opacity-70">
+                        {checkIn.toLocaleDateString()} → {checkOut.toLocaleDateString()} · {nights} nights
+                      </p>
+                    ) : (
+                      <p className="text-xs mt-2 opacity-70">Select dates — 2-night minimum</p>
+                    )}
+                    {checkIn && checkOut && nights < 2 && (
                       <p className="text-xs text-red-600 mt-1">2-night minimum</p>
                     )}
                   </fieldset>

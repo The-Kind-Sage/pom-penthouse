@@ -1,5 +1,5 @@
 import { a as require_jsx_runtime } from "../_libs/@radix-ui/react-collection+[...].mjs";
-import { C as DollarSign, _ as MessageCircle, f as Percent, k as CalendarCheck } from "../_libs/lucide-react.mjs";
+import { A as CalendarCheck, C as DollarSign, _ as MessageCircle, f as Percent } from "../_libs/lucide-react.mjs";
 import { n as useBookingStats, r as useBookings, t as useActivities } from "./hooks-BYi8XGEx.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/admin.index-DhfJkMkP.js
 var import_jsx_runtime = require_jsx_runtime();
