@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase";
+import type { Penthouse, Booking, User, Activity, Setting } from "@/lib/admin-types";
 
 function supabase() {
   return createClient();
@@ -10,7 +11,7 @@ function supabase() {
 // ============================================
 
 export function usePenthouses() {
-  return useQuery({
+  return useQuery<Penthouse[]>({
     queryKey: ["penthouses"],
     queryFn: async () => {
       const { data, error } = await supabase()
@@ -72,7 +73,7 @@ export function useDeletePenthouse() {
 // ============================================
 
 export function useBookings() {
-  return useQuery({
+  return useQuery<Booking[]>({
     queryKey: ["bookings"],
     queryFn: async () => {
       const { data, error } = await supabase()
@@ -102,8 +103,15 @@ export function useUpdateBooking() {
   });
 }
 
+interface BookingStats {
+  totalBookings: number;
+  confirmedBookings: number;
+  totalRevenue: number;
+  pendingBookings: number;
+}
+
 export function useBookingStats() {
-  return useQuery({
+  return useQuery<BookingStats>({
     queryKey: ["booking-stats"],
     queryFn: async () => {
       const [totalBookings, confirmedBookings, totalRevenue, pendingBookings] = await Promise.all([
@@ -113,7 +121,7 @@ export function useBookingStats() {
         supabase().from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
       ]);
 
-      const revenue = totalRevenue.data?.reduce((sum, b) => sum + (b.total || 0), 0) || 0;
+      const revenue = totalRevenue.data?.reduce((sum: number, b: { total: number | null }) => sum + (b.total || 0), 0) || 0;
 
       return {
         totalBookings: totalBookings.count || 0,
@@ -130,7 +138,7 @@ export function useBookingStats() {
 // ============================================
 
 export function useUsers() {
-  return useQuery({
+  return useQuery<User[]>({
     queryKey: ["users"],
     queryFn: async () => {
       const { data, error } = await supabase()
@@ -182,7 +190,7 @@ export function useToggleBanUser() {
 // ============================================
 
 export function useActivities(limit = 20) {
-  return useQuery({
+  return useQuery<Activity[]>({
     queryKey: ["activities", limit],
     queryFn: async () => {
       const { data, error } = await supabase()
@@ -201,13 +209,13 @@ export function useActivities(limit = 20) {
 // ============================================
 
 export function useSettings() {
-  return useQuery({
+  return useQuery<Record<string, any>>({
     queryKey: ["settings"],
     queryFn: async () => {
-      const { data, error } = await supabase().from("settings").select("*");
+      const { data, error } = await supabase().from("settings").select("*") as { data: Setting[] | null; error: any };
       if (error) throw error;
       const map: Record<string, any> = {};
-      data?.forEach((s) => { map[s.key] = s.value; });
+      data?.forEach((s: Setting) => { map[s.key] = s.value; });
       return map;
     },
   });

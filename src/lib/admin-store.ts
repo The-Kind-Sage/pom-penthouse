@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from "react";
-import { createClient } from "@/lib/supabase";
 
 type Profile = {
   id: string;
@@ -30,11 +29,16 @@ function subscribe(cb: () => void) { listeners.add(cb); return () => listeners.d
 function getSnapshot() { return state; }
 function getServerSnapshot() { return state; }
 
+async function getClient() {
+  const { createClient } = await import("@/lib/supabase");
+  return createClient();
+}
+
 export const adminStore = {
   async init() {
     if (typeof window === "undefined") return;
     try {
-      const supabase = createClient();
+      const supabase = await getClient();
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         const { data: profile } = await supabase
@@ -54,7 +58,7 @@ export const adminStore = {
   },
 
   async login(email: string, password: string) {
-    const supabase = createClient();
+    const supabase = await getClient();
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
     if (data.user) {
@@ -69,7 +73,7 @@ export const adminStore = {
   },
 
   async logout() {
-    const supabase = createClient();
+    const supabase = await getClient();
     await supabase.auth.signOut();
     state = { ...state, isAuthenticated: false, user: null };
     emit();
