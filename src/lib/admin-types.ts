@@ -6,51 +6,73 @@ export type UserRole = "guest" | "staff" | "admin";
 export interface Penthouse {
   id: string;
   name: string;
-  location: string;
-  pricePerNight: number;
+  location: string | null;
+  price_per_night: number;
   status: PenthouseStatus;
-  image: string;
-  description: string;
+  image: string | null;
+  description: string | null;
   amenities: string[];
-  maxGuests: number;
+  max_guests: number;
   bedrooms: number;
   bathrooms: number;
   rules: string[];
   images: string[];
-  createdAt: string;
+  created_at: string;
 }
 
 export interface Booking {
   id: string;
-  penthouseId: string;
-  penthouseName: string;
-  guestName: string;
-  guestEmail: string;
-  checkIn: string;
-  checkOut: string;
+  penthouse_id: string | null;
+  penthouse_name: string | null;
+  guest_name: string;
+  guest_email: string;
+  guest_phone: string | null;
+  check_in: string;
+  check_out: string;
   nights: number;
   total: number;
   status: BookingStatus;
-  paymentStatus: PaymentStatus;
+  payment_status: PaymentStatus;
   guests: number;
-  createdAt: string;
+  addons: Record<string, boolean>;
+  notes: string | null;
+  created_at: string;
 }
 
 export interface User {
   id: string;
-  name: string;
-  email: string;
+  name: string | null;
+  email: string | null;
   role: UserRole;
-  bookingCount: number;
-  lifetimeSpend: number;
-  createdAt: string;
+  avatar: string | null;
   banned: boolean;
+  created_at: string;
 }
 
 export interface Activity {
   id: string;
   action: string;
-  detail: string;
-  time: string;
-  type: "booking" | "review" | "payment" | "user";
+  detail: string | null;
+  type: "booking" | "review" | "payment" | "user" | null;
+  created_at: string;
 }
+
+export interface Setting {
+  key: string;
+  value: any;
+  updated_at: string;
+}
+
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  read: boolean;
+  created_at: string;
+}
+
+// Legacy aliases (used by some pages)
+export type PenthouseStatusLegacy = PenthouseStatus;
+export type BookingStatusLegacy = BookingStatus;
+export type PaymentStatusLegacy = PaymentStatus;

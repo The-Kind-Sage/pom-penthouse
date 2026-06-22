@@ -1,4 +1,4 @@
-import { Outlet, createFileRoute, redirect, Link, useLocation } from "@tanstack/react-router";
+import { Outlet, createFileRoute, Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useAdmin, adminStore } from "@/lib/admin-store";
 import {
@@ -21,24 +21,35 @@ export const Route = createFileRoute("/admin")({
   ssr: false,
   beforeLoad: ({ location }) => {
     if (location.pathname === "/admin/login") return;
-    const stored = localStorage.getItem("pom-admin-auth");
-    if (!stored) throw redirect({ to: "/admin/login" });
   },
 });
 
 function AdminLayout() {
-  const { sidebarOpen } = useAdmin();
+  const { sidebarOpen, isLoading, isAuthenticated, user } = useAdmin();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [notifOpen, setNotifOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isLoginPage = location.pathname === "/admin/login";
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      adminStore.init();
+    }
+  }, []);
+
+  useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    if (!isLoading && !isLoginPage && !isAuthenticated) {
+      navigate({ to: "/admin/login" });
+    }
+  }, [isLoading, isAuthenticated, isLoginPage, navigate]);
 
   const toggleTheme = () => {
     const next = theme === "light" ? "dark" : "light";
@@ -53,14 +64,26 @@ function AdminLayout() {
 
   if (isLoginPage) return <Outlet />;
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-sm text-foreground/60">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) return null;
+
+  const initials = user?.name
+    ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : "A";
+
   return (
     <div className="min-h-screen bg-background text-foreground flex">
-      {/* Mobile overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setMobileOpen(false)} />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`fixed lg:sticky top-0 left-0 z-50 h-screen bg-paper border-r transition-all duration-300 flex flex-col ${
           sidebarOpen ? "w-64" : "w-0 lg:w-16 overflow-hidden"
@@ -94,7 +117,7 @@ function AdminLayout() {
         </nav>
         <div className="p-4 border-t shrink-0">
           <button
-            onClick={() => { localStorage.removeItem("pom-admin-auth"); window.location.href = "/admin/login"; }}
+            onClick={() => adminStore.logout()}
             className={`flex items-center gap-3 text-sm text-foreground/60 hover:text-foreground transition ${sidebarOpen ? "" : "justify-center"}`}
           >
             <LogOut size={18} />
@@ -103,9 +126,7 @@ function AdminLayout() {
         </div>
       </aside>
 
-      {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Navbar */}
         <header className="h-16 border-b bg-paper flex items-center justify-between px-4 lg:px-6 shrink-0">
           <div className="flex items-center gap-3">
             <button className="lg:hidden p-2" onClick={() => setMobileOpen(true)}>
@@ -138,7 +159,7 @@ function AdminLayout() {
             <div className="relative">
               <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-muted transition">
                 <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-medium">
-                  A
+                  {initials}
                 </div>
               </button>
               {profileOpen && (
@@ -146,14 +167,14 @@ function AdminLayout() {
                   <div className="fixed inset-0 z-10" onClick={() => setProfileOpen(false)} />
                   <div className="absolute right-0 top-full mt-2 w-48 bg-paper border rounded-xl shadow-lg z-20 py-2">
                     <div className="px-4 py-2 text-sm border-b">
-                      <p className="font-medium">Admin</p>
-                      <p className="text-foreground/60">admin@pompenthouse.np</p>
+                      <p className="font-medium">{user?.name || "Admin"}</p>
+                      <p className="text-foreground/60">{user?.email || ""}</p>
                     </div>
                     <button className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted">
                       <User size={14} /> Profile
                     </button>
                     <button
-                      onClick={() => { localStorage.removeItem("pom-admin-auth"); window.location.href = "/admin/login"; }}
+                      onClick={() => adminStore.logout()}
                       className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted text-red-500"
                     >
                       <LogOut size={14} /> Logout
@@ -165,7 +186,6 @@ function AdminLayout() {
           </div>
         </header>
 
-        {/* Page content */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           <Outlet />
         </main>

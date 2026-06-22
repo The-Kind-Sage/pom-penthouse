@@ -1,17 +1,27 @@
 import { useSyncExternalStore } from "react";
+import { createClient } from "@/lib/supabase";
+
+type Profile = {
+  id: string;
+  name: string | null;
+  email: string | null;
+  role: "admin" | "staff" | "guest";
+  avatar: string | null;
+  banned: boolean;
+};
 
 type AdminState = {
+  isLoading: boolean;
   isAuthenticated: boolean;
-  user: { name: string; email: string; role: "admin" | "staff" | "guest"; avatar: string } | null;
+  user: Profile | null;
   sidebarOpen: boolean;
-  theme: "light" | "dark";
 };
 
 let state: AdminState = {
+  isLoading: true,
   isAuthenticated: false,
   user: null,
   sidebarOpen: true,
-  theme: "light",
 };
 
 const listeners = new Set<() => void>();
@@ -21,16 +31,55 @@ function getSnapshot() { return state; }
 function getServerSnapshot() { return state; }
 
 export const adminStore = {
-  login(email: string, password: string) {
-    state = { ...state, isAuthenticated: true, user: { name: "Admin", email, role: "admin", avatar: "" } };
-    emit();
+  async init() {
+    if (typeof window === "undefined") return;
+    try {
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+        state = { ...state, isLoading: false, isAuthenticated: true, user: profile };
+      } else {
+        state = { ...state, isLoading: false };
+      }
+      emit();
+    } catch {
+      state = { ...state, isLoading: false };
+      emit();
+    }
   },
-  logout() { state = { ...state, isAuthenticated: false, user: null }; emit(); },
-  toggleSidebar() { state = { ...state, sidebarOpen: !state.sidebarOpen }; emit(); },
-  setTheme(t: "light" | "dark") {
-    state = { ...state, theme: t };
-    document.documentElement.setAttribute("data-theme", t);
-    localStorage.setItem("pom-admin-theme", t);
+
+  async login(email: string, password: string) {
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    if (data.user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", data.user.id)
+        .single();
+      state = { ...state, isAuthenticated: true, user: profile };
+      emit();
+    }
+  },
+
+  async logout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    state = { ...state, isAuthenticated: false, user: null };
+    emit();
+    if (typeof window !== "undefined") {
+      window.location.href = "/admin/login";
+    }
+  },
+
+  toggleSidebar() {
+    state = { ...state, sidebarOpen: !state.sidebarOpen };
     emit();
   },
 };
