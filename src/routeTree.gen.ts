@@ -12,15 +12,23 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as ApiUsersRouteImport } from './routes/api/users'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as ApiSettingsRouteImport } from './routes/api/settings'
+import { Route as ApiPenthousesRouteImport } from './routes/api/penthouses'
+import { Route as ApiContactMessagesRouteImport } from './routes/api/contact-messages'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiBookingsRouteImport } from './routes/api/bookings'
+import { Route as ApiActivitiesRouteImport } from './routes/api/activities'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminPenthousesRouteImport } from './routes/admin.penthouses'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
+import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
+import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
+import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
 
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
@@ -37,9 +45,29 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiUsersRoute = ApiUsersRouteImport.update({
+  id: '/api/users',
+  path: '/api/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiUploadRoute = ApiUploadRouteImport.update({
   id: '/api/upload',
   path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSettingsRoute = ApiSettingsRouteImport.update({
+  id: '/api/settings',
+  path: '/api/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPenthousesRoute = ApiPenthousesRouteImport.update({
+  id: '/api/penthouses',
+  path: '/api/penthouses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiContactMessagesRoute = ApiContactMessagesRouteImport.update({
+  id: '/api/contact-messages',
+  path: '/api/contact-messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiContactRoute = ApiContactRouteImport.update({
@@ -50,6 +78,11 @@ const ApiContactRoute = ApiContactRouteImport.update({
 const ApiBookingsRoute = ApiBookingsRouteImport.update({
   id: '/api/bookings',
   path: '/api/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiActivitiesRoute = ApiActivitiesRouteImport.update({
+  id: '/api/activities',
+  path: '/api/activities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
@@ -82,6 +115,21 @@ const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiAuthMeRoute = ApiAuthMeRouteImport.update({
+  id: '/api/auth/me',
+  path: '/api/auth/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
+  id: '/api/auth/logout',
+  path: '/api/auth/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
+  id: '/api/auth/login',
+  path: '/api/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -92,10 +140,18 @@ export interface FileRoutesByFullPath {
   '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/activities': typeof ApiActivitiesRoute
   '/api/bookings': typeof ApiBookingsRoute
   '/api/contact': typeof ApiContactRoute
+  '/api/contact-messages': typeof ApiContactMessagesRoute
+  '/api/penthouses': typeof ApiPenthousesRoute
+  '/api/settings': typeof ApiSettingsRoute
   '/api/upload': typeof ApiUploadRoute
+  '/api/users': typeof ApiUsersRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/me': typeof ApiAuthMeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -105,10 +161,18 @@ export interface FileRoutesByTo {
   '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/activities': typeof ApiActivitiesRoute
   '/api/bookings': typeof ApiBookingsRoute
   '/api/contact': typeof ApiContactRoute
+  '/api/contact-messages': typeof ApiContactMessagesRoute
+  '/api/penthouses': typeof ApiPenthousesRoute
+  '/api/settings': typeof ApiSettingsRoute
   '/api/upload': typeof ApiUploadRoute
+  '/api/users': typeof ApiUsersRoute
   '/admin': typeof AdminIndexRoute
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/me': typeof ApiAuthMeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -120,10 +184,18 @@ export interface FileRoutesById {
   '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/activities': typeof ApiActivitiesRoute
   '/api/bookings': typeof ApiBookingsRoute
   '/api/contact': typeof ApiContactRoute
+  '/api/contact-messages': typeof ApiContactMessagesRoute
+  '/api/penthouses': typeof ApiPenthousesRoute
+  '/api/settings': typeof ApiSettingsRoute
   '/api/upload': typeof ApiUploadRoute
+  '/api/users': typeof ApiUsersRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/me': typeof ApiAuthMeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,10 +208,18 @@ export interface FileRouteTypes {
     | '/admin/penthouses'
     | '/admin/settings'
     | '/admin/users'
+    | '/api/activities'
     | '/api/bookings'
     | '/api/contact'
+    | '/api/contact-messages'
+    | '/api/penthouses'
+    | '/api/settings'
     | '/api/upload'
+    | '/api/users'
     | '/admin/'
+    | '/api/auth/login'
+    | '/api/auth/logout'
+    | '/api/auth/me'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -149,10 +229,18 @@ export interface FileRouteTypes {
     | '/admin/penthouses'
     | '/admin/settings'
     | '/admin/users'
+    | '/api/activities'
     | '/api/bookings'
     | '/api/contact'
+    | '/api/contact-messages'
+    | '/api/penthouses'
+    | '/api/settings'
     | '/api/upload'
+    | '/api/users'
     | '/admin'
+    | '/api/auth/login'
+    | '/api/auth/logout'
+    | '/api/auth/me'
   id:
     | '__root__'
     | '/'
@@ -163,18 +251,34 @@ export interface FileRouteTypes {
     | '/admin/penthouses'
     | '/admin/settings'
     | '/admin/users'
+    | '/api/activities'
     | '/api/bookings'
     | '/api/contact'
+    | '/api/contact-messages'
+    | '/api/penthouses'
+    | '/api/settings'
     | '/api/upload'
+    | '/api/users'
     | '/admin/'
+    | '/api/auth/login'
+    | '/api/auth/logout'
+    | '/api/auth/me'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  ApiActivitiesRoute: typeof ApiActivitiesRoute
   ApiBookingsRoute: typeof ApiBookingsRoute
   ApiContactRoute: typeof ApiContactRoute
+  ApiContactMessagesRoute: typeof ApiContactMessagesRoute
+  ApiPenthousesRoute: typeof ApiPenthousesRoute
+  ApiSettingsRoute: typeof ApiSettingsRoute
   ApiUploadRoute: typeof ApiUploadRoute
+  ApiUsersRoute: typeof ApiUsersRoute
+  ApiAuthLoginRoute: typeof ApiAuthLoginRoute
+  ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
+  ApiAuthMeRoute: typeof ApiAuthMeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -200,11 +304,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/users': {
+      id: '/api/users'
+      path: '/api/users'
+      fullPath: '/api/users'
+      preLoaderRoute: typeof ApiUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/upload': {
       id: '/api/upload'
       path: '/api/upload'
       fullPath: '/api/upload'
       preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/settings': {
+      id: '/api/settings'
+      path: '/api/settings'
+      fullPath: '/api/settings'
+      preLoaderRoute: typeof ApiSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/penthouses': {
+      id: '/api/penthouses'
+      path: '/api/penthouses'
+      fullPath: '/api/penthouses'
+      preLoaderRoute: typeof ApiPenthousesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contact-messages': {
+      id: '/api/contact-messages'
+      path: '/api/contact-messages'
+      fullPath: '/api/contact-messages'
+      preLoaderRoute: typeof ApiContactMessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/contact': {
@@ -219,6 +351,13 @@ declare module '@tanstack/react-router' {
       path: '/api/bookings'
       fullPath: '/api/bookings'
       preLoaderRoute: typeof ApiBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/activities': {
+      id: '/api/activities'
+      path: '/api/activities'
+      fullPath: '/api/activities'
+      preLoaderRoute: typeof ApiActivitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/users': {
@@ -263,6 +402,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnalyticsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/auth/me': {
+      id: '/api/auth/me'
+      path: '/api/auth/me'
+      fullPath: '/api/auth/me'
+      preLoaderRoute: typeof ApiAuthMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/logout': {
+      id: '/api/auth/logout'
+      path: '/api/auth/logout'
+      fullPath: '/api/auth/logout'
+      preLoaderRoute: typeof ApiAuthLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/login': {
+      id: '/api/auth/login'
+      path: '/api/auth/login'
+      fullPath: '/api/auth/login'
+      preLoaderRoute: typeof ApiAuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -291,9 +451,17 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  ApiActivitiesRoute: ApiActivitiesRoute,
   ApiBookingsRoute: ApiBookingsRoute,
   ApiContactRoute: ApiContactRoute,
+  ApiContactMessagesRoute: ApiContactMessagesRoute,
+  ApiPenthousesRoute: ApiPenthousesRoute,
+  ApiSettingsRoute: ApiSettingsRoute,
   ApiUploadRoute: ApiUploadRoute,
+  ApiUsersRoute: ApiUsersRoute,
+  ApiAuthLoginRoute: ApiAuthLoginRoute,
+  ApiAuthLogoutRoute: ApiAuthLogoutRoute,
+  ApiAuthMeRoute: ApiAuthMeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

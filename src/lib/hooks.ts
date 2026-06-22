@@ -1,9 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClient } from "@/lib/supabase";
 import type { Penthouse, Booking, User, Activity, Setting } from "@/lib/admin-types";
+import { adminStore } from "@/lib/admin-store";
 
-function supabase() {
-  return createClient();
+async function apiGet<T>(url: string): Promise<T> {
+  const res = await adminStore.apiFetch(url);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Request failed");
+  return data.data ?? data;
+}
+
+async function apiMutate<T>(url: string, options: RequestInit): Promise<T> {
+  const res = await adminStore.apiFetch(url, options);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Request failed");
+  return data;
 }
 
 // ============================================
@@ -13,29 +23,15 @@ function supabase() {
 export function usePenthouses() {
   return useQuery<Penthouse[]>({
     queryKey: ["penthouses"],
-    queryFn: async () => {
-      const { data, error } = await supabase()
-        .from("penthouses")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
-    },
+    queryFn: () => apiGet("/api/penthouses"),
   });
 }
 
 export function useCreatePenthouse() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (penthouse: any) => {
-      const { data, error } = await supabase()
-        .from("penthouses")
-        .insert(penthouse)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
-    },
+    mutationFn: (penthouse: any) =>
+      apiMutate("/api/penthouses", { method: "POST", body: JSON.stringify(penthouse) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["penthouses"] }),
   });
 }
@@ -43,16 +39,8 @@ export function useCreatePenthouse() {
 export function useUpdatePenthouse() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...updates }: any) => {
-      const { data, error } = await supabase()
-        .from("penthouses")
-        .update(updates)
-        .eq("id", id)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
-    },
+    mutationFn: ({ id, ...updates }: any) =>
+      apiMutate("/api/penthouses", { method: "PATCH", body: JSON.stringify({ id, ...updates }) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["penthouses"] }),
   });
 }
@@ -60,10 +48,8 @@ export function useUpdatePenthouse() {
 export function useDeletePenthouse() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase().from("penthouses").delete().eq("id", id);
-      if (error) throw error;
-    },
+    mutationFn: (id: string) =>
+      apiMutate("/api/penthouses", { method: "DELETE", body: JSON.stringify({ id }) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["penthouses"] }),
   });
 }
@@ -75,95 +61,52 @@ export function useDeletePenthouse() {
 export function useBookings() {
   return useQuery<Booking[]>({
     queryKey: ["bookings"],
-    queryFn: async () => {
-      const { data, error } = await supabase()
-        .from("bookings")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
-    },
+    queryFn: () => apiGet("/api/bookings"),
   });
 }
 
 export function useUpdateBooking() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...updates }: any) => {
-      const { data, error } = await supabase()
-        .from("bookings")
-        .update(updates)
-        .eq("id", id)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
-    },
+    mutationFn: ({ id, ...updates }: any) =>
+      apiMutate("/api/bookings", { method: "PATCH", body: JSON.stringify({ id, ...updates }) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["bookings"] }),
   });
 }
 
-interface BookingStats {
-  totalBookings: number;
-  confirmedBookings: number;
-  totalRevenue: number;
-  pendingBookings: number;
-}
-
 export function useBookingStats() {
-  return useQuery<BookingStats>({
+  return useQuery({
     queryKey: ["booking-stats"],
     queryFn: async () => {
-      const [totalBookings, confirmedBookings, totalRevenue, pendingBookings] = await Promise.all([
-        supabase().from("bookings").select("id", { count: "exact", head: true }),
-        supabase().from("bookings").select("id", { count: "exact", head: true }).eq("status", "confirmed"),
-        supabase().from("bookings").select("total").eq("status", "confirmed"),
-        supabase().from("bookings").select("id", { count: "exact", head: true }).eq("status", "pending"),
-      ]);
-
-      const revenue = totalRevenue.data?.reduce((sum: number, b: { total: number | null }) => sum + (b.total || 0), 0) || 0;
-
+      const bookings = await apiGet<Booking[]>("/api/bookings");
       return {
-        totalBookings: totalBookings.count || 0,
-        confirmedBookings: confirmedBookings.count || 0,
-        totalRevenue: revenue,
-        pendingBookings: pendingBookings.count || 0,
+        totalBookings: bookings.length,
+        confirmedBookings: bookings.filter((b) => b.status === "confirmed").length,
+        totalRevenue: bookings
+          .filter((b) => b.status === "confirmed")
+          .reduce((sum, b) => sum + (b.total || 0), 0),
+        pendingBookings: bookings.filter((b) => b.status === "pending").length,
       };
     },
   });
 }
 
 // ============================================
-// USER / PROFILE HOOKS
+// USER HOOKS
 // ============================================
 
 export function useUsers() {
   return useQuery<User[]>({
     queryKey: ["users"],
-    queryFn: async () => {
-      const { data, error } = await supabase()
-        .from("profiles")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
-    },
+    queryFn: () => apiGet("/api/users"),
   });
 }
 
 export function useUpdateUserRole() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, role }: { id: string; role: string }) => {
-      const { data, error } = await supabase()
-        .from("profiles")
-        .update({ role })
-        .eq("id", id)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
-    },
+    mutationFn: ({ id, role }: { id: string; role: string }) =>
+      apiMutate("/api/users", { method: "PATCH", body: JSON.stringify({ id, role }) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["users"] }),
   });
 }
@@ -171,16 +114,8 @@ export function useUpdateUserRole() {
 export function useToggleBanUser() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, banned }: { id: string; banned: boolean }) => {
-      const { data, error } = await supabase()
-        .from("profiles")
-        .update({ banned })
-        .eq("id", id)
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
-    },
+    mutationFn: ({ id, banned }: { id: string; banned: boolean }) =>
+      apiMutate("/api/users", { method: "PATCH", body: JSON.stringify({ id, banned }) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["users"] }),
   });
 }
@@ -192,15 +127,7 @@ export function useToggleBanUser() {
 export function useActivities(limit = 20) {
   return useQuery<Activity[]>({
     queryKey: ["activities", limit],
-    queryFn: async () => {
-      const { data, error } = await supabase()
-        .from("activities")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(limit);
-      if (error) throw error;
-      return data;
-    },
+    queryFn: () => apiGet(`/api/activities?limit=${limit}`),
   });
 }
 
@@ -212,10 +139,9 @@ export function useSettings() {
   return useQuery<Record<string, any>>({
     queryKey: ["settings"],
     queryFn: async () => {
-      const { data, error } = await supabase().from("settings").select("*") as { data: Setting[] | null; error: any };
-      if (error) throw error;
+      const settings = await apiGet<{ key: string; value: any }[]>("/api/settings");
       const map: Record<string, any> = {};
-      data?.forEach((s: Setting) => { map[s.key] = s.value; });
+      settings.forEach((s: { key: string; value: any }) => { map[s.key] = s.value; });
       return map;
     },
   });
@@ -224,15 +150,8 @@ export function useSettings() {
 export function useUpdateSetting() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ key, value }: { key: string; value: any }) => {
-      const { data, error } = await supabase()
-        .from("settings")
-        .upsert({ key, value, updated_at: new Date().toISOString() })
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
-    },
+    mutationFn: ({ key, value }: { key: string; value: any }) =>
+      apiMutate("/api/settings", { method: "PATCH", body: JSON.stringify({ key, value }) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["settings"] }),
   });
 }
@@ -244,27 +163,15 @@ export function useUpdateSetting() {
 export function useContactMessages() {
   return useQuery({
     queryKey: ["contact-messages"],
-    queryFn: async () => {
-      const { data, error } = await supabase()
-        .from("contact_messages")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
-    },
+    queryFn: () => apiGet("/api/contact-messages"),
   });
 }
 
 export function useMarkContactRead() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase()
-        .from("contact_messages")
-        .update({ read: true })
-        .eq("id", id);
-      if (error) throw error;
-    },
+    mutationFn: (id: string) =>
+      apiMutate("/api/contact-messages", { method: "PATCH", body: JSON.stringify({ id }) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["contact-messages"] }),
   });
 }

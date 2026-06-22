@@ -29,25 +29,47 @@ function subscribe(cb: () => void) { listeners.add(cb); return () => listeners.d
 function getSnapshot() { return state; }
 function getServerSnapshot() { return state; }
 
-async function getClient() {
-  const { createClient } = await import("@/lib/supabase");
-  return createClient();
+function getToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("token");
+}
+
+function setToken(token: string) {
+  localStorage.setItem("token", token);
+}
+
+function clearToken() {
+  localStorage.removeItem("token");
+}
+
+async function apiFetch(url: string, options: RequestInit = {}) {
+  const token = getToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(options.headers as Record<string, string>),
+  };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  return fetch(url, { ...options, headers });
 }
 
 export const adminStore = {
   async init() {
     if (typeof window === "undefined") return;
     try {
-      const supabase = await getClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", session.user.id)
-          .single();
-        state = { ...state, isLoading: false, isAuthenticated: true, user: profile };
+      const token = getToken();
+      if (!token) {
+        state = { ...state, isLoading: false };
+        emit();
+        return;
+      }
+      const res = await fetch("/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok && data.user) {
+        state = { ...state, isLoading: false, isAuthenticated: true, user: data.user };
       } else {
+        clearToken();
         state = { ...state, isLoading: false };
       }
       emit();
@@ -58,23 +80,20 @@ export const adminStore = {
   },
 
   async login(email: string, password: string) {
-    const supabase = await getClient();
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    if (data.user) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", data.user.id)
-        .single();
-      state = { ...state, isAuthenticated: true, user: profile };
-      emit();
-    }
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Login failed");
+    setToken(data.token);
+    state = { ...state, isAuthenticated: true, user: data.user };
+    emit();
   },
 
   async logout() {
-    const supabase = await getClient();
-    await supabase.auth.signOut();
+    clearToken();
     state = { ...state, isAuthenticated: false, user: null };
     emit();
     if (typeof window !== "undefined") {
@@ -86,6 +105,9 @@ export const adminStore = {
     state = { ...state, sidebarOpen: !state.sidebarOpen };
     emit();
   },
+
+  apiFetch,
+  getToken,
 };
 
 export function useAdmin() {
