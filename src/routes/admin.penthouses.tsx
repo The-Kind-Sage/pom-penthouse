@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { usePenthouses, useCreatePenthouse, useUpdatePenthouse, useDeletePenthouse } from "@/lib/hooks";
 import { type Penthouse, type PenthouseStatus } from "@/lib/admin-types";
-import { Plus, Pencil, Trash2, Upload } from "lucide-react";
+import { Plus, Pencil, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/penthouses")({
@@ -19,40 +20,96 @@ function Badge({ label, style }: { label: string; style: string }) {
 }
 
 function PenthousesPage() {
-  const [penthouses, setPenthouses] = useState<Penthouse[]>([]);
+  const { data: penthouses = [], isLoading } = usePenthouses();
+  const createPenthouse = useCreatePenthouse();
+  const updatePenthouse = useUpdatePenthouse();
+  const deletePenthouse = useDeletePenthouse();
+
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Penthouse | null>(null);
-  const [form, setForm] = useState({ name: "", location: "", pricePerNight: 0, description: "", maxGuests: 0, bedrooms: 0, bathrooms: 0, status: "available" as PenthouseStatus, amenities: "", rules: "" });
+  const [form, setForm] = useState({ name: "", location: "", price_per_night: 0, description: "", max_guests: 2, bedrooms: 1, bathrooms: 1, status: "available" as PenthouseStatus, amenities: "", rules: "" });
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
 
   const openNew = () => {
     setEditing(null);
-    setForm({ name: "", location: "", pricePerNight: 0, description: "", maxGuests: 0, bedrooms: 0, bathrooms: 0, status: "available", amenities: "", rules: "" });
+    setForm({ name: "", location: "", price_per_night: 0, description: "", max_guests: 2, bedrooms: 1, bathrooms: 1, status: "available", amenities: "", rules: "" });
+    setImageUrls([]);
     setShowForm(true);
   };
 
   const openEdit = (p: Penthouse) => {
     setEditing(p);
-    setForm({ name: p.name, location: p.location, pricePerNight: p.pricePerNight, description: p.description, maxGuests: p.maxGuests, bedrooms: p.bedrooms, bathrooms: p.bathrooms, status: p.status, amenities: p.amenities.join(", "), rules: p.rules.join(", ") });
+    setForm({ name: p.name, location: p.location || "", price_per_night: p.price_per_night, description: p.description || "", max_guests: p.max_guests, bedrooms: p.bedrooms, bathrooms: p.bathrooms, status: p.status, amenities: p.amenities?.join(", ") || "", rules: p.rules?.join(", ") || "" });
+    setImageUrls(p.images || []);
     setShowForm(true);
   };
 
-  const handleSave = () => {
-    if (!form.name.trim()) { toast.error("Name is required"); return; }
-    if (editing) {
-      setPenthouses((prev) => prev.map((p) => p.id === editing.id ? { ...p, ...form, amenities: form.amenities.split(",").map((s) => s.trim()), rules: form.rules.split(",").map((s) => s.trim()) } : p));
-      toast.success("Penthouse updated");
-    } else {
-      const newP: Penthouse = { id: `p${Date.now()}`, ...form, image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&q=80", amenities: form.amenities.split(",").map((s) => s.trim()), rules: form.rules.split(",").map((s) => s.trim()), images: [], createdAt: new Date().toISOString() };
-      setPenthouses((prev) => [...prev, newP]);
-      toast.success("Penthouse added");
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+    setUploading(true);
+    try {
+      const urls: string[] = [];
+      for (const file of Array.from(files)) {
+        const fd = new FormData();
+        fd.append("file", file);
+        fd.append("folder", "pom-penthouse");
+        const res = await fetch("/api/upload", { method: "POST", body: fd });
+        const data = await res.json();
+        if (data.url) urls.push(data.url);
+      }
+      setImageUrls((prev) => [...prev, ...urls]);
+      toast.success(`${urls.length} image(s) uploaded`);
+    } catch {
+      toast.error("Upload failed");
+    } finally {
+      setUploading(false);
     }
-    setShowForm(false);
   };
 
-  const handleDelete = (id: string) => {
-    setPenthouses((prev) => prev.filter((p) => p.id !== id));
-    toast.success("Penthouse removed");
+  const handleSave = async () => {
+    if (!form.name.trim()) { toast.error("Name is required"); return; }
+    const payload = {
+      name: form.name,
+      location: form.location,
+      price_per_night: form.price_per_night,
+      description: form.description,
+      max_guests: form.max_guests,
+      bedrooms: form.bedrooms,
+      bathrooms: form.bathrooms,
+      status: form.status,
+      amenities: form.amenities.split(",").map((s) => s.trim()).filter(Boolean),
+      rules: form.rules.split(",").map((s) => s.trim()).filter(Boolean),
+      image: imageUrls[0] || null,
+      images: imageUrls,
+    };
+    try {
+      if (editing) {
+        await updatePenthouse.mutateAsync({ id: editing.id, ...payload });
+        toast.success("Penthouse updated");
+      } else {
+        await createPenthouse.mutateAsync(payload);
+        toast.success("Penthouse added");
+      }
+      setShowForm(false);
+    } catch {
+      toast.error("Failed to save penthouse");
+    }
   };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deletePenthouse.mutateAsync(id);
+      toast.success("Penthouse removed");
+    } catch {
+      toast.error("Failed to delete penthouse");
+    }
+  };
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center py-20 text-sm text-foreground/60">Loading penthouses...</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -84,13 +141,13 @@ function PenthousesPage() {
               {penthouses.map((p) => (
                 <tr key={p.id} className="hover:bg-muted/30 transition">
                   <td className="px-4 py-3">
-                    <img src={p.image} alt={p.name} className="w-10 h-10 rounded-lg object-cover" />
+                    {p.image ? <img src={p.image} alt={p.name} className="w-10 h-10 rounded-lg object-cover" /> : <div className="w-10 h-10 rounded-lg bg-muted" />}
                   </td>
                   <td className="px-4 py-3 font-medium">{p.name}</td>
                   <td className="px-4 py-3 text-foreground/60">{p.location}</td>
-                  <td className="px-4 py-3">रू{p.pricePerNight.toLocaleString("en-IN")}</td>
-                  <td className="px-4 py-3"><Badge label={p.status} style={statusStyles[p.status]} /></td>
-                  <td className="px-4 py-3">{p.maxGuests}</td>
+                  <td className="px-4 py-3">रू{p.price_per_night.toLocaleString("en-IN")}</td>
+                  <td className="px-4 py-3"><Badge label={p.status} style={statusStyles[p.status as PenthouseStatus]} /></td>
+                  <td className="px-4 py-3">{p.max_guests}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
                       <button onClick={() => openEdit(p)} className="p-1.5 rounded-lg hover:bg-muted transition" title="Edit"><Pencil size={15} /></button>
@@ -119,9 +176,9 @@ function PenthousesPage() {
                 <input placeholder="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })}
                   className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
                 <div className="grid grid-cols-3 gap-3">
-                  <input type="number" placeholder="Price" value={form.pricePerNight || ""} onChange={(e) => setForm({ ...form, pricePerNight: Number(e.target.value) })}
+                  <input type="number" placeholder="Price" value={form.price_per_night || ""} onChange={(e) => setForm({ ...form, price_per_night: Number(e.target.value) })}
                     className="rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
-                  <input type="number" placeholder="Guests" value={form.maxGuests || ""} onChange={(e) => setForm({ ...form, maxGuests: Number(e.target.value) })}
+                  <input type="number" placeholder="Guests" value={form.max_guests || ""} onChange={(e) => setForm({ ...form, max_guests: Number(e.target.value) })}
                     className="rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
                   <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as PenthouseStatus })}
                     className="rounded-xl border px-4 py-3 bg-transparent outline-none text-sm">
@@ -143,14 +200,34 @@ function PenthousesPage() {
                 <input placeholder="Rules (comma separated)" value={form.rules} onChange={(e) => setForm({ ...form, rules: e.target.value })}
                   className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
 
-                <div className="border-2 border-dashed rounded-xl p-6 text-center cursor-pointer hover:bg-muted/30 transition">
-                  <Upload size={24} className="mx-auto text-foreground/40 mb-2" />
-                  <p className="text-sm text-foreground/60">Drag & drop property images here</p>
-                  <p className="text-xs text-foreground/40 mt-1">Max 10MB per image</p>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Property Images</label>
+                  {imageUrls.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {imageUrls.map((url, i) => (
+                        <div key={i} className="relative group">
+                          <img src={url} alt="" className="w-20 h-20 rounded-lg object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => setImageUrls((prev) => prev.filter((_, j) => j !== i))}
+                            className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                          >
+                            <X size={10} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <label className="border-2 border-dashed rounded-xl p-6 text-center cursor-pointer hover:bg-muted/30 transition block">
+                    <input type="file" accept="image/*" multiple onChange={handleUpload} className="hidden" />
+                    <Upload size={24} className="mx-auto text-foreground/40 mb-2" />
+                    <p className="text-sm text-foreground/60">{uploading ? "Uploading..." : "Click or drag to upload images"}</p>
+                    <p className="text-xs text-foreground/40 mt-1">Max 10MB per image</p>
+                  </label>
                 </div>
               </div>
               <div className="flex gap-2 mt-6">
-                <button onClick={handleSave} className="flex-1 btn-primary justify-center text-sm py-2">
+                <button onClick={handleSave} disabled={createPenthouse.isPending || updatePenthouse.isPending} className="flex-1 btn-primary justify-center text-sm py-2 disabled:opacity-50">
                   {editing ? "Update" : "Add"} Penthouse
                 </button>
                 <button onClick={() => setShowForm(false)} className="flex-1 border rounded-full py-2 text-sm hover:bg-muted transition">Cancel</button>

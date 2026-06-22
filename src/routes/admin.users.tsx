@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useUsers, useUpdateUserRole, useToggleBanUser } from "@/lib/hooks";
 import { type User, type UserRole } from "@/lib/admin-types";
 import { Search } from "lucide-react";
 import { toast } from "sonner";
@@ -19,22 +20,36 @@ function Badge({ label, style }: { label: string; style: string }) {
 }
 
 function UsersPage() {
-  const [users, setUsers] = useState<User[]>([]);
+  const { data: users = [], isLoading } = useUsers();
+  const updateRole = useUpdateUserRole();
+  const toggleBan = useToggleBanUser();
   const [search, setSearch] = useState("");
 
   const filtered = users.filter((u) =>
-    !search || u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase())
+    !search || (u.name || "").toLowerCase().includes(search.toLowerCase()) || (u.email || "").toLowerCase().includes(search.toLowerCase())
   );
 
-  const updateRole = (id: string, role: UserRole) => {
-    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, role } : u)));
-    toast.success(`Role updated to ${role}`);
+  const handleRoleChange = async (id: string, role: UserRole) => {
+    try {
+      await updateRole.mutateAsync({ id, role });
+      toast.success(`Role updated to ${role}`);
+    } catch {
+      toast.error("Failed to update role");
+    }
   };
 
-  const toggleBan = (id: string) => {
-    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, banned: !u.banned } : u)));
-    toast.success("User status updated");
+  const handleBanToggle = async (id: string, currentBanned: boolean) => {
+    try {
+      await toggleBan.mutateAsync({ id, banned: !currentBanned });
+      toast.success(currentBanned ? "User unbanned" : "User banned");
+    } catch {
+      toast.error("Failed to update user status");
+    }
   };
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center py-20 text-sm text-foreground/60">Loading users...</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -58,8 +73,6 @@ function UsersPage() {
                 <th className="text-left px-4 py-3 font-medium">Name</th>
                 <th className="text-left px-4 py-3 font-medium">Email</th>
                 <th className="text-left px-4 py-3 font-medium">Role</th>
-                <th className="text-left px-4 py-3 font-medium">Bookings</th>
-                <th className="text-left px-4 py-3 font-medium">Lifetime Spend</th>
                 <th className="text-left px-4 py-3 font-medium">Status</th>
                 <th className="text-left px-4 py-3 font-medium">Actions</th>
               </tr>
@@ -70,20 +83,18 @@ function UsersPage() {
                   <td className="px-4 py-3 font-medium">{u.name}</td>
                   <td className="px-4 py-3 text-foreground/60">{u.email}</td>
                   <td className="px-4 py-3">
-                    <select value={u.role} onChange={(e) => updateRole(u.id, e.target.value as UserRole)}
-                      className={`text-xs px-2 py-1 rounded-full font-medium border-0 bg-transparent outline-none cursor-pointer ${roleStyles[u.role]}`}>
+                    <select value={u.role} onChange={(e) => handleRoleChange(u.id, e.target.value as UserRole)}
+                      className={`text-xs px-2 py-1 rounded-full font-medium border-0 bg-transparent outline-none cursor-pointer ${roleStyles[u.role as UserRole]}`}>
                       <option value="guest">Guest</option>
                       <option value="staff">Staff</option>
                       <option value="admin">Admin</option>
                     </select>
                   </td>
-                  <td className="px-4 py-3">{u.bookingCount}</td>
-                  <td className="px-4 py-3">रू{u.lifetimeSpend.toLocaleString("en-IN")}</td>
                   <td className="px-4 py-3">
                     <Badge label={u.banned ? "Banned" : "Active"} style={u.banned ? "bg-red-100 text-red-800" : "bg-emerald-100 text-emerald-800"} />
                   </td>
                   <td className="px-4 py-3">
-                    <button onClick={() => toggleBan(u.id)} className={`text-xs px-3 py-1.5 rounded-lg border transition ${u.banned ? "text-emerald-600 border-emerald-200 hover:bg-emerald-50" : "text-red-600 border-red-200 hover:bg-red-50"}`}>
+                    <button onClick={() => handleBanToggle(u.id, u.banned)} className={`text-xs px-3 py-1.5 rounded-lg border transition ${u.banned ? "text-emerald-600 border-emerald-200 hover:bg-emerald-50" : "text-red-600 border-red-200 hover:bg-red-50"}`}>
                       {u.banned ? "Unban" : "Ban"}
                     </button>
                   </td>

@@ -12,6 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as ApiContactRouteImport } from './routes/api/contact'
+import { Route as ApiBookingsRouteImport } from './routes/api/bookings'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminPenthousesRouteImport } from './routes/admin.penthouses'
@@ -33,6 +36,21 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiContactRoute = ApiContactRouteImport.update({
+  id: '/api/contact',
+  path: '/api/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBookingsRoute = ApiBookingsRouteImport.update({
+  id: '/api/bookings',
+  path: '/api/bookings',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
@@ -74,6 +92,9 @@ export interface FileRoutesByFullPath {
   '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/bookings': typeof ApiBookingsRoute
+  '/api/contact': typeof ApiContactRoute
+  '/api/upload': typeof ApiUploadRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -84,6 +105,9 @@ export interface FileRoutesByTo {
   '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/bookings': typeof ApiBookingsRoute
+  '/api/contact': typeof ApiContactRoute
+  '/api/upload': typeof ApiUploadRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -96,6 +120,9 @@ export interface FileRoutesById {
   '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/bookings': typeof ApiBookingsRoute
+  '/api/contact': typeof ApiContactRoute
+  '/api/upload': typeof ApiUploadRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -109,6 +136,9 @@ export interface FileRouteTypes {
     | '/admin/penthouses'
     | '/admin/settings'
     | '/admin/users'
+    | '/api/bookings'
+    | '/api/contact'
+    | '/api/upload'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -119,6 +149,9 @@ export interface FileRouteTypes {
     | '/admin/penthouses'
     | '/admin/settings'
     | '/admin/users'
+    | '/api/bookings'
+    | '/api/contact'
+    | '/api/upload'
     | '/admin'
   id:
     | '__root__'
@@ -130,12 +163,18 @@ export interface FileRouteTypes {
     | '/admin/penthouses'
     | '/admin/settings'
     | '/admin/users'
+    | '/api/bookings'
+    | '/api/contact'
+    | '/api/upload'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  ApiBookingsRoute: typeof ApiBookingsRoute
+  ApiContactRoute: typeof ApiContactRoute
+  ApiUploadRoute: typeof ApiUploadRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -160,6 +199,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contact': {
+      id: '/api/contact'
+      path: '/api/contact'
+      fullPath: '/api/contact'
+      preLoaderRoute: typeof ApiContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/bookings': {
+      id: '/api/bookings'
+      path: '/api/bookings'
+      fullPath: '/api/bookings'
+      preLoaderRoute: typeof ApiBookingsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/users': {
       id: '/admin/users'
@@ -231,6 +291,9 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  ApiBookingsRoute: ApiBookingsRoute,
+  ApiContactRoute: ApiContactRoute,
+  ApiUploadRoute: ApiUploadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

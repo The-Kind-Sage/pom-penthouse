@@ -1,11 +1,35 @@
+import { useState } from "react";
 import { toast } from "sonner";
 import { ui } from "@/lib/ui-store";
 
 export function Footer() {
-  const handleContact = (e: React.FormEvent<HTMLFormElement>) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleContact = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast.success("Message sent. We'll reply within 12h.");
-    (e.target as HTMLFormElement).reset();
+    const form = e.target as HTMLFormElement;
+    const fd = new FormData(form);
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fd.get("name"),
+          email: fd.get("email"),
+          message: fd.get("message"),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to send");
+      toast.success("Message sent. We'll reply within 12h.");
+      form.reset();
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to send message");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -34,8 +58,8 @@ export function Footer() {
             placeholder="Tell us about your stay or purchase interest…"
             className="w-full rounded-xl border px-4 py-3.5 bg-transparent focus:ring-2 focus:ring-[var(--gold)] outline-none transition resize-none"
           />
-          <button type="submit" className="btn-primary w-full justify-center mt-2">
-            Send Message
+          <button type="submit" disabled={loading} className="btn-primary w-full justify-center mt-2 disabled:opacity-50">
+            {loading ? "Sending..." : "Send Message"}
           </button>
         </form>
 

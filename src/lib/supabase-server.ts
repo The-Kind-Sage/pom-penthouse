@@ -1,7 +1,7 @@
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient as createSSRClient } from "@supabase/ssr";
 
 export function createServerClient(request: Request) {
-  return createServerClient(
+  return createSSRClient(
     import.meta.env.SUPABASE_URL!,
     import.meta.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
@@ -13,8 +13,8 @@ export function createServerClient(request: Request) {
             return { name: name.trim(), value: rest.join("=").trim() };
           });
         },
-        setAll(cookies) {
-          // no-op on server, cookies managed by middleware
+        setAll() {
+          // no-op on server
         },
       },
     },
@@ -22,7 +22,7 @@ export function createServerClient(request: Request) {
 }
 
 export function createServiceClient() {
-  return createServerClient(
+  return createSSRClient(
     import.meta.env.SUPABASE_URL!,
     import.meta.env.SUPABASE_SERVICE_ROLE_KEY!,
     {

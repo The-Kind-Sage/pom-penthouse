@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useSettings, useUpdateSetting } from "@/lib/hooks";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/settings")({
@@ -19,7 +20,6 @@ function SettingsPage() {
         <TabsList className="mb-6">
           <TabsTrigger value="pricing">Pricing</TabsTrigger>
           <TabsTrigger value="cms">Site Content</TabsTrigger>
-          <TabsTrigger value="email">Email Templates</TabsTrigger>
         </TabsList>
 
         <TabsContent value="pricing">
@@ -28,21 +28,34 @@ function SettingsPage() {
         <TabsContent value="cms">
           <CMSTab />
         </TabsContent>
-        <TabsContent value="email">
-          <EmailTab />
-        </TabsContent>
       </Tabs>
     </div>
   );
 }
 
 function PricingTab() {
-  const [peakMultiplier, setPeakMultiplier] = useState(0);
-  const [minStay, setMinStay] = useState(1);
-  const [holidayRate, setHolidayRate] = useState(0);
+  const { data: settings } = useSettings();
+  const updateSetting = useUpdateSetting();
+  const pricing = settings?.pricing_rules || { peakMultiplier: 0, minStay: 1, holidayRate: 0 };
+  const [peakMultiplier, setPeakMultiplier] = useState(pricing.peakMultiplier || 0);
+  const [minStay, setMinStay] = useState(pricing.minStay || 1);
+  const [holidayRate, setHolidayRate] = useState(pricing.holidayRate || 0);
 
-  const save = () => {
-    toast.success("Pricing rules saved");
+  useEffect(() => {
+    if (pricing) {
+      setPeakMultiplier(pricing.peakMultiplier || 0);
+      setMinStay(pricing.minStay || 1);
+      setHolidayRate(pricing.holidayRate || 0);
+    }
+  }, [settings]);
+
+  const save = async () => {
+    try {
+      await updateSetting.mutateAsync({ key: "pricing_rules", value: { peakMultiplier, minStay, holidayRate } });
+      toast.success("Pricing rules saved");
+    } catch {
+      toast.error("Failed to save pricing rules");
+    }
   };
 
   return (
@@ -71,19 +84,40 @@ function PricingTab() {
           <span className="text-sm font-medium w-12">{holidayRate}%</span>
         </div>
       </div>
-      <button onClick={save} className="btn-primary text-sm py-2 px-4">Save Pricing Rules</button>
+      <button onClick={save} disabled={updateSetting.isPending} className="btn-primary text-sm py-2 px-4 disabled:opacity-50">Save Pricing Rules</button>
     </div>
   );
 }
 
 function CMSTab() {
+  const { data: settings } = useSettings();
+  const updateSetting = useUpdateSetting();
   const [heroTitle, setHeroTitle] = useState("");
   const [heroSubtitle, setHeroSubtitle] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
 
-  const save = () => {
-    toast.success("Site content updated");
+  useEffect(() => {
+    if (settings) {
+      setHeroTitle(settings.hero_title || "");
+      setHeroSubtitle(settings.hero_subtitle || "");
+      setContactEmail(settings.contact_email || "");
+      setContactPhone(settings.contact_phone || "");
+    }
+  }, [settings]);
+
+  const save = async () => {
+    try {
+      await Promise.all([
+        updateSetting.mutateAsync({ key: "hero_title", value: heroTitle }),
+        updateSetting.mutateAsync({ key: "hero_subtitle", value: heroSubtitle }),
+        updateSetting.mutateAsync({ key: "contact_email", value: contactEmail }),
+        updateSetting.mutateAsync({ key: "contact_phone", value: contactPhone }),
+      ]);
+      toast.success("Site content updated");
+    } catch {
+      toast.error("Failed to save content");
+    }
   };
 
   return (
@@ -108,15 +142,7 @@ function CMSTab() {
         <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="+977 ..."
           className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
       </div>
-      <button onClick={save} className="btn-primary text-sm py-2 px-4">Save Content</button>
-    </div>
-  );
-}
-
-function EmailTab() {
-  return (
-    <div className="flex items-center justify-center py-16 text-sm text-foreground/40">
-      No email templates configured yet
+      <button onClick={save} disabled={updateSetting.isPending} className="btn-primary text-sm py-2 px-4 disabled:opacity-50">Save Content</button>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { X, Plus, Minus } from "lucide-react";
 import { toast } from "sonner";
 import { ui, useUI } from "@/lib/ui-store";
 import { ROOMS, ADDONS, calcPrice, fmtNPR, type RoomKey, type AddonKey } from "@/lib/pricing";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 import { photo } from "@/lib/images";
 
 function differenceInDays(a: Date, b: Date) {
@@ -133,7 +134,10 @@ export function BookingModal() {
     setForm({ firstName: "", lastName: "", email: "", phone: "+977 ", req: "" });
   };
 
-  const submit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [whatsappLink, setWhatsappLink] = useState("");
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (room !== "long" && (!range?.from || !range?.to || nights < 2)) {
       toast.error("Select valid dates — 2-night minimum");
@@ -143,16 +147,47 @@ export function BookingModal() {
       toast.error("Please complete guest details");
       return;
     }
-    const window =
-      room === "long"
-        ? "your long stay"
-        : `${range!.from!.toDateString()} → ${range!.to!.toDateString()}`;
-    toast.success(
-      `Booking request sent! We'll confirm availability for ${window} within 2 hours.`,
-      { duration: 6000 },
-    );
-    ui.closeBooking();
-    resetAll();
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          penthouse_name: ROOMS[room].label,
+          guest_name: `${form.firstName} ${form.lastName}`,
+          guest_email: form.email,
+          guest_phone: form.phone,
+          check_in: room === "long" ? new Date().toISOString().split("T")[0] : range!.from!.toISOString().split("T")[0],
+          check_out: room === "long" ? new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0] : range!.to!.toISOString().split("T")[0],
+          nights: room === "long" ? 30 : nights,
+          total: price.total,
+          guests: adults + children,
+          addons,
+          notes: form.req,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Booking failed");
+
+      const link = getWhatsAppLink({
+        guestName: `${form.firstName} ${form.lastName}`,
+        penthouseName: ROOMS[room].label,
+        checkIn: room === "long" ? "Flexible" : range!.from!.toLocaleDateString(),
+        checkOut: room === "long" ? "30+ days" : range!.to!.toLocaleDateString(),
+        nights: room === "long" ? 30 : nights,
+        total: price.total,
+      });
+      setWhatsappLink(link);
+
+      toast.success("Booking request sent! Check your email for confirmation.", { duration: 6000 });
+      ui.closeBooking();
+      resetAll();
+      setWhatsappLink("");
+    } catch (err: any) {
+      toast.error(err?.message || "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
 
@@ -418,9 +453,14 @@ export function BookingModal() {
                   </div>
                 </fieldset>
 
-                <button type="submit" className="btn-primary w-full justify-center">
-                  Request to Book — Total {fmtNPR(price.total)}
+                <button type="submit" disabled={submitting} className="btn-primary w-full justify-center disabled:opacity-50">
+                  {submitting ? "Submitting..." : `Request to Book — Total ${fmtNPR(price.total)}`}
                 </button>
+                {whatsappLink && (
+                  <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="block text-center text-sm text-emerald-600 hover:underline mt-2">
+                    Open WhatsApp to confirm →
+                  </a>
+                )}
                 <p className="text-xs opacity-60 text-center">You won't be charged yet</p>
                 <p className="text-xs opacity-60 text-center">
                   रू 67.5L purchase inquiries: hello@pompenthouse.np · Free cancellation 48h prior ·

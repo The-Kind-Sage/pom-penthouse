@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useBookings, useUpdateBooking } from "@/lib/hooks";
 import { type Booking, type BookingStatus, type PaymentStatus } from "@/lib/admin-types";
 import { Check, X, Download, Search, Eye } from "lucide-react";
 import { toast } from "sonner";
@@ -27,32 +28,41 @@ function Badge({ label, style }: { label: string; style: string }) {
 }
 
 function BookingsPage() {
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const { data: bookings = [], isLoading } = useBookings();
+  const updateBooking = useUpdateBooking();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<BookingStatus | "all">("all");
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
   const filtered = bookings.filter((b) => {
     if (statusFilter !== "all" && b.status !== statusFilter) return false;
-    if (search && !b.guestName.toLowerCase().includes(search.toLowerCase()) && !b.penthouseName.toLowerCase().includes(search.toLowerCase())) return false;
+    if (search && !b.guest_name.toLowerCase().includes(search.toLowerCase()) && !(b.penthouse_name || "").toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
-  const updateStatus = (id: string, status: BookingStatus) => {
-    setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status } : b)));
-    toast.success(`Booking ${status}`);
+  const handleUpdateStatus = async (id: string, status: BookingStatus) => {
+    try {
+      await updateBooking.mutateAsync({ id, status });
+      toast.success(`Booking ${status}`);
+    } catch {
+      toast.error("Failed to update booking");
+    }
   };
 
   const downloadCSV = () => {
     if (filtered.length === 0) { toast.error("No bookings to export"); return; }
     const headers = "ID,Guest,Penthouse,Check-in,Check-out,Total,Status\n";
-    const rows = filtered.map((b) => `${b.id},${b.guestName},${b.penthouseName},${b.checkIn},${b.checkOut},${b.total},${b.status}`).join("\n");
+    const rows = filtered.map((b) => `${b.id},${b.guest_name},${b.penthouse_name || ""},${b.check_in},${b.check_out},${b.total},${b.status}`).join("\n");
     const blob = new Blob([headers + rows], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "bookings.csv"; a.click();
     URL.revokeObjectURL(url);
     toast.success("Bookings exported");
   };
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center py-20 text-sm text-foreground/60">Loading bookings...</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -102,26 +112,26 @@ function BookingsPage() {
               {filtered.map((b) => (
                 <tr key={b.id} className="hover:bg-muted/30 transition">
                   <td className="px-4 py-3">
-                    <p className="font-medium">{b.guestName}</p>
-                    <p className="text-xs text-foreground/60">{b.guestEmail}</p>
+                    <p className="font-medium">{b.guest_name}</p>
+                    <p className="text-xs text-foreground/60">{b.guest_email}</p>
                   </td>
-                  <td className="px-4 py-3">{b.penthouseName}</td>
-                  <td className="px-4 py-3">{b.checkIn}</td>
-                  <td className="px-4 py-3">{b.checkOut}</td>
+                  <td className="px-4 py-3">{b.penthouse_name}</td>
+                  <td className="px-4 py-3">{b.check_in}</td>
+                  <td className="px-4 py-3">{b.check_out}</td>
                   <td className="px-4 py-3">रू{b.total.toLocaleString("en-IN")}</td>
-                  <td className="px-4 py-3"><Badge label={b.status} style={statusStyles[b.status]} /></td>
-                  <td className="px-4 py-3"><Badge label={b.paymentStatus} style={paymentStyles[b.paymentStatus]} /></td>
+                  <td className="px-4 py-3"><Badge label={b.status} style={statusStyles[b.status as BookingStatus]} /></td>
+                  <td className="px-4 py-3"><Badge label={b.payment_status} style={paymentStyles[b.payment_status as PaymentStatus]} /></td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
                       <button onClick={() => setSelectedBooking(b)} className="p-1.5 rounded-lg hover:bg-muted transition" title="View"><Eye size={15} /></button>
                       {b.status === "pending" && (
                         <>
-                          <button onClick={() => updateStatus(b.id, "confirmed")} className="p-1.5 rounded-lg hover:bg-emerald-100 text-emerald-600 transition" title="Approve"><Check size={15} /></button>
-                          <button onClick={() => updateStatus(b.id, "declined")} className="p-1.5 rounded-lg hover:bg-red-100 text-red-600 transition" title="Decline"><X size={15} /></button>
+                          <button onClick={() => handleUpdateStatus(b.id, "confirmed")} className="p-1.5 rounded-lg hover:bg-emerald-100 text-emerald-600 transition" title="Approve"><Check size={15} /></button>
+                          <button onClick={() => handleUpdateStatus(b.id, "declined")} className="p-1.5 rounded-lg hover:bg-red-100 text-red-600 transition" title="Decline"><X size={15} /></button>
                         </>
                       )}
                       {b.status === "confirmed" && (
-                        <button onClick={() => updateStatus(b.id, "cancelled")} className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-600 transition" title="Cancel"><X size={15} /></button>
+                        <button onClick={() => handleUpdateStatus(b.id, "cancelled")} className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-600 transition" title="Cancel"><X size={15} /></button>
                       )}
                     </div>
                   </td>
@@ -142,15 +152,15 @@ function BookingsPage() {
             <div className="bg-paper border rounded-2xl p-6 max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="font-semibold text-lg">{selectedBooking.guestName}</h3>
-                  <p className="text-sm text-foreground/60">{selectedBooking.guestEmail}</p>
+                  <h3 className="font-semibold text-lg">{selectedBooking.guest_name}</h3>
+                  <p className="text-sm text-foreground/60">{selectedBooking.guest_email}</p>
                 </div>
                 <Badge label={selectedBooking.status} style={statusStyles[selectedBooking.status]} />
               </div>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-foreground/60">Penthouse</span><span>{selectedBooking.penthouseName}</span></div>
-                <div className="flex justify-between"><span className="text-foreground/60">Check-in</span><span>{selectedBooking.checkIn}</span></div>
-                <div className="flex justify-between"><span className="text-foreground/60">Check-out</span><span>{selectedBooking.checkOut}</span></div>
+                <div className="flex justify-between"><span className="text-foreground/60">Penthouse</span><span>{selectedBooking.penthouse_name}</span></div>
+                <div className="flex justify-between"><span className="text-foreground/60">Check-in</span><span>{selectedBooking.check_in}</span></div>
+                <div className="flex justify-between"><span className="text-foreground/60">Check-out</span><span>{selectedBooking.check_out}</span></div>
                 <div className="flex justify-between"><span className="text-foreground/60">Nights</span><span>{selectedBooking.nights}</span></div>
                 <div className="flex justify-between"><span className="text-foreground/60">Guests</span><span>{selectedBooking.guests}</span></div>
                 <div className="flex justify-between font-medium border-t pt-2 mt-2"><span>Total</span><span>रू{selectedBooking.total.toLocaleString("en-IN")}</span></div>
@@ -158,8 +168,8 @@ function BookingsPage() {
               <div className="flex gap-2 mt-4">
                 {selectedBooking.status === "pending" && (
                   <>
-                    <button onClick={() => { updateStatus(selectedBooking.id, "confirmed"); setSelectedBooking(null); }} className="flex-1 btn-primary justify-center text-sm py-2">Approve</button>
-                    <button onClick={() => { updateStatus(selectedBooking.id, "declined"); setSelectedBooking(null); }} className="flex-1 border rounded-full py-2 text-sm hover:bg-muted transition">Decline</button>
+                    <button onClick={() => { handleUpdateStatus(selectedBooking.id, "confirmed"); setSelectedBooking(null); }} className="flex-1 btn-primary justify-center text-sm py-2">Approve</button>
+                    <button onClick={() => { handleUpdateStatus(selectedBooking.id, "declined"); setSelectedBooking(null); }} className="flex-1 border rounded-full py-2 text-sm hover:bg-muted transition">Decline</button>
                   </>
                 )}
                 <button onClick={() => setSelectedBooking(null)} className="flex-1 border rounded-full py-2 text-sm hover:bg-muted transition">Close</button>
