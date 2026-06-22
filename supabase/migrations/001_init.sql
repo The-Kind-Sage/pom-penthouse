@@ -105,6 +105,23 @@ alter table activities enable row level security;
 alter table settings enable row level security;
 alter table contact_messages enable row level security;
 
+-- Drop existing policies to make re-runnable
+drop policy if exists "Public can read penthouses" on penthouses;
+drop policy if exists "Service role full access penthouses" on penthouses;
+drop policy if exists "Admin full access penthouses" on penthouses;
+drop policy if exists "Service role full access bookings" on bookings;
+drop policy if exists "Admin full access bookings" on bookings;
+drop policy if exists "Guests can read own bookings" on bookings;
+drop policy if exists "Service role full access profiles" on profiles;
+drop policy if exists "Admin full access profiles" on profiles;
+drop policy if exists "Service role full access activities" on activities;
+drop policy if exists "Admin full access activities" on activities;
+drop policy if exists "Service role full access settings" on settings;
+drop policy if exists "Admin full access settings" on settings;
+drop policy if exists "Service role full access contact_messages" on contact_messages;
+drop policy if exists "Admin full access contact_messages" on contact_messages;
+drop policy if exists "Anyone can insert contact_messages" on contact_messages;
+
 -- Public can read penthouses
 create policy "Public can read penthouses" on penthouses
   for select using (true);
