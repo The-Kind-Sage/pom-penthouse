@@ -1,61 +1,108 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
-const TESTIMONIALS = [
-  { name: "Sophie Laurent", country: "France", text: "The most thoughtful stay I've had in Asia. The view of Phewa from the balcony alone is worth the trip — but the service is what brings you back.", img: "https://i.pravatar.cc/120?img=47" },
-  { name: "James Whitaker", country: "United Kingdom", text: "I worked from POM'S for two months. Fast WiFi, quiet apartments, and a team that genuinely cares. It set a new bar for me.", img: "https://i.pravatar.cc/120?img=12" },
-  { name: "Priya Sharma", country: "India", text: "Travelled with my family — children, in-laws, the lot. The space, the kitchen, the calm. We've already booked again.", img: "https://i.pravatar.cc/120?img=45" },
+const REVIEWS = [
+  { name: "Sophie Laurent", text: "The most thoughtful stay I've had in Asia. The view of Phewa from the balcony alone is worth the trip — but the service is what brings you back." },
+  { name: "James Whitaker", text: "I worked from POM'S for two months. Fast WiFi, quiet apartments, and a team that genuinely cares. It set a new bar for me." },
+  { name: "Priya Sharma", text: "Travelled with my family — children, in-laws, the lot. The space, the kitchen, the calm. We've already booked again." },
+  { name: "Ravi Thapa", text: "Perfect location in Lakeside, walking distance to everything. The rooms are spotless and the staff went above and beyond." },
+  { name: "Emma Chen", text: "Booked the Penthouse Suite for our anniversary — breathtaking views, impeccable service. Truly a five-star experience." },
+  { name: "Ahmed Hassan", text: "Stayed a week on business. Great workspace in the room, reliable internet, and the team arranged everything I needed." },
+  { name: "Maria Lopez", text: "The Family Apartment was perfect for us. Spacious, well-equipped kitchen, and the kids loved the area. Highly recommended." },
+  { name: "David Kim", text: "Best place we stayed in Nepal. The attention to detail in the rooms, the warm hospitality — absolutely unmatched." },
+  { name: "Anita Joshi", text: "Third time at POM'S and it gets better each visit. The team remembers your preferences — that's real service." },
 ];
 
-function SectionEyebrow({ label, title }: { label: string; title: React.ReactNode }) {
-  return (
-    <div className="mx-auto max-w-3xl text-center">
-      <div className="mb-4 flex items-center justify-center gap-3 text-[10px] uppercase tracking-[0.4em] text-gold">
-        <span className="h-px w-8 bg-gold" />{label}<span className="h-px w-8 bg-gold" />
-      </div>
-      <h2 className="font-display text-4xl font-medium leading-tight text-luxury-black sm:text-5xl">
-        {title}
-      </h2>
-    </div>
-  );
-}
-
 export function Testimonial() {
-  const [i, setI] = useState(0);
+  const [index, setIndex] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+
   useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % TESTIMONIALS.length), 6000);
-    return () => clearInterval(t);
+    intervalRef.current = setInterval(() => {
+      setIndex((prev) => (prev + 1) % REVIEWS.length);
+    }, 4000);
+    return () => clearInterval(intervalRef.current);
   }, []);
-  const current = TESTIMONIALS[i];
+
+  function goTo(i: number) {
+    clearInterval(intervalRef.current);
+    setIndex(i);
+    intervalRef.current = setInterval(() => {
+      setIndex((prev) => (prev + 1) % REVIEWS.length);
+    }, 4000);
+  }
+
+  function visible() {
+    const out = [];
+    for (let offset = -1; offset <= 1; offset++) {
+      out.push(REVIEWS[(index + offset + REVIEWS.length) % REVIEWS.length]);
+    }
+    return out;
+  }
+
+  const cards = visible();
+
   return (
-    <section className="bg-muted py-24 sm:py-32">
-      <div className="mx-auto max-w-4xl px-6 text-center">
-        <SectionEyebrow label="Guest Stories" title={<>Loved by guests <span className="italic text-gold">worldwide</span></>} />
-        <motion.blockquote
-          key={current.name}
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
-          className="mt-14"
-        >
-          <div className="flex items-center justify-center gap-1 text-gold">
-            {Array.from({ length: 5 }).map((_, n) => <Star key={n} className="size-4 fill-gold" />)}
+    <section className="bg-muted overflow-hidden py-24 sm:py-32">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="mb-4 flex items-center justify-center gap-3 text-[10px] uppercase tracking-[0.4em] text-gold">
+            <span className="h-px w-8 bg-gold" />Guest Stories<span className="h-px w-8 bg-gold" />
           </div>
-          <p className="mt-6 font-display text-2xl leading-relaxed text-luxury-black sm:text-3xl">
-            &ldquo;{current.text}&rdquo;
-          </p>
-          <div className="mt-8 flex items-center justify-center gap-4">
-            <img src={current.img} alt={current.name} className="size-12 rounded-full object-cover" />
-            <div className="text-left">
-              <div className="font-semibold text-luxury-black">{current.name}</div>
-              <div className="text-xs uppercase tracking-[0.25em] text-muted-foreground">{current.country}</div>
-            </div>
-          </div>
-        </motion.blockquote>
+          <h2 className="font-display text-4xl font-medium leading-tight text-luxury-black sm:text-5xl">
+            Loved by guests <span className="italic text-gold">worldwide</span>
+          </h2>
+        </div>
+
+        <div className="mt-16 flex items-stretch justify-center gap-4 sm:gap-6">
+          {cards.map((r, idx) => {
+            const isCenter = idx === 1;
+            return (
+              <motion.div
+                key={`${r.name}-${index}-${idx}`}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{
+                  opacity: 1,
+                  scale: isCenter ? 1.08 : 0.92,
+                }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className={`flex flex-col rounded-2xl border bg-card p-6 shadow-lg transition-shadow sm:p-8 ${
+                  isCenter
+                    ? "border-gold/40 shadow-gold/10 z-10 shadow-xl"
+                    : "border-border opacity-70"
+                }`}
+                style={{ width: isCenter ? "340px" : "280px" }}
+              >
+                <div className="flex gap-1 text-gold">
+                  {Array.from({ length: 5 }).map((_, n) => (
+                    <Star key={n} className="size-4 fill-gold" />
+                  ))}
+                </div>
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-muted-foreground">
+                  &ldquo;{r.text}&rdquo;
+                </p>
+                <div className="mt-5 flex items-center gap-3 border-t border-border pt-4">
+                  <div className="flex size-9 items-center justify-center rounded-full bg-gold/20 text-xs font-bold uppercase text-gold">
+                    {r.name.split(" ").map((s) => s[0]).join("")}
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-luxury-black">{r.name}</div>
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Google Review</div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
         <div className="mt-10 flex items-center justify-center gap-2">
-          {TESTIMONIALS.map((_, idx) => (
+          {REVIEWS.map((_, idx) => (
             <button
-              key={idx} onClick={() => setI(idx)} aria-label={`Testimonial ${idx + 1}`}
-              className={`h-1.5 rounded-full transition-all ${idx === i ? "w-8 bg-gold" : "w-2 bg-luxury-black/20"}`}
+              key={idx}
+              onClick={() => goTo(idx)}
+              aria-label={`Review ${idx + 1}`}
+              className={`h-1.5 rounded-full transition-all ${idx === index ? "w-8 bg-gold" : "w-2 bg-luxury-black/20"}`}
             />
           ))}
         </div>
