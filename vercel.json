@@ -2,10 +2,5 @@
   "buildCommand": "vite build",
   "outputDirectory": ".vercel/output",
   "framework": null,
-  "installCommand": "npm install",
-  "git": {
-    "deploymentEnabled": {
-      "*": false
-    }
-  }
+  "installCommand": "npm install"
 }
