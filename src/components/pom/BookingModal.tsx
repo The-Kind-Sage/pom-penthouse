@@ -46,9 +46,16 @@ export function BookingModal() {
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+      const prevent = (e: Event) => e.preventDefault();
+      document.addEventListener("wheel", prevent, { passive: false, capture: true });
+      document.addEventListener("touchmove", prevent, { passive: false, capture: true });
+      return () => {
+        document.body.style.overflow = "";
+        document.removeEventListener("wheel", prevent, true);
+        document.removeEventListener("touchmove", prevent, true);
+      };
     }
+    document.body.style.overflow = "";
     return () => { document.body.style.overflow = ""; };
   }, [open]);
   const [form, setForm] = useState({
