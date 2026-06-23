@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Phone, MessageCircle, ArrowRight, Moon, Sun } from "lucide-react";
+import { Phone, ArrowRight, Moon, Sun } from "lucide-react";
 import logoUrl from "../../favicon/logo.png?url";
 
 const links = [
@@ -45,9 +45,7 @@ function MobileMenu({ scrolled, links }: { scrolled: boolean; links: readonly (r
             <a href="tel:+9779800000000" className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-luxury-black/80 transition hover:bg-muted hover:text-gold">
               <Phone className="size-4" /> +977 980-000-0000
             </a>
-            <a href="https://wa.me/9779800000000" target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-luxury-black/80 transition hover:bg-muted hover:text-gold">
-              <MessageCircle className="size-4" /> WhatsApp
-            </a>
+
           </div>
         </div>
       )}
@@ -90,11 +88,11 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-        <a href="#home" className="flex shrink-0 items-center">
+        <a href="#home" className="flex flex-1 items-center">
           <img src={logoUrl} alt="POM'S Penthouse" className="h-16 w-auto" />
         </a>
 
-        <nav className={`hidden items-center gap-5 text-[13px] xl:flex ${scrolled ? "text-luxury-black/80" : "text-white/85"}`}>
+        <nav className={`hidden xl:flex flex-1 items-center justify-center gap-5 text-[13px] ${scrolled ? "text-luxury-black/80" : "text-white/85"}`}>
           {links.map(([label, href]) => (
             <a key={href} href={href} className="relative whitespace-nowrap transition hover:text-gold after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-gold after:transition-all hover:after:w-full">
               {label}
@@ -102,7 +100,7 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
           <a
             href="tel:+9779800000000"
             className={`hidden items-center gap-1.5 whitespace-nowrap text-xs font-medium transition lg:inline-flex ${
@@ -112,18 +110,6 @@ export function Navbar() {
             <Phone className="size-3.5 shrink-0" />
             <span className="hidden xl:inline">+977 980-000-0000</span>
             <span className="xl:hidden">Call</span>
-          </a>
-          <a
-            href="https://wa.me/9779800000000"
-            target="_blank" rel="noreferrer"
-            className={`hidden items-center gap-1.5 whitespace-nowrap rounded-full border px-3.5 py-2 text-xs font-medium transition sm:inline-flex ${
-              scrolled
-                ? "border-luxury-black/15 text-luxury-black hover:border-gold hover:text-gold"
-                : "border-white/30 text-white hover:border-gold hover:text-gold"
-            }`}
-          >
-            <MessageCircle className="size-3.5 shrink-0" />
-            <span className="hidden sm:inline">WhatsApp</span>
           </a>
           <button
             onClick={toggleTheme}
