@@ -19,7 +19,7 @@ dist-ssr
 *.local
 
 # pom project folder (separate repo)
-pom/
+/pom/
 
 # Wrangler / Cloudflare
 .wrangler/
