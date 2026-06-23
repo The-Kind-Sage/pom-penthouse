@@ -13,12 +13,12 @@ function openBooking(room?: string) {
 }
 
 const ROOMS = [
-  { name: "Mountain View King Room", img: aptExec, price: "रू55", size: "26 m²", beds: "1 King Bed", view: "Annapurna View", features: ["King Bed", "Smart TV", "Workspace", "En-suite Bath"] },
-  { name: "Twin Comfort Room", img: aptStudio, price: "रू48", size: "24 m²", beds: "2 Single Beds", view: "Garden View", features: ["2 Singles", "Mini Fridge", "Smart TV", "AC"] },
-  { name: "Deluxe Double Room", img: aptFamily, price: "रू70", size: "30 m²", beds: "1 Queen Bed", view: "Lakeside View", features: ["Queen Bed", "Lounge Chair", "Smart TV", "Rain Shower"] },
-  { name: "Premier Lake View Room", img: aptPent, price: "रू90", size: "34 m²", beds: "1 King Bed", view: "Phewa Lake View", features: ["King Bed", "Balcony", "Bathtub", "Premium Linen"] },
-  { name: "Family Triple Room", img: aptFamily, price: "रू110", size: "40 m²", beds: "1 Queen + 1 Single", view: "Mountain View", features: ["Sleeps 3", "Wardrobe", "Tea/Coffee", "AC"] },
-  { name: "Penthouse Master Room", img: aptPent, price: "रू160", size: "46 m²", beds: "1 King Bed", view: "Panoramic View", features: ["Private Terrace", "Soaking Tub", "Lounge", "Premium Service"] },
+  { name: "Mountain View King Room", img: aptExec, price: "$55", size: "26 m²", beds: "1 King Bed", view: "Annapurna View", features: ["King Bed", "Smart TV", "Workspace", "En-suite Bath"] },
+  { name: "Twin Comfort Room", img: aptStudio, price: "$48", size: "24 m²", beds: "2 Single Beds", view: "Garden View", features: ["2 Singles", "Mini Fridge", "Smart TV", "AC"] },
+  { name: "Deluxe Double Room", img: aptFamily, price: "$70", size: "30 m²", beds: "1 Queen Bed", view: "Lakeside View", features: ["Queen Bed", "Lounge Chair", "Smart TV", "Rain Shower"] },
+  { name: "Premier Lake View Room", img: aptPent, price: "$90", size: "34 m²", beds: "1 King Bed", view: "Phewa Lake View", features: ["King Bed", "Balcony", "Bathtub", "Premium Linen"] },
+  { name: "Family Triple Room", img: aptFamily, price: "$110", size: "40 m²", beds: "1 Queen + 1 Single", view: "Mountain View", features: ["Sleeps 3", "Wardrobe", "Tea/Coffee", "AC"] },
+  { name: "Penthouse Master Room", img: aptPent, price: "$160", size: "46 m²", beds: "1 King Bed", view: "Panoramic View", features: ["Private Terrace", "Soaking Tub", "Lounge", "Premium Service"] },
 ];
 
 export function Rooms() {

@@ -6,19 +6,19 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 const APARTMENTS = [
-  { name: "Deluxe Studio", price: "रू65" },
-  { name: "Executive Suite", price: "रू95" },
-  { name: "Family Apartment", price: "रू140" },
-  { name: "Penthouse Suite", price: "रू220" },
+  { name: "Deluxe Studio", price: "$65" },
+  { name: "Executive Suite", price: "$95" },
+  { name: "Family Apartment", price: "$140" },
+  { name: "Penthouse Suite", price: "$220" },
 ];
 
 const ROOMS = [
-  { name: "Mountain View King Room", price: "रू55" },
-  { name: "Twin Comfort Room", price: "रू48" },
-  { name: "Deluxe Double Room", price: "रू70" },
-  { name: "Premier Lake View Room", price: "रू90" },
-  { name: "Family Triple Room", price: "रू110" },
-  { name: "Penthouse Master Room", price: "रू160" },
+  { name: "Mountain View King Room", price: "$55" },
+  { name: "Twin Comfort Room", price: "$48" },
+  { name: "Deluxe Double Room", price: "$70" },
+  { name: "Premier Lake View Room", price: "$90" },
+  { name: "Family Triple Room", price: "$110" },
+  { name: "Penthouse Master Room", price: "$160" },
 ];
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {

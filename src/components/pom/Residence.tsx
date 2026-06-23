@@ -13,10 +13,10 @@ function openBooking(apartment?: string) {
 }
 
 const APARTMENTS = [
-  { name: "Deluxe Studio", img: aptStudio, price: "रू65", desc: "An elegant studio retreat with mountain views, perfect for solo travelers and couples.", capacity: "1–2 Guests", area: "38 m²", features: ["Queen Bed", "Kitchenette", "Smart TV", "Mountain View"] },
-  { name: "Executive Suite", img: aptExec, price: "रू95", desc: "Refined one-bedroom suite tailored for the business traveler who refuses to compromise.", capacity: "1–3 Guests", area: "55 m²", features: ["King Bed", "Workspace", "Lounge Area", "Lake Glimpse"] },
-  { name: "Family Apartment", img: aptFamily, price: "रू140", desc: "Spacious two-bedroom apartment with a full kitchen and dining — a true home away from home.", capacity: "3–5 Guests", area: "82 m²", features: ["2 Bedrooms", "Full Kitchen", "Dining Area", "Washer"] },
-  { name: "Penthouse Suite", img: aptPent, price: "रू220", desc: "Our signature residence: double-height ceilings, panoramic Annapurna views and a private terrace.", capacity: "2–4 Guests", area: "120 m²", features: ["Private Terrace", "Fireplace", "Panorama View", "Premium Service"] },
+  { name: "Deluxe Studio", img: aptStudio, price: "$65", desc: "An elegant studio retreat with mountain views, perfect for solo travelers and couples.", capacity: "1–2 Guests", area: "38 m²", features: ["Queen Bed", "Kitchenette", "Smart TV", "Mountain View"] },
+  { name: "Executive Suite", img: aptExec, price: "$95", desc: "Refined one-bedroom suite tailored for the business traveler who refuses to compromise.", capacity: "1–3 Guests", area: "55 m²", features: ["King Bed", "Workspace", "Lounge Area", "Lake Glimpse"] },
+  { name: "Family Apartment", img: aptFamily, price: "$140", desc: "Spacious two-bedroom apartment with a full kitchen and dining — a true home away from home.", capacity: "3–5 Guests", area: "82 m²", features: ["2 Bedrooms", "Full Kitchen", "Dining Area", "Washer"] },
+  { name: "Penthouse Suite", img: aptPent, price: "$220", desc: "Our signature residence: double-height ceilings, panoramic Annapurna views and a private terrace.", capacity: "2–4 Guests", area: "120 m²", features: ["Private Terrace", "Fireplace", "Panorama View", "Premium Service"] },
 ];
 
 export function Residence() {
