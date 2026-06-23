@@ -3,7 +3,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ArrowRight, CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 const APARTMENTS = [
   { name: "Deluxe Studio", price: "$65" },
@@ -36,10 +40,22 @@ export function BookingModal() {
     name: "", email: "", phone: "", checkin: "", checkout: "",
     guests: "2", apartment: "Deluxe Studio", message: "",
   });
+  const [checkinDate, setCheckinDate] = useState<Date>();
+  const [checkoutDate, setCheckoutDate] = useState<Date>();
   const [sent, setSent] = useState(false);
 
   function update<K extends keyof typeof form>(k: K, v: string) {
     setForm((f) => ({ ...f, [k]: v }));
+  }
+
+  function onSelectCheckin(d: Date | undefined) {
+    setCheckinDate(d);
+    setForm((f) => ({ ...f, checkin: d ? format(d, "yyyy-MM-dd") : "" }));
+  }
+
+  function onSelectCheckout(d: Date | undefined) {
+    setCheckoutDate(d);
+    setForm((f) => ({ ...f, checkout: d ? format(d, "yyyy-MM-dd") : "" }));
   }
 
   useEffect(() => {
@@ -71,7 +87,7 @@ export function BookingModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-[92vh] max-w-3xl overflow-y-auto border-gold/30 p-0">
+      <DialogContent className="max-h-[92vh] max-w-3xl overflow-y-auto border-gold/30 p-0 overscroll-contain">
         <div className="border-b border-border bg-luxury-black px-8 py-6 text-white">
           <div className="mb-2 flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-gold">
             <span className="h-px w-8 bg-gold" />Booking Inquiry
@@ -85,7 +101,7 @@ export function BookingModal() {
             </DialogDescription>
           </DialogHeader>
         </div>
-        <form onSubmit={onSubmit} className="grid gap-5 p-8 md:grid-cols-2">
+        <div className="grid gap-5 p-8 md:grid-cols-2">
           <Field label="Full Name *">
             <Input required value={form.name} onChange={(e) => update("name", e.target.value)} placeholder="Your name" maxLength={100} />
           </Field>
@@ -113,10 +129,48 @@ export function BookingModal() {
             </select>
           </Field>
           <Field label="Check-in *">
-            <Input required type="date" value={form.checkin} onChange={(e) => update("checkin", e.target.value)} />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn("h-10 w-full justify-start text-left font-normal", !checkinDate && "text-muted-foreground")}
+                >
+                  <CalendarIcon className="mr-2 size-4" />
+                  {checkinDate ? format(checkinDate, "MMM d, yyyy") : "Select date"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={checkinDate}
+                  onSelect={onSelectCheckin}
+                  disabled={(d) => d < new Date()}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </Field>
           <Field label="Check-out *">
-            <Input required type="date" value={form.checkout} onChange={(e) => update("checkout", e.target.value)} />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn("h-10 w-full justify-start text-left font-normal", !checkoutDate && "text-muted-foreground")}
+                >
+                  <CalendarIcon className="mr-2 size-4" />
+                  {checkoutDate ? format(checkoutDate, "MMM d, yyyy") : "Select date"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={checkoutDate}
+                  onSelect={onSelectCheckout}
+                  disabled={(d) => d < new Date() || (!!checkinDate && d <= checkinDate)}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </Field>
           <Field label="Guests">
             <Input type="number" min={1} max={10} value={form.guests} onChange={(e) => update("guests", e.target.value)} />
@@ -131,7 +185,7 @@ export function BookingModal() {
               Submitting opens WhatsApp with your inquiry pre-filled. You can also email{" "}
               <a href="mailto:stay@pomspenthouse.com" className="text-gold hover:underline">stay@pomspenthouse.com</a>.
             </p>
-            <Button type="submit" className="rounded-full bg-gold px-7 py-6 text-xs font-semibold uppercase tracking-[0.25em] text-luxury-black hover:brightness-110">
+            <Button onClick={onSubmit} className="rounded-full bg-gold px-7 py-6 text-xs font-semibold uppercase tracking-[0.25em] text-luxury-black hover:brightness-110">
               Send Booking Inquiry <ArrowRight className="ml-2 size-4" />
             </Button>
           </div>
@@ -140,7 +194,7 @@ export function BookingModal() {
               Thank you! Your inquiry has been opened in WhatsApp — we&apos;ll reply within the hour.
             </p>
           )}
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
