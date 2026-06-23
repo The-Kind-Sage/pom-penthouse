@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Phone, MessageCircle, ArrowRight, Moon, Sun } from "lucide-react";
+import logoUrl from "../../favicon/logo.png?url";
 
 const links = [
   ["Home", "#home"], ["Apartments", "#apartments"], ["Amenities", "#amenities"],
@@ -89,9 +90,8 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-        <a href="#home" className={`flex shrink-0 items-center gap-2 ${scrolled ? "text-luxury-black" : "text-white"}`}>
-          <span className="font-display text-2xl font-bold tracking-tight">POM&apos;S</span>
-          <span className="hidden text-[10px] uppercase tracking-[0.3em] opacity-70 sm:inline">Penthouse</span>
+        <a href="#home" className="flex shrink-0 items-center">
+          <img src={logoUrl} alt="POM'S Penthouse" className="h-16 w-auto" />
         </a>
 
         <nav className={`hidden items-center gap-5 text-[13px] xl:flex ${scrolled ? "text-luxury-black/80" : "text-white/85"}`}>
