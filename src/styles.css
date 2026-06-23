@@ -247,6 +247,11 @@
   0%, 100% { transform: scaleY(0.2); transform-origin: top; }
   50% { transform: scaleY(1); transform-origin: top; }
 }
+@keyframes toast-slide-in {
+  0% { opacity: 0; transform: translateX(40px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.toast-slide-in { animation: toast-slide-in 0.35s ease-out; }
 
 .kenburns { animation: kenburns 25s infinite alternate ease-in-out; }
 

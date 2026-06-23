@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { ArrowRight, CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { showToast } from "@/components/ui/toast";
 import aptStudio from "@/assets/apt-studio.jpg";
 import aptExec from "@/assets/apt-executive.jpg";
 import aptFamily from "@/assets/apt-family.jpg";
@@ -64,7 +65,6 @@ export function BookingModal() {
   });
   const [checkinDate, setCheckinDate] = useState<Date>();
   const [checkoutDate, setCheckoutDate] = useState<Date>();
-  const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const selected = ALL_OPTIONS.find((o) => o.name === form.apartment) ?? ALL_OPTIONS[0];
@@ -89,7 +89,6 @@ export function BookingModal() {
       if (typeof name === "string" && name) {
         setForm((f) => ({ ...f, apartment: name }));
       }
-      setSent(false);
       setOpen(true);
     }
     window.addEventListener("poms:open-booking", onOpen);
@@ -107,7 +106,11 @@ export function BookingModal() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to submit");
-      setSent(true);
+      setOpen(false);
+      showToast("Booking request has been sent! We'll get back to you shortly.");
+      setForm({ name: "", email: "", phone: "", checkin: "", checkout: "", guests: "2", apartment: "Deluxe Studio", message: "" });
+      setCheckinDate(undefined);
+      setCheckoutDate(undefined);
     } catch (err: any) {
       alert(err?.message || "Something went wrong. Please try again.");
     } finally {
@@ -230,11 +233,6 @@ export function BookingModal() {
                     {submitting ? "Sending..." : "Confirm Booking"} <ArrowRight className="ml-2 size-4" />
                   </Button>
                 </div>
-                {sent && (
-                  <p className="rounded-md border border-gold/40 bg-gold/10 px-4 py-3 text-sm text-luxury-black md:col-span-2">
-                    Thank you! Your booking inquiry has been received. We&apos;ll get back to you shortly.
-                  </p>
-                )}
               </div>
             </div>
           </div>
