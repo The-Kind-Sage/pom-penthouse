@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Phone, MessageCircle, ArrowRight } from "lucide-react";
+import { Phone, MessageCircle, ArrowRight, Moon, Sun } from "lucide-react";
 
 const links = [
   ["Home", "#home"], ["Apartments", "#apartments"], ["Amenities", "#amenities"],
@@ -56,12 +56,29 @@ function MobileMenu({ scrolled, links }: { scrolled: boolean; links: readonly (r
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("pom-theme") as "light" | "dark" | null;
+    const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    const next = stored ?? prefers;
+    setTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    localStorage.setItem("pom-theme", next);
+    document.documentElement.setAttribute("data-theme", next);
+  };
 
   return (
     <header
@@ -108,6 +125,18 @@ export function Navbar() {
             <MessageCircle className="size-3.5 shrink-0" />
             <span className="hidden sm:inline">WhatsApp</span>
           </a>
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-full transition ${
+              scrolled
+                ? "text-luxury-black hover:bg-luxury-black/5"
+                : "text-white hover:bg-white/10"
+            }`}
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
+
           <button
             type="button"
             onClick={openBooking}
