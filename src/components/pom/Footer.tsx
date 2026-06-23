@@ -48,7 +48,7 @@ export function Footer() {
       </div>
       <div className="mx-auto mt-16 flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-white/10 px-6 pt-6 text-xs text-white/40 sm:flex-row">
         <span>&copy; {new Date().getFullYear()} POM&apos;S Penthouse. All rights reserved.</span>
-        <span>Crafted with care in Pokhara, Nepal.</span>
+        <a href="https://www.drillthru.tech" target="_blank" rel="noreferrer" className="transition hover:text-gold">Made with Love ❤️ by Drill Thru</a>
       </div>
     </footer>
   );
