@@ -1,16 +1,36 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ui } from "@/lib/ui-store";
-import hero1 from "@/assets/3.jpeg";
-import hero2 from "@/assets/10.jpeg";
-import hero3 from "@/assets/13.jpeg";
+import hero1 from "@/assets/1.jpeg";
+import hero2 from "@/assets/2.jpeg";
+import hero3 from "@/assets/3.jpeg";
+import hero4 from "@/assets/4.jpeg";
+import hero5 from "@/assets/5.jpeg";
+import hero6 from "@/assets/6.jpeg";
+import hero7 from "@/assets/7.jpeg";
+import hero8 from "@/assets/8.jpeg";
+import hero9 from "@/assets/9.jpeg";
+import hero10 from "@/assets/10.jpeg";
+import hero11 from "@/assets/11.jpeg";
+import hero12 from "@/assets/12.jpeg";
+import hero13 from "@/assets/13.jpeg";
 import heroHome from "@/assets/home.jpg";
 
 const slides = [
-  { id: 1, src: hero1, alt: "Pom PentHouse living room", effect: "Crossfade" },
-  { id: 2, src: hero2, alt: "Pom PentHouse interior", effect: "Ken Burns" },
-  { id: 3, src: heroHome, alt: "Pom PentHouse home", effect: "Crossfade" },
-  { id: 4, src: hero3, alt: "Pom PentHouse view", effect: "Crossfade" },
+  { id: 1, src: hero1, alt: "POM'S Penthouse Exterior" },
+  { id: 2, src: hero2, alt: "POM'S Penthouse Interior" },
+  { id: 3, src: hero3, alt: "Luxury Living Room" },
+  { id: 4, src: hero4, alt: "Modern Kitchen" },
+  { id: 5, src: hero5, alt: "Cozy Bedroom" },
+  { id: 6, src: hero6, alt: "Spacious Hall" },
+  { id: 7, src: hero7, alt: "Balcony View" },
+  { id: 8, src: hero8, alt: "Bathroom" },
+  { id: 9, src: hero9, alt: "Lake View" },
+  { id: 10, src: hero10, alt: "Mountain View" },
+  { id: 11, src: hero11, alt: "Pokhara City" },
+  { id: 12, src: hero12, alt: "Penthouse Suite" },
+  { id: 13, src: hero13, alt: "Dining Area" },
+  { id: 14, src: heroHome, alt: "POM'S Penthouse Home" },
 ];
 
 export function Hero() {
@@ -19,7 +39,7 @@ export function Hero() {
 
   useEffect(() => {
     if (paused) return;
-    const t = setInterval(() => setI((p) => (p + 1) % slides.length), 4500);
+    const t = setInterval(() => setI((p) => (p + 1) % slides.length), 4000);
     return () => clearInterval(t);
   }, [paused]);
 
@@ -30,12 +50,9 @@ export function Hero() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Photo 1/20 — Crossfade */}
-      {/* Photo 2/20 — Ken Burns */}
-      {/* Photo 3/20 — Crossfade */}
       {slides.map((s, idx) => (
         <motion.div
-          key={s.id + "-" + idx}
+          key={s.id}
           aria-hidden={i !== idx}
           className="absolute inset-0"
           initial={false}
@@ -45,7 +62,7 @@ export function Hero() {
           <img
             src={s.src}
             alt={s.alt}
-            loading="eager"
+            loading={idx === 0 ? "eager" : "lazy"}
             decoding="async"
             className="object-cover w-full h-full"
           />
@@ -88,13 +105,13 @@ export function Hero() {
         <span className="block w-px h-12 bg-[var(--off-white)]/70 origin-top animate-[scroll-line_2.4s_ease-in-out_infinite]" />
       </div>
 
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
         {slides.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setI(idx)}
             aria-label={`Slide ${idx + 1}`}
-            className={`h-2 rounded-full transition-all ${i === idx ? "w-6 bg-[var(--gold)]" : "w-2 bg-white/50"}`}
+            className={`h-1.5 rounded-full transition-all duration-500 ${i === idx ? "w-5 bg-[var(--gold)]" : "w-1.5 bg-white/40"}`}
           />
         ))}
       </div>
