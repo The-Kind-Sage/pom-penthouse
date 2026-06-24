@@ -49,18 +49,24 @@ export function BookingModal() {
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
       document.addEventListener("wheel", prevent, { passive: false, capture: true });
       document.addEventListener("touchmove", prevent, { passive: false, capture: true });
-      window.dispatchEvent(new CustomEvent("poms:stop-scroll"));
+      window.__lenis?.stop();
       return () => {
         document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
         document.removeEventListener("wheel", prevent, { capture: true });
         document.removeEventListener("touchmove", prevent, { capture: true });
-        window.dispatchEvent(new CustomEvent("poms:start-scroll"));
+        window.__lenis?.start();
       };
     }
     document.body.style.overflow = "";
-    return () => { document.body.style.overflow = ""; };
+    document.documentElement.style.overflow = "";
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
   }, [open]);
   const [form, setForm] = useState({
     name: "", email: "", phone: "", checkin: "", checkout: "",
