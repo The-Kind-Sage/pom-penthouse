@@ -221,7 +221,7 @@ async function seed() {
   ];
 
   for (const s of settings) {
-    await db.collection("settings").updateOne({ key: s.key }, { $setOnInsert: s }, { upsert: true });
+    await db.collection("settings").updateOne({ key: s.key }, { $set: s }, { upsert: true });
   }
   console.log(`✓ Settings seeded`);
 
@@ -247,6 +247,28 @@ async function seed() {
   } else {
     console.log(`- Penthouse already exists`);
   }
+
+  // Seed gallery images
+  const galleryImages = [
+    { url: "/images/home.jpg", label: "Penthouse Living Room" },
+    { url: "/images/1.jpeg", label: "Pom PentHouse Living" },
+    { url: "/images/2.jpeg", label: "Pom PentHouse Interior" },
+    { url: "/images/3.jpeg", label: "Pom PentHouse Lounge" },
+    { url: "/images/4.jpeg", label: "Pom PentHouse Dining" },
+    { url: "/images/5.jpeg", label: "Pom PentHouse Entrance" },
+    { url: "/images/gal-lake.jpg", label: "Phewa Lake View" },
+    { url: "/images/life-balcony.jpg", label: "Balcony View" },
+    { url: "/images/gal-bedroom.jpg", label: "Bedroom" },
+    { url: "/images/gal-kitchen.jpg", label: "Kitchen" },
+    { url: "/images/gal-bath.jpg", label: "Bathroom" },
+    { url: "/images/apt-family.jpg", label: "Family Apartment" },
+  ];
+  await db.collection("settings").updateOne(
+    { key: "gallery_images" },
+    { $setOnInsert: { value: galleryImages.map((g, i) => ({ ...g, created_at: new Date().toISOString() })) } },
+    { upsert: true },
+  );
+  console.log(`✓ Gallery images seeded`);
 
   console.log("\n✓ Seed complete!");
   process.exit(0);

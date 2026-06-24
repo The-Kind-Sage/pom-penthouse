@@ -45,7 +45,13 @@ export function Gallery() {
     span: SPANS[i % SPANS.length],
   }));
 
-  const GALLERY = remoteGallery;
+  const localGallery = IMAGES.map((img, i) => ({
+    src: img.src,
+    label: img.alt,
+    span: SPANS[i % SPANS.length],
+  }));
+
+  const GALLERY = remoteGallery.length > 0 ? remoteGallery : localGallery;
 
   const open = useCallback((i: number) => { setActiveIdx(i); setLightboxOpen(true); }, []);
   const close = useCallback(() => setLightboxOpen(false), []);
