@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { useSettings } from "@/lib/hooks";
+import offerBg from "@/assets/home.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
@@ -15,7 +16,7 @@ export function Offer() {
   const title = offer.title || "Ready to Experience Premium Living?";
   const subtitle = offer.subtitle || "Book your luxury serviced apartment today. Our team will respond within the hour.";
   const btnText = offer.btn_text || "Book Now";
-  const bgImg = offer.image || "";
+  const bgImg = offerBg;
   const wa = settings?.footer_settings?.whatsapp || "https://wa.me/9779840814142";
 
   return (
