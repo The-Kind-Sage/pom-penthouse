@@ -1,12 +1,6 @@
 import { useEffect, useRef } from "react";
 import testImg from "@/assets/405915677.jpg";
 
-declare global {
-  interface Window {
-    eApps?: { init?: () => void };
-  }
-}
-
 export function Testimonial() {
   const mounted = useRef(false);
 
@@ -15,16 +9,9 @@ export function Testimonial() {
     mounted.current = true;
 
     const script = document.createElement("script");
-    script.src = "https://elfsightcdn.com/platform.js";
-    script.async = true;
+    script.src = "https://widgets.sociablekit.com/google-reviews/widget.js";
+    script.defer = true;
     document.body.appendChild(script);
-
-    // Initialize widget after script loads
-    script.onload = () => {
-      if (window.eApps?.init) {
-        window.eApps.init();
-      }
-    };
   }, []);
 
   return (
@@ -43,7 +30,7 @@ export function Testimonial() {
         </div>
 
         <div className="mt-16">
-          <div className="elfsight-app-a1bde9c4-658b-40a3-ac19-a19822b5bfa6" data-elfsight-app-lazy />
+          <div className="sk-ww-google-reviews" data-embed-id="25692242" />
         </div>
       </div>
     </section>
