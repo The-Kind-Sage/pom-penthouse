@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ArrowRight, CalendarIcon, ShieldCheck, Info, X } from "lucide-react";
+import { ArrowRight, CalendarIcon, ShieldCheck, Info, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { format, differenceInCalendarDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { showToast } from "@/components/ui/toast";
@@ -13,21 +13,24 @@ import aptFamily from "@/assets/apt-family.jpg";
 import aptPent from "@/assets/405915699.jpg";
 import aptStudio from "@/assets/395344888.jpg";
 import aptExec from "@/assets/405267735.jpg";
+import galBedroom from "@/assets/gal-bedroom.jpg";
+import galKitchen from "@/assets/gal-kitchen.jpg";
+import galBath from "@/assets/gal-bath.jpg";
 
 const USD_TO_NPR_FALLBACK = 134.5;
 const VAT_RATE = 0.13;
 
 const APARTMENTS = [
-  { name: "3 BHK", priceUsd: 150, img: aptPent },
-  { name: "2 BHK", priceUsd: 110, img: aptFamily },
-  { name: "1 BHK", priceUsd: 75, img: aptExec },
-  { name: "Studio Apartment", priceUsd: 55, img: aptStudio },
+  { name: "3 BHK", priceUsd: 150, img: aptPent, gallery: [aptPent, galBedroom, galKitchen, galBath] },
+  { name: "2 BHK", priceUsd: 110, img: aptFamily, gallery: [aptFamily, galBedroom, galKitchen] },
+  { name: "1 BHK", priceUsd: 75, img: aptExec, gallery: [aptExec, galBedroom, galKitchen] },
+  { name: "Studio Apartment", priceUsd: 55, img: aptStudio, gallery: [aptStudio, galBedroom, galKitchen] },
 ];
 
 const ROOMS = [
-  { name: "Single Room — Single Bed", priceUsd: 30, img: aptExec },
-  { name: "Single Room — Double Bed", priceUsd: 40, img: aptStudio },
-  { name: "Single Room — Twin Bed", priceUsd: 45, img: aptFamily },
+  { name: "Single Room — Single Bed", priceUsd: 30, img: aptExec, gallery: [aptExec, galBedroom, galBath] },
+  { name: "Single Room — Double Bed", priceUsd: 40, img: aptStudio, gallery: [aptStudio, galBedroom, galBath] },
+  { name: "Single Room — Twin Bed", priceUsd: 45, img: aptFamily, gallery: [aptFamily, galBedroom, galBath] },
 ];
 
 const ALL_OPTIONS = [...APARTMENTS, ...ROOMS];
@@ -63,9 +66,11 @@ export function BookingModal() {
   }, []);
 
   const [selectedImg, setSelectedImg] = useState<string>("");
+  const [activeImg, setActiveImg] = useState(0);
 
   const selected = ALL_OPTIONS.find((o) => o.name === form.apartment) ?? ALL_OPTIONS[0];
-  const displayImg = selectedImg || selected.img;
+  const gallery = selectedImg ? [selectedImg, ...selected.gallery.filter((g: string) => g !== selectedImg)] : selected.gallery;
+  const displayImg = gallery[activeImg] || selected.img;
 
   const nights = useMemo(() => {
     if (!checkinDate || !checkoutDate) return 0;
@@ -109,6 +114,7 @@ export function BookingModal() {
         setForm((f) => ({ ...f, apartment: detail }));
         setSelectedImg("");
       }
+      setActiveImg(0);
       setOpen(true);
     }
     window.addEventListener("poms:open-booking", onOpen);
@@ -130,6 +136,7 @@ export function BookingModal() {
       showToast("Booking request has been sent! We'll get back to you shortly.");
       setForm({ name: "", email: "", phone: "", checkin: "", checkout: "", guests: "2", apartment: "Studio Apartment", message: "" });
       setSelectedImg("");
+      setActiveImg(0);
       setCheckinDate(undefined);
       setCheckoutDate(undefined);
     } catch (err: any) {
@@ -150,26 +157,66 @@ export function BookingModal() {
           <X className="size-4" />
         </button>
 
-        {/* Left: image */}
+        {/* Left: image gallery */}
         <div className="relative shrink-0 overflow-hidden md:hidden">
-          <img src={displayImg} alt={selected.name} className="aspect-[16/9] w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-          <div className="absolute bottom-3 left-4 right-4 text-white">
-            <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Selected</div>
-            <div className="font-display text-lg font-medium">{selected.name}</div>
-            <div className="text-sm text-white/80">{fmtUsd(selected.priceUsd)}/night</div>
+          <div className="relative aspect-[16/9] w-full overflow-hidden">
+            <img src={displayImg} alt={selected.name} className="size-full object-cover transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+            {gallery.length > 1 && (
+              <>
+                <button onClick={() => setActiveImg((i) => (i - 1 + gallery.length) % gallery.length)} className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-1.5 text-white backdrop-blur-sm transition hover:bg-black/70">
+                  <ChevronLeft className="size-4" />
+                </button>
+                <button onClick={() => setActiveImg((i) => (i + 1) % gallery.length)} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-1.5 text-white backdrop-blur-sm transition hover:bg-black/70">
+                  <ChevronRight className="size-4" />
+                </button>
+              </>
+            )}
+            <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between text-white">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Selected</div>
+                <div className="font-display text-lg font-medium">{selected.name}</div>
+                <div className="text-sm text-white/80">{fmtUsd(selected.priceUsd)}/night</div>
+              </div>
+              {gallery.length > 1 && (
+                <div className="flex gap-1">
+                  {gallery.map((_: string, i: number) => (
+                    <button key={i} onClick={() => setActiveImg(i)} className={`size-2 rounded-full transition ${i === activeImg ? "bg-gold" : "bg-white/40"}`} />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">
-          {/* Left: image (desktop) */}
+          {/* Left: image gallery (desktop) */}
           <div className="relative hidden shrink-0 overflow-hidden md:block md:w-2/5">
-            <img src={displayImg} alt={selected.name} className="absolute inset-0 size-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-            <div className="absolute bottom-5 left-5 right-5 text-white">
-              <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Selected</div>
-              <div className="font-display text-xl font-medium">{selected.name}</div>
-              <div className="mt-1 text-sm text-white/80">{fmtUsd(selected.priceUsd)}<span className="ml-1 text-[10px] text-white/60">/ night</span></div>
+            <div className="relative size-full">
+              <img src={displayImg} alt={selected.name} className="absolute inset-0 size-full object-cover transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              {gallery.length > 1 && (
+                <>
+                  <button onClick={() => setActiveImg((i) => (i - 1 + gallery.length) % gallery.length)} className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition hover:bg-black/70">
+                    <ChevronLeft className="size-4" />
+                  </button>
+                  <button onClick={() => setActiveImg((i) => (i + 1) % gallery.length)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white backdrop-blur-sm transition hover:bg-black/70">
+                    <ChevronRight className="size-4" />
+                  </button>
+                </>
+              )}
+              <div className="absolute bottom-5 left-5 right-5 text-white">
+                <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Selected</div>
+                <div className="font-display text-xl font-medium">{selected.name}</div>
+                <div className="mt-1 text-sm text-white/80">{fmtUsd(selected.priceUsd)}<span className="ml-1 text-[10px] text-white/60">/ night</span></div>
+                {gallery.length > 1 && (
+                  <div className="mt-3 flex gap-1.5">
+                    {gallery.map((_: string, i: number) => (
+                      <button key={i} onClick={() => setActiveImg(i)} className={`h-1.5 rounded-full transition-all ${i === activeImg ? "w-6 bg-gold" : "w-1.5 bg-white/40"}`} />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
