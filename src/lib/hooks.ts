@@ -218,3 +218,29 @@ export function useMarkContactRead() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["contact-messages"] }),
   });
 }
+
+// Gallery images
+export function useGalleryImages() {
+  return useQuery<{ url: string; label: string; created_at: string }[]>({
+    queryKey: ["gallery-images"],
+    queryFn: () => apiGet("/api/gallery-images"),
+  });
+}
+
+export function useAddGalleryImage() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { url: string; label: string }) =>
+      apiMutate("/api/gallery-images", { method: "POST", body: JSON.stringify(data) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["gallery-images"] }),
+  });
+}
+
+export function useRemoveGalleryImage() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (index: number) =>
+      apiMutate("/api/gallery-images", { method: "DELETE", body: JSON.stringify({ index }) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["gallery-images"] }),
+  });
+}

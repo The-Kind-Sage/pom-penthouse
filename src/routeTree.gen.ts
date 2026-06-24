@@ -23,6 +23,7 @@ import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as ApiSettingsRouteImport } from './routes/api/settings'
 import { Route as ApiRoomsRouteImport } from './routes/api/rooms'
 import { Route as ApiPenthousesRouteImport } from './routes/api/penthouses'
+import { Route as ApiGalleryImagesRouteImport } from './routes/api/gallery-images'
 import { Route as ApiContactMessagesRouteImport } from './routes/api/contact-messages'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiBookingsRouteImport } from './routes/api/bookings'
@@ -108,6 +109,11 @@ const ApiRoomsRoute = ApiRoomsRouteImport.update({
 const ApiPenthousesRoute = ApiPenthousesRouteImport.update({
   id: '/api/penthouses',
   path: '/api/penthouses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGalleryImagesRoute = ApiGalleryImagesRouteImport.update({
+  id: '/api/gallery-images',
+  path: '/api/gallery-images',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiContactMessagesRoute = ApiContactMessagesRouteImport.update({
@@ -213,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/api/bookings': typeof ApiBookingsRoute
   '/api/contact': typeof ApiContactRoute
   '/api/contact-messages': typeof ApiContactMessagesRoute
+  '/api/gallery-images': typeof ApiGalleryImagesRoute
   '/api/penthouses': typeof ApiPenthousesRoute
   '/api/rooms': typeof ApiRoomsRoute
   '/api/settings': typeof ApiSettingsRoute
@@ -244,6 +251,7 @@ export interface FileRoutesByTo {
   '/api/bookings': typeof ApiBookingsRoute
   '/api/contact': typeof ApiContactRoute
   '/api/contact-messages': typeof ApiContactMessagesRoute
+  '/api/gallery-images': typeof ApiGalleryImagesRoute
   '/api/penthouses': typeof ApiPenthousesRoute
   '/api/rooms': typeof ApiRoomsRoute
   '/api/settings': typeof ApiSettingsRoute
@@ -277,6 +285,7 @@ export interface FileRoutesById {
   '/api/bookings': typeof ApiBookingsRoute
   '/api/contact': typeof ApiContactRoute
   '/api/contact-messages': typeof ApiContactMessagesRoute
+  '/api/gallery-images': typeof ApiGalleryImagesRoute
   '/api/penthouses': typeof ApiPenthousesRoute
   '/api/rooms': typeof ApiRoomsRoute
   '/api/settings': typeof ApiSettingsRoute
@@ -311,6 +320,7 @@ export interface FileRouteTypes {
     | '/api/bookings'
     | '/api/contact'
     | '/api/contact-messages'
+    | '/api/gallery-images'
     | '/api/penthouses'
     | '/api/rooms'
     | '/api/settings'
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/api/bookings'
     | '/api/contact'
     | '/api/contact-messages'
+    | '/api/gallery-images'
     | '/api/penthouses'
     | '/api/rooms'
     | '/api/settings'
@@ -374,6 +385,7 @@ export interface FileRouteTypes {
     | '/api/bookings'
     | '/api/contact'
     | '/api/contact-messages'
+    | '/api/gallery-images'
     | '/api/penthouses'
     | '/api/rooms'
     | '/api/settings'
@@ -400,6 +412,7 @@ export interface RootRouteChildren {
   ApiBookingsRoute: typeof ApiBookingsRoute
   ApiContactRoute: typeof ApiContactRoute
   ApiContactMessagesRoute: typeof ApiContactMessagesRoute
+  ApiGalleryImagesRoute: typeof ApiGalleryImagesRoute
   ApiPenthousesRoute: typeof ApiPenthousesRoute
   ApiRoomsRoute: typeof ApiRoomsRoute
   ApiSettingsRoute: typeof ApiSettingsRoute
@@ -508,6 +521,13 @@ declare module '@tanstack/react-router' {
       path: '/api/penthouses'
       fullPath: '/api/penthouses'
       preLoaderRoute: typeof ApiPenthousesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/gallery-images': {
+      id: '/api/gallery-images'
+      path: '/api/gallery-images'
+      fullPath: '/api/gallery-images'
+      preLoaderRoute: typeof ApiGalleryImagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/contact-messages': {
@@ -664,6 +684,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiBookingsRoute: ApiBookingsRoute,
   ApiContactRoute: ApiContactRoute,
   ApiContactMessagesRoute: ApiContactMessagesRoute,
+  ApiGalleryImagesRoute: ApiGalleryImagesRoute,
   ApiPenthousesRoute: ApiPenthousesRoute,
   ApiRoomsRoute: ApiRoomsRoute,
   ApiSettingsRoute: ApiSettingsRoute,
