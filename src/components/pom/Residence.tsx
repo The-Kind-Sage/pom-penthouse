@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Users, Square, ArrowRight } from "lucide-react";
-import aptStudio from "@/assets/apt-studio.jpg";
-import aptExec from "@/assets/apt-executive.jpg";
-import aptFamily from "@/assets/apt-family.jpg";
 import aptPent from "@/assets/apt-penthouse.jpg";
+import aptFamily from "@/assets/apt-family.jpg";
+import aptExec from "@/assets/apt-executive.jpg";
+import aptStudio from "@/assets/apt-studio.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
@@ -13,10 +13,10 @@ function openBooking(apartment?: string) {
 }
 
 const APARTMENTS = [
-  { name: "Deluxe Studio", img: aptStudio, price: "$65", desc: "An elegant studio retreat with mountain views, perfect for solo travelers and couples.", capacity: "1–2 Guests", area: "38 m²", features: ["Queen Bed", "Kitchenette", "Smart TV", "Mountain View"] },
-  { name: "Executive Suite", img: aptExec, price: "$95", desc: "Refined one-bedroom suite tailored for the business traveler who refuses to compromise.", capacity: "1–3 Guests", area: "55 m²", features: ["King Bed", "Workspace", "Lounge Area", "Lake Glimpse"] },
-  { name: "Family Apartment", img: aptFamily, price: "$140", desc: "Spacious two-bedroom apartment with a full kitchen and dining — a true home away from home.", capacity: "3–5 Guests", area: "82 m²", features: ["2 Bedrooms", "Full Kitchen", "Dining Area", "Washer"] },
-  { name: "Penthouse Suite", img: aptPent, price: "$220", desc: "Our signature residence: double-height ceilings, panoramic Annapurna views and a private terrace.", capacity: "2–4 Guests", area: "120 m²", features: ["Private Terrace", "Fireplace", "Panorama View", "Premium Service"] },
+  { name: "3 BHK", img: aptPent, price: "$150", desc: "Spacious three-bedroom apartment with modern living room, fully equipped kitchen, and scenic balcony views.", capacity: "4–6 Guests", area: "120 m²", features: ["3 Bedrooms", "Living Room", "Full Kitchen", "2 Bathrooms"] },
+  { name: "2 BHK", img: aptFamily, price: "$110", desc: "Comfortable two-bedroom apartment perfect for families, featuring a bright hall and modular kitchen.", capacity: "3–5 Guests", area: "85 m²", features: ["2 Bedrooms", "Living Room", "Full Kitchen", "1 Bathroom"] },
+  { name: "1 BHK", img: aptExec, price: "$75", desc: "Cozy one-bedroom apartment with an attached hall and kitchen — ideal for couples or solo travelers.", capacity: "1–3 Guests", area: "55 m²", features: ["1 Bedroom", "Living Room", "Kitchenette", "1 Bathroom"] },
+  { name: "Studio Apartment", img: aptStudio, price: "$55", desc: "Compact open-plan studio with a kitchenette and smart storage — designed for modern urban living.", capacity: "1–2 Guests", area: "35 m²", features: ["Open Layout", "Kitchenette", "Workspace", "Smart TV"] },
 ];
 
 export function Residence() {
@@ -31,7 +31,7 @@ export function Residence() {
             Featured <span className="italic text-gold">Apartments</span>
           </h2>
           <p className="mt-5 text-muted-foreground">
-            Four signature residences, each designed with curated materials, considered light and the warmth of home.
+            Four thoughtfully designed residences to suit every need — from studio living to family comfort.
           </p>
         </div>
         <motion.div

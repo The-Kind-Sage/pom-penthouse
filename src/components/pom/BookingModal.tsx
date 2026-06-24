@@ -15,19 +15,16 @@ import aptFamily from "@/assets/apt-family.jpg";
 import aptPent from "@/assets/apt-penthouse.jpg";
 
 const APARTMENTS = [
-  { name: "Deluxe Studio", price: "$65", img: aptStudio },
-  { name: "Executive Suite", price: "$95", img: aptExec },
-  { name: "Family Apartment", price: "$140", img: aptFamily },
-  { name: "Penthouse Suite", price: "$220", img: aptPent },
+  { name: "3 BHK", price: "$150", img: aptPent },
+  { name: "2 BHK", price: "$110", img: aptFamily },
+  { name: "1 BHK", price: "$75", img: aptExec },
+  { name: "Studio Apartment", price: "$55", img: aptStudio },
 ];
 
 const ROOMS = [
-  { name: "Mountain View King Room", price: "$55", img: aptExec },
-  { name: "Twin Comfort Room", price: "$48", img: aptStudio },
-  { name: "Deluxe Double Room", price: "$70", img: aptFamily },
-  { name: "Premier Lake View Room", price: "$90", img: aptPent },
-  { name: "Family Triple Room", price: "$110", img: aptFamily },
-  { name: "Penthouse Master Room", price: "$160", img: aptPent },
+  { name: "Single Room — Single Bed", price: "$30", img: aptExec },
+  { name: "Single Room — Double Bed", price: "$40", img: aptStudio },
+  { name: "Single Room — Twin Bed", price: "$45", img: aptFamily },
 ];
 
 const ALL_OPTIONS = [...APARTMENTS, ...ROOMS];
@@ -61,7 +58,7 @@ export function BookingModal() {
   }, [open]);
   const [form, setForm] = useState({
     name: "", email: "", phone: "", checkin: "", checkout: "",
-    guests: "2", apartment: "Deluxe Studio", message: "",
+    guests: "2", apartment: "Studio Apartment", message: "",
   });
   const [checkinDate, setCheckinDate] = useState<Date>();
   const [checkoutDate, setCheckoutDate] = useState<Date>();
@@ -108,7 +105,7 @@ export function BookingModal() {
       if (!res.ok) throw new Error(data.error || "Failed to submit");
       setOpen(false);
       showToast("Booking request has been sent! We'll get back to you shortly.");
-      setForm({ name: "", email: "", phone: "", checkin: "", checkout: "", guests: "2", apartment: "Deluxe Studio", message: "" });
+      setForm({ name: "", email: "", phone: "", checkin: "", checkout: "", guests: "2", apartment: "Studio Apartment", message: "" });
       setCheckinDate(undefined);
       setCheckoutDate(undefined);
     } catch (err: any) {

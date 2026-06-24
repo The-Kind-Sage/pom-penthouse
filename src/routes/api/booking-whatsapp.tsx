@@ -72,7 +72,7 @@ export const Route = createFileRoute("/api/booking-whatsapp")({
             name: name.trim(),
             email: email.trim(),
             phone: phone?.trim() || null,
-            apartment: apartment?.trim() || "Deluxe Studio",
+            apartment: apartment?.trim() || "Studio Apartment",
             guests: parseInt(guests) || 2,
             checkin,
             checkout,

@@ -3,7 +3,6 @@ import { Bed, Square, ArrowRight } from "lucide-react";
 import aptExec from "@/assets/apt-executive.jpg";
 import aptStudio from "@/assets/apt-studio.jpg";
 import aptFamily from "@/assets/apt-family.jpg";
-import aptPent from "@/assets/apt-penthouse.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
@@ -13,12 +12,9 @@ function openBooking(room?: string) {
 }
 
 const ROOMS = [
-  { name: "Mountain View King Room", img: aptExec, price: "$55", size: "26 m²", beds: "1 King Bed", view: "Annapurna View", features: ["King Bed", "Smart TV", "Workspace", "En-suite Bath"] },
-  { name: "Twin Comfort Room", img: aptStudio, price: "$48", size: "24 m²", beds: "2 Single Beds", view: "Garden View", features: ["2 Singles", "Mini Fridge", "Smart TV", "AC"] },
-  { name: "Deluxe Double Room", img: aptFamily, price: "$70", size: "30 m²", beds: "1 Queen Bed", view: "Lakeside View", features: ["Queen Bed", "Lounge Chair", "Smart TV", "Rain Shower"] },
-  { name: "Premier Lake View Room", img: aptPent, price: "$90", size: "34 m²", beds: "1 King Bed", view: "Phewa Lake View", features: ["King Bed", "Balcony", "Bathtub", "Premium Linen"] },
-  { name: "Family Triple Room", img: aptFamily, price: "$110", size: "40 m²", beds: "1 Queen + 1 Single", view: "Mountain View", features: ["Sleeps 3", "Wardrobe", "Tea/Coffee", "AC"] },
-  { name: "Penthouse Master Room", img: aptPent, price: "$160", size: "46 m²", beds: "1 King Bed", view: "Panoramic View", features: ["Private Terrace", "Soaking Tub", "Lounge", "Premium Service"] },
+  { name: "Single Room — Single Bed", img: aptExec, price: "$30", size: "18 m²", beds: "1 Single Bed", view: "Courtyard View", features: ["Single Bed", "Desk", "WiFi", "AC"] },
+  { name: "Single Room — Double Bed", img: aptStudio, price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
+  { name: "Single Room — Twin Bed", img: aptFamily, price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
 ];
 
 export function Rooms() {
@@ -33,7 +29,7 @@ export function Rooms() {
             Choose Your <span className="italic text-gold">Room</span>
           </h2>
           <p className="mt-5 text-muted-foreground">
-            Individual rooms for shorter stays — refined, comfortable, and ready when you are.
+            Simple, comfortable rooms for short stays — designed for rest and productivity.
           </p>
         </div>
         <motion.div

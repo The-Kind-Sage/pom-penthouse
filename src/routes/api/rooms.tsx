@@ -1,16 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getDb } from "@/lib/mongodb";
 import { json } from "@/lib/auth";
-import { ObjectId } from "mongodb";
 
 const ROOM_TYPES: Record<number, string[]> = {
-  1: ["Mountain View King Room", "Twin Comfort Room", "Deluxe Studio", "Mountain View King Room"],
-  2: ["Deluxe Studio", "Twin Comfort Room", "Deluxe Double Room", "Mountain View King Room"],
-  3: ["Deluxe Studio", "Deluxe Double Room", "Executive Suite", "Family Triple Room"],
-  4: ["Deluxe Studio", "Deluxe Double Room", "Executive Suite", "Family Triple Room"],
-  5: ["Executive Suite", "Premier Lake View Room", "Family Apartment", "Penthouse Master Room"],
-  6: ["Premier Lake View Room", "Executive Suite", "Penthouse Master Room", "Family Apartment"],
-  7: ["Penthouse Suite", "Penthouse Master Room", "Premier Lake View Room", "Family Apartment"],
+  1: ["Studio Apartment", "Single Room — Single Bed", "Single Room — Double Bed", "Single Room — Twin Bed"],
+  2: ["Studio Apartment", "1 BHK", "Single Room — Single Bed", "Single Room — Double Bed"],
+  3: ["1 BHK", "1 BHK", "2 BHK", "Single Room — Twin Bed"],
+  4: ["1 BHK", "2 BHK", "2 BHK", "Studio Apartment"],
+  5: ["2 BHK", "2 BHK", "3 BHK", "Studio Apartment"],
+  6: ["2 BHK", "3 BHK", "3 BHK", "1 BHK"],
+  7: ["3 BHK", "3 BHK", "2 BHK", "Studio Apartment"],
 };
 
 function buildRooms() {
@@ -27,7 +26,7 @@ function buildRooms() {
 export const Route = createFileRoute("/api/rooms")({
   server: {
     handlers: {
-      GET: async ({ request }) => {
+      GET: async () => {
         try {
           const db = await getDb();
           const all = await db.collection("rooms").find().toArray();
