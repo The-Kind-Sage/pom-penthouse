@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useBookings, useUpdateBooking, useBookingInquiries } from "@/lib/hooks";
+import { useBookings, useUpdateBooking, useBookingInquiries, useUpdateInquiry } from "@/lib/hooks";
 import { type Booking, type BookingInquiry, type BookingStatus, type PaymentStatus } from "@/lib/admin-types";
-import { Check, X, Download, Search, Eye, Mail } from "lucide-react";
+import { Check, X, Download, Search, Eye, Mail, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/bookings")({
@@ -26,17 +26,21 @@ const paymentStyles: Record<PaymentStatus, string> = {
 const tabs = [
   { key: "bookings", label: "Bookings" },
   { key: "inquiries", label: "Inquiries" },
+  { key: "rejected", label: "Rejected" },
 ] as const;
+
+type TabKey = (typeof tabs)[number]["key"];
 
 function Badge({ label, style }: { label: string; style: string }) {
   return <span className={`inline-block text-xs px-2 py-1 rounded-full font-medium ${style}`}>{label}</span>;
 }
 
 function BookingsPage() {
-  const [tab, setTab] = useState<"bookings" | "inquiries">("bookings");
+  const [tab, setTab] = useState<TabKey>("bookings");
   const { data: bookings = [], isLoading: loadingBookings } = useBookings();
   const { data: inquiries = [], isLoading: loadingInquiries } = useBookingInquiries();
   const updateBooking = useUpdateBooking();
+  const updateInquiry = useUpdateInquiry();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<BookingStatus | "all">("all");
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -48,12 +52,42 @@ function BookingsPage() {
     return true;
   });
 
+  const pendingInquiries = inquiries.filter((i) => !i.status || i.status === "pending");
+  const rejectedInquiries = inquiries.filter((i) => i.status === "rejected");
+
+  const filteredInquiries = tab === "rejected" ? rejectedInquiries : pendingInquiries;
+  const displayedInquiries = filteredInquiries.filter((i) => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return i.name.toLowerCase().includes(q) || i.apartment.toLowerCase().includes(q) || i.email.toLowerCase().includes(q);
+  });
+
   const handleUpdateStatus = async (id: string, status: BookingStatus) => {
     try {
       await updateBooking.mutateAsync({ id, status });
       toast.success(`Booking ${status}`);
     } catch {
       toast.error("Failed to update booking");
+    }
+  };
+
+  const handleAcceptInquiry = async (id: string) => {
+    try {
+      await updateInquiry.mutateAsync({ id, action: "accept" });
+      toast.success("Inquiry accepted — added to bookings");
+      setSelectedInquiry(null);
+    } catch {
+      toast.error("Failed to accept inquiry");
+    }
+  };
+
+  const handleRejectInquiry = async (id: string) => {
+    try {
+      await updateInquiry.mutateAsync({ id, action: "reject" });
+      toast.success("Inquiry rejected");
+      setSelectedInquiry(null);
+    } catch {
+      toast.error("Failed to reject inquiry");
     }
   };
 
@@ -87,19 +121,25 @@ function BookingsPage() {
       </div>
 
       <div className="flex gap-1 border-b">
-        {tabs.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 transition -mb-px ${tab === t.key ? "border-gold text-foreground" : "border-transparent text-foreground/60 hover:text-foreground"}`}
-          >
-            {t.key === "inquiries" && <Mail size={14} className="inline mr-1.5 -mt-0.5" />}
-            {t.label}
-            {t.key === "inquiries" && inquiries.length > 0 && (
-              <span className="ml-1.5 inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold rounded-full bg-gold/20 text-gold">{inquiries.length}</span>
-            )}
-          </button>
-        ))}
+        {tabs.map((t) => {
+          const count = t.key === "inquiries" ? pendingInquiries.length : t.key === "rejected" ? rejectedInquiries.length : null;
+          return (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition -mb-px ${tab === t.key ? "border-gold text-foreground" : "border-transparent text-foreground/60 hover:text-foreground"}`}
+            >
+              {t.key === "inquiries" && <Mail size={14} className="inline mr-1.5 -mt-0.5" />}
+              {t.key === "rejected" && <X size={14} className="inline mr-1.5 -mt-0.5" />}
+              {t.label}
+              {count !== null && count > 0 && (
+                <span className={`ml-1.5 inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold rounded-full ${t.key === "rejected" ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" : "bg-gold/20 text-gold"}`}>
+                  {count}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {tab === "bookings" ? (
@@ -229,11 +269,7 @@ function BookingsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {inquiries.filter((i) => {
-                    if (!search) return true;
-                    const q = search.toLowerCase();
-                    return i.name.toLowerCase().includes(q) || i.apartment.toLowerCase().includes(q) || i.email.toLowerCase().includes(q);
-                  }).map((i) => (
+                  {displayedInquiries.map((i) => (
                     <tr key={i.id} className="hover:bg-muted/30 transition">
                       <td className="px-4 py-3">
                         <p className="font-medium">{i.name}</p>
@@ -245,15 +281,26 @@ function BookingsPage() {
                       <td className="px-4 py-3">{i.guests}</td>
                       <td className="px-4 py-3 text-xs text-foreground/60">{new Date(i.created_at).toLocaleDateString()}</td>
                       <td className="px-4 py-3">
-                        <button onClick={() => setSelectedInquiry(i)} className="p-1.5 rounded-lg hover:bg-muted transition" title="View"><Eye size={15} /></button>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => setSelectedInquiry(i)} className="p-1.5 rounded-lg hover:bg-muted transition" title="View"><Eye size={15} /></button>
+                          {(!i.status || i.status === "pending") && (
+                            <>
+                              <button onClick={() => handleAcceptInquiry(i.id)} className="p-1.5 rounded-lg hover:bg-emerald-100 text-emerald-600 transition" title="Accept"><Check size={15} /></button>
+                              <button onClick={() => handleRejectInquiry(i.id)} className="p-1.5 rounded-lg hover:bg-red-100 text-red-600 transition" title="Reject"><X size={15} /></button>
+                            </>
+                          )}
+                          {i.status === "rejected" && (
+                            <button onClick={() => handleAcceptInquiry(i.id)} className="p-1.5 rounded-lg hover:bg-emerald-100 text-emerald-600 transition" title="Re-accept"><RotateCcw size={15} /></button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            {inquiries.length === 0 && (
-              <p className="text-center py-8 text-sm text-foreground/60">No inquiries yet</p>
+            {displayedInquiries.length === 0 && (
+              <p className="text-center py-8 text-sm text-foreground/60">{tab === "rejected" ? "No rejected inquiries" : "No pending inquiries"}</p>
             )}
           </div>
 
@@ -267,7 +314,10 @@ function BookingsPage() {
                       <h3 className="font-semibold text-lg">{selectedInquiry.name}</h3>
                       <p className="text-sm text-foreground/60">{selectedInquiry.email}</p>
                     </div>
-                    <Badge label="New" style="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300" />
+                    <Badge
+                      label={selectedInquiry.status === "rejected" ? "Rejected" : selectedInquiry.status === "accepted" ? "Accepted" : "New"}
+                      style={selectedInquiry.status === "rejected" ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300" : selectedInquiry.status === "accepted" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300" : "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"}
+                    />
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between"><span className="text-foreground/60">Phone</span><span>{selectedInquiry.phone || "N/A"}</span></div>
@@ -286,11 +336,26 @@ function BookingsPage() {
                     </div>
                   </div>
                   <div className="flex gap-2 mt-4">
+                    {(!selectedInquiry.status || selectedInquiry.status === "pending") && (
+                      <>
+                        <button onClick={() => handleAcceptInquiry(selectedInquiry.id)} className="flex-1 btn-primary justify-center text-sm py-2">
+                          <Check size={14} className="inline mr-1" /> Accept
+                        </button>
+                        <button onClick={() => handleRejectInquiry(selectedInquiry.id)} className="flex-1 border rounded-full py-2 text-sm hover:bg-red-50 text-red-600 transition">
+                          <X size={14} className="inline mr-1" /> Reject
+                        </button>
+                      </>
+                    )}
+                    {selectedInquiry.status === "rejected" && (
+                      <button onClick={() => handleAcceptInquiry(selectedInquiry.id)} className="flex-1 btn-primary justify-center text-sm py-2">
+                        <RotateCcw size={14} className="inline mr-1" /> Re-accept
+                      </button>
+                    )}
                     <a
                       href={`mailto:${selectedInquiry.email}`}
-                      className="flex-1 btn-primary justify-center text-sm py-2"
+                      className="flex-1 border rounded-full py-2 text-sm hover:bg-muted transition text-center"
                     >
-                      Reply via Email
+                      <Mail size={14} className="inline mr-1" /> Reply
                     </a>
                     <button onClick={() => setSelectedInquiry(null)} className="flex-1 border rounded-full py-2 text-sm hover:bg-muted transition">Close</button>
                   </div>

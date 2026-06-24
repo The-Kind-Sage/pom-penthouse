@@ -102,6 +102,18 @@ export function useBookingInquiries() {
   });
 }
 
+export function useUpdateInquiry() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, action }: { id: string; action: string }) =>
+      apiMutate("/api/booking-inquiries", { method: "PATCH", body: JSON.stringify({ id, action }) }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["booking-inquiries"] });
+      qc.invalidateQueries({ queryKey: ["bookings"] });
+    },
+  });
+}
+
 // ============================================
 // ROOM HOOKS
 // ============================================
