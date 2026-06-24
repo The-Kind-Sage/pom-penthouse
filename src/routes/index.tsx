@@ -50,8 +50,8 @@ function Index() {
       <Testimonial />
       <LongTerm />
       <About />
-      <Offer />
       <FAQ />
+      <Offer />
     </PageLayout>
   );
 }
