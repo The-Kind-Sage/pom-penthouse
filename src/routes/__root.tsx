@@ -73,7 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "POM'S Penthouse" },
-      { name: "description", content: "Luxury Serviced Apartments in Lakeside, Pokhara" },
+      { name: "description", content: "Luxury Serviced Apartments in Lakeside, Pokhara, Nepal" },
       { name: "author", content: "POM'S Penthouse" },
       { property: "og:title", content: "POM'S Penthouse" },
       { property: "og:description", content: "Luxury Serviced Apartments in Lakeside, Pokhara" },
