@@ -4,14 +4,14 @@ import { useAdmin, adminStore } from "@/lib/admin-store";
 import {
   LayoutDashboard, CalendarCheck, Users, BarChart3, Settings,
   ChevronLeft, ChevronRight, Bell, Search, Moon, Sun, LogOut, User,
-  Menu, Image as ImageIcon, MessageSquare, BedDouble, Building,
+  Menu, ImageIcon, MessageSquare, BedDouble, Building,
 } from "lucide-react";
 import logoUrl from "../favicon/logo.png?url";
 
 const navItems = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
-  { to: "/admin/inquiries", label: "Inquiries", icon: MessageSquare },
+  { to: "/admin/inquiries", label: "Booking Request", icon: MessageSquare },
   { to: "/admin/rooms", label: "Rooms", icon: BedDouble },
   { to: "/admin/apartments", label: "Apartments", icon: Building },
   { to: "/admin/gallery", label: "Gallery", icon: ImageIcon },
