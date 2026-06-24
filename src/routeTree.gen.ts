@@ -20,6 +20,7 @@ import { Route as ApiContactMessagesRouteImport } from './routes/api/contact-mes
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiBookingsRouteImport } from './routes/api/bookings'
 import { Route as ApiBookingWhatsappRouteImport } from './routes/api/booking-whatsapp'
+import { Route as ApiBookingInquiriesRouteImport } from './routes/api/booking-inquiries'
 import { Route as ApiActivitiesRouteImport } from './routes/api/activities'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
@@ -86,6 +87,11 @@ const ApiBookingWhatsappRoute = ApiBookingWhatsappRouteImport.update({
   path: '/api/booking-whatsapp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiBookingInquiriesRoute = ApiBookingInquiriesRouteImport.update({
+  id: '/api/booking-inquiries',
+  path: '/api/booking-inquiries',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiActivitiesRoute = ApiActivitiesRouteImport.update({
   id: '/api/activities',
   path: '/api/activities',
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/activities': typeof ApiActivitiesRoute
+  '/api/booking-inquiries': typeof ApiBookingInquiriesRoute
   '/api/booking-whatsapp': typeof ApiBookingWhatsappRoute
   '/api/bookings': typeof ApiBookingsRoute
   '/api/contact': typeof ApiContactRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/activities': typeof ApiActivitiesRoute
+  '/api/booking-inquiries': typeof ApiBookingInquiriesRoute
   '/api/booking-whatsapp': typeof ApiBookingWhatsappRoute
   '/api/bookings': typeof ApiBookingsRoute
   '/api/contact': typeof ApiContactRoute
@@ -193,6 +201,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/activities': typeof ApiActivitiesRoute
+  '/api/booking-inquiries': typeof ApiBookingInquiriesRoute
   '/api/booking-whatsapp': typeof ApiBookingWhatsappRoute
   '/api/bookings': typeof ApiBookingsRoute
   '/api/contact': typeof ApiContactRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/api/activities'
+    | '/api/booking-inquiries'
     | '/api/booking-whatsapp'
     | '/api/bookings'
     | '/api/contact'
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/api/activities'
+    | '/api/booking-inquiries'
     | '/api/booking-whatsapp'
     | '/api/bookings'
     | '/api/contact'
@@ -263,6 +274,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/api/activities'
+    | '/api/booking-inquiries'
     | '/api/booking-whatsapp'
     | '/api/bookings'
     | '/api/contact'
@@ -281,6 +293,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   ApiActivitiesRoute: typeof ApiActivitiesRoute
+  ApiBookingInquiriesRoute: typeof ApiBookingInquiriesRoute
   ApiBookingWhatsappRoute: typeof ApiBookingWhatsappRoute
   ApiBookingsRoute: typeof ApiBookingsRoute
   ApiContactRoute: typeof ApiContactRoute
@@ -371,6 +384,13 @@ declare module '@tanstack/react-router' {
       path: '/api/booking-whatsapp'
       fullPath: '/api/booking-whatsapp'
       preLoaderRoute: typeof ApiBookingWhatsappRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/booking-inquiries': {
+      id: '/api/booking-inquiries'
+      path: '/api/booking-inquiries'
+      fullPath: '/api/booking-inquiries'
+      preLoaderRoute: typeof ApiBookingInquiriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/activities': {
@@ -472,6 +492,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   ApiActivitiesRoute: ApiActivitiesRoute,
+  ApiBookingInquiriesRoute: ApiBookingInquiriesRoute,
   ApiBookingWhatsappRoute: ApiBookingWhatsappRoute,
   ApiBookingsRoute: ApiBookingsRoute,
   ApiContactRoute: ApiContactRoute,

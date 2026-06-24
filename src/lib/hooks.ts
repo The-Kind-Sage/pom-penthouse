@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Penthouse, Booking, User, Activity, Setting } from "@/lib/admin-types";
+import type { Penthouse, Booking, BookingInquiry, User, Activity, Setting } from "@/lib/admin-types";
 import { adminStore } from "@/lib/admin-store";
 
 async function apiGet<T>(url: string): Promise<T> {
@@ -88,6 +88,17 @@ export function useBookingStats() {
         pendingBookings: bookings.filter((b) => b.status === "pending").length,
       };
     },
+  });
+}
+
+// ============================================
+// BOOKING INQUIRIES
+// ============================================
+
+export function useBookingInquiries() {
+  return useQuery<BookingInquiry[]>({
+    queryKey: ["booking-inquiries"],
+    queryFn: () => apiGet("/api/booking-inquiries"),
   });
 }
 

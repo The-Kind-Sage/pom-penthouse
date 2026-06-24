@@ -39,6 +39,20 @@ export interface Booking {
   created_at: string;
 }
 
+export interface BookingInquiry {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  apartment: string;
+  guests: number;
+  checkin: string;
+  checkout: string;
+  message: string | null;
+  status: string;
+  created_at: string;
+}
+
 export interface User {
   id: string;
   name: string | null;
