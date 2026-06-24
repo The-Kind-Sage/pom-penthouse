@@ -1,28 +1,66 @@
-import { motion } from "framer-motion";
+import { useState, useCallback, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import aptPent from "@/assets/apt-penthouse.jpg";
+import aptExec from "@/assets/apt-executive.jpg";
+import aptFamily from "@/assets/apt-family.jpg";
+import aptStudio from "@/assets/apt-studio.jpg";
 import galBedroom from "@/assets/gal-bedroom.jpg";
 import galKitchen from "@/assets/gal-kitchen.jpg";
 import lifeBalcony from "@/assets/life-balcony.jpg";
 import galLake from "@/assets/gal-lake.jpg";
 import galBath from "@/assets/gal-bath.jpg";
 import whyImg from "@/assets/why-choose.jpg";
-import aptExec from "@/assets/apt-executive.jpg";
-
-const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
+import heroImg from "@/assets/hero.jpg";
+import ctaImg from "@/assets/cta.jpg";
+import lifeNomad from "@/assets/life-nomad.jpg";
 
 const GALLERY = [
-  { src: aptPent, label: "Living Room", span: "row-span-2" },
-  { src: galBedroom, label: "Bedroom", span: "" },
+  { src: aptPent, label: "Penthouse Living Room", span: "row-span-2" },
+  { src: heroImg, label: "Building Exterior", span: "" },
   { src: galKitchen, label: "Kitchen", span: "" },
   { src: lifeBalcony, label: "Balcony View", span: "row-span-2" },
-  { src: galLake, label: "Phewa Lake", span: "" },
+  { src: galLake, label: "Phewa Lake View", span: "" },
   { src: galBath, label: "Bathroom", span: "" },
-  { src: whyImg, label: "Exterior", span: "" },
-  { src: aptExec, label: "Suite", span: "" },
+  { src: whyImg, label: "Entrance", span: "" },
+  { src: aptExec, label: "Executive Suite", span: "" },
+  { src: aptFamily, label: "Family Apartment", span: "col-span-2" },
+  { src: galBedroom, label: "Bedroom", span: "" },
+  { src: aptStudio, label: "Studio Apartment", span: "" },
+  { src: ctaImg, label: "Rooftop Lounge", span: "" },
+  { src: lifeNomad, label: "Workspace", span: "" },
 ];
 
+const item = {
+  hidden: { opacity: 0, scale: 0.92, filter: "blur(6px)" },
+  show: { opacity: 1, scale: 1, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+};
+
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
+};
+
 export function Gallery() {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  const open = useCallback((i: number) => { setActiveIdx(i); setLightboxOpen(true); }, []);
+  const close = useCallback(() => setLightboxOpen(false), []);
+  const next = useCallback(() => setActiveIdx((p) => (p + 1) % GALLERY.length), []);
+  const prev = useCallback(() => setActiveIdx((p) => (p - 1 + GALLERY.length) % GALLERY.length), []);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const h = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+    };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [lightboxOpen, close, next, prev]);
+
   return (
     <section id="gallery" className="bg-background py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
@@ -35,18 +73,24 @@ export function Gallery() {
         <p className="mt-5 text-center text-muted-foreground">
           A look through the residences, the building and the views that frame them.
         </p>
+
         <motion.div
-          initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={stagger}
+          initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={container}
           className="mt-16 grid auto-rows-[180px] grid-cols-2 gap-3 sm:auto-rows-[220px] sm:grid-cols-3 lg:grid-cols-4 lg:gap-4"
         >
           {GALLERY.map((g, i) => (
             <motion.figure
-              key={i} variants={fadeUp}
-              className={`group relative overflow-hidden bg-muted ${g.span}`}
+              key={i} variants={item}
+              className={`group relative cursor-pointer overflow-hidden rounded-sm bg-muted ${g.span}`}
+              onClick={() => open(i)}
             >
-              <img src={g.src} alt={g.label} loading="lazy" className="size-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
-              <div className="absolute inset-0 bg-luxury-black/0 transition group-hover:bg-luxury-black/40" />
-              <figcaption className="absolute inset-x-0 bottom-0 translate-y-full p-4 text-white transition-transform duration-500 group-hover:translate-y-0">
+              <img
+                src={g.src} alt={g.label} loading="lazy"
+                className="size-full object-cover transition-all duration-1000 ease-out group-hover:scale-110"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-luxury-black/70 via-luxury-black/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="pointer-events-none absolute inset-0 opacity-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)] transition-opacity duration-500 group-hover:opacity-100" />
+              <figcaption className="pointer-events-none absolute bottom-0 left-0 right-0 translate-y-6 p-4 text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                 <span className="text-[10px] uppercase tracking-[0.3em] text-gold">View</span>
                 <div className="font-display text-lg">{g.label}</div>
               </figcaption>
@@ -54,6 +98,41 @@ export function Gallery() {
           ))}
         </motion.div>
       </div>
+
+      <AnimatePresence>
+        {lightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4"
+            onClick={close}
+          >
+            <button onClick={close} className="absolute right-6 top-6 z-10 text-white/50 transition hover:text-white">
+              <X className="size-8" />
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-4 z-10 text-white/30 transition hover:text-white">
+              <ChevronLeft className="size-10" />
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); next(); }} className="absolute right-4 z-10 text-white/30 transition hover:text-white">
+              <ChevronRight className="size-10" />
+            </button>
+
+            <motion.div
+              key={activeIdx}
+              initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }}
+              className="flex max-h-full max-w-full flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={GALLERY[activeIdx].src} alt={GALLERY[activeIdx].label}
+                className="max-h-[80vh] max-w-full rounded-sm object-contain shadow-2xl"
+              />
+              <span className="mt-4 text-sm text-white/50">{GALLERY[activeIdx].label}</span>
+              <span className="mt-1 text-xs text-white/25">{activeIdx + 1} / {GALLERY.length}</span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
