@@ -13,6 +13,10 @@ export function MultiImageUpload({ value, onChange, label = "Images", folder = "
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const isLocalAsset = (url: string) => {
+    return url.startsWith('/') || url.startsWith('./') || url.startsWith('../') || url.includes('/assets/');
+  };
+
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -41,13 +45,22 @@ export function MultiImageUpload({ value, onChange, label = "Images", folder = "
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {value.map((url, i) => (
           <div key={i} className="relative w-full rounded-xl overflow-hidden border group">
-            <img src={url} alt={`${label} ${i + 1}`} className="w-full h-32 object-cover" />
+            <img 
+              src={isLocalAsset(url) ? url : url} 
+              alt={`${label} ${i + 1}`} 
+              className="w-full h-32 object-cover" 
+            />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
               <button type="button" onClick={() => removeImage(i)}
                 className="p-1.5 rounded-lg bg-red-500/70 hover:bg-red-500 text-white transition">
                 <X size={16} />
               </button>
             </div>
+            {isLocalAsset(url) && (
+              <div className="absolute top-2 left-2 px-2 py-0.5 bg-blue-500/80 text-white text-xs rounded-full">
+                Local
+              </div>
+            )}
           </div>
         ))}
         {canAddMore && (
