@@ -7,14 +7,14 @@ import { IMAGES } from "@/lib/images";
 export function Lightbox() {
   const { lightboxIndex } = useUI();
   const open = lightboxIndex !== null;
+  const idx = lightboxIndex ?? 0;
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") ui.closeLightbox();
-      if (e.key === "ArrowRight") ui.setLightbox((lightboxIndex! + 1) % IMAGES.length);
-      if (e.key === "ArrowLeft")
-        ui.setLightbox((lightboxIndex! - 1 + IMAGES.length) % IMAGES.length);
+      if (e.key === "ArrowRight") ui.setLightbox((idx + 1) % IMAGES.length);
+      if (e.key === "ArrowLeft") ui.setLightbox((idx - 1 + IMAGES.length) % IMAGES.length);
     };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
@@ -22,66 +22,53 @@ export function Lightbox() {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [open, lightboxIndex]);
+  }, [open, idx]);
 
   return (
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[80] bg-black/92 flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4"
           onClick={ui.closeLightbox}
         >
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              ui.closeLightbox();
-            }}
-            className="absolute top-5 right-5 text-white p-3 md:p-2"
-            aria-label="Close"
+            onClick={ui.closeLightbox}
+            className="absolute right-6 top-6 z-10 text-white/50 transition hover:text-white"
           >
-            <X />
+            <X className="size-8" />
           </button>
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              ui.setLightbox((lightboxIndex! - 1 + IMAGES.length) % IMAGES.length);
-            }}
-            className="absolute left-4 text-white p-3 md:p-2"
-            aria-label="Previous"
+            onClick={(e) => { e.stopPropagation(); ui.setLightbox((idx - 1 + IMAGES.length) % IMAGES.length); }}
+            className="absolute left-4 z-10 text-white/30 transition hover:text-white"
           >
-            <ChevronLeft />
+            <ChevronLeft className="size-10" />
           </button>
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              ui.setLightbox((lightboxIndex! + 1) % IMAGES.length);
-            }}
-            className="absolute right-4 text-white p-3 md:p-2"
-            aria-label="Next"
+            onClick={(e) => { e.stopPropagation(); ui.setLightbox((idx + 1) % IMAGES.length); }}
+            className="absolute right-4 z-10 text-white/30 transition hover:text-white"
           >
-            <ChevronRight />
+            <ChevronRight className="size-10" />
           </button>
+
           <motion.div
-            key={lightboxIndex}
-            initial={{ scale: 0.97, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.97, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 28 }}
-            className="max-w-[90vw] max-h-[88vh] flex flex-col items-center"
+            key={idx}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            className="flex max-h-full max-w-full flex-col items-center"
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={IMAGES[lightboxIndex!].src}
-              alt={IMAGES[lightboxIndex!].alt}
-              className="max-h-[80vh] w-auto object-contain rounded-xl"
+              src={IMAGES[idx].src}
+              alt={IMAGES[idx].alt}
+              className="max-h-[80vh] max-w-full rounded-sm object-contain shadow-2xl"
             />
-            <p className="mt-4 text-white/80 text-sm tracking-[0.2em]">
-              {String(lightboxIndex! + 1).padStart(2, "0")} /{" "}
-              {String(IMAGES.length).padStart(2, "0")} · {IMAGES[lightboxIndex!].alt}
-            </p>
+            <span className="mt-4 text-sm text-white/50">{IMAGES[idx].alt}</span>
+            <span className="mt-1 text-xs text-white/25">{idx + 1} / {IMAGES.length}</span>
           </motion.div>
         </motion.div>
       )}

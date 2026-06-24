@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Bed, Square, ArrowRight } from "lucide-react";
-import aptExec from "@/assets/apt-executive.jpg";
-import aptStudio from "@/assets/apt-studio.jpg";
-import aptFamily from "@/assets/apt-family.jpg";
+import roomSingle from "@/assets/10.jpeg";
+import roomDouble from "@/assets/405915702.jpg";
+import roomTwin from "@/assets/405915696.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
@@ -12,9 +12,9 @@ function openBooking(room?: string) {
 }
 
 const ROOMS = [
-  { name: "Single Room — Single Bed", img: aptExec, price: "$30", size: "18 m²", beds: "1 Single Bed", view: "Courtyard View", features: ["Single Bed", "Desk", "WiFi", "AC"] },
-  { name: "Single Room — Double Bed", img: aptStudio, price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
-  { name: "Single Room — Twin Bed", img: aptFamily, price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
+  { name: "Single Room — Single Bed", img: roomSingle, price: "$30", size: "18 m²", beds: "1 Single Bed", view: "Courtyard View", features: ["Single Bed", "Desk", "WiFi", "AC"] },
+  { name: "Single Room — Double Bed", img: roomDouble, price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
+  { name: "Single Room — Twin Bed", img: roomTwin, price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
 ];
 
 export function Rooms() {

@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import galBedroom from "@/assets/gal-bedroom.jpg";
-import lifeNomad from "@/assets/life-nomad.jpg";
+import lifeNomad from "@/assets/395344844.jpg";
 import lifeBalcony from "@/assets/life-balcony.jpg";
-import aptExec from "@/assets/apt-executive.jpg";
+import travelImg from "@/assets/405915699.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
@@ -12,7 +12,7 @@ const LIFESTYLE = [
   { title: "Hotel comfort. Home privacy.", body: "Crisp linens, daily housekeeping and a concierge that anticipates — without ever knocking unannounced.", img: galBedroom, tag: "The Experience" },
   { title: "Perfect for digital nomads.", body: "Quiet workspaces, fibre WiFi and backup power so deadlines never depend on the city grid.", img: lifeNomad, tag: "Work From Pokhara" },
   { title: "Ideal for long-term living.", body: "Monthly rates, utilities included, flexible contracts — designed for stays measured in months, not nights.", img: lifeBalcony, tag: "Extended Stays" },
-  { title: "Designed for modern travelers.", body: "From late check-ins to airport pickups, every touchpoint is curated to feel effortless and discreet.", img: aptExec, tag: "Signature Service" },
+  { title: "Designed for modern travelers.", body: "From late check-ins to airport pickups, every touchpoint is curated to feel effortless and discreet.", img: travelImg, tag: "Signature Service" },
 ];
 
 export function Lifestyle() {

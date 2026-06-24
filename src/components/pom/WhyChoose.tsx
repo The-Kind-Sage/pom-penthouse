@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import whyImg from "@/assets/why-choose.jpg";
+import whyImg from "@/assets/home.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };

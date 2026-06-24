@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ui } from "@/lib/ui-store";
-import { IMAGES, photo } from "@/lib/images";
+import hero1 from "@/assets/3.jpeg";
+import hero2 from "@/assets/10.jpeg";
+import hero3 from "@/assets/13.jpeg";
+import heroHome from "@/assets/home.jpg";
 
-const slides = [photo(1), photo(2), photo(3)];
+const slides = [
+  { id: 1, src: hero1, alt: "Pom PentHouse living room", effect: "Crossfade" },
+  { id: 2, src: hero2, alt: "Pom PentHouse interior", effect: "Ken Burns" },
+  { id: 3, src: heroHome, alt: "Pom PentHouse home", effect: "Crossfade" },
+  { id: 4, src: hero3, alt: "Pom PentHouse view", effect: "Crossfade" },
+];
 
 export function Hero() {
   const [i, setI] = useState(0);

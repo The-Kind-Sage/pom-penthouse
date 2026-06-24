@@ -9,10 +9,13 @@ import { ArrowRight, CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { showToast } from "@/components/ui/toast";
-import aptStudio from "@/assets/apt-studio.jpg";
-import aptExec from "@/assets/apt-executive.jpg";
 import aptFamily from "@/assets/apt-family.jpg";
-import aptPent from "@/assets/apt-penthouse.jpg";
+import aptPent from "@/assets/405915699.jpg";
+import aptStudio from "@/assets/395344888.jpg";
+import aptExec from "@/assets/405267735.jpg";
+import roomSingle from "@/assets/10.jpeg";
+import roomDouble from "@/assets/405915702.jpg";
+import roomTwin from "@/assets/405915696.jpg";
 
 const APARTMENTS = [
   { name: "3 BHK", price: "$150", img: aptPent },
@@ -22,9 +25,9 @@ const APARTMENTS = [
 ];
 
 const ROOMS = [
-  { name: "Single Room — Single Bed", price: "$30", img: aptExec },
-  { name: "Single Room — Double Bed", price: "$40", img: aptStudio },
-  { name: "Single Room — Twin Bed", price: "$45", img: aptFamily },
+  { name: "Single Room — Single Bed", price: "$30", img: roomSingle },
+  { name: "Single Room — Double Bed", price: "$40", img: roomDouble },
+  { name: "Single Room — Twin Bed", price: "$45", img: roomTwin },
 ];
 
 const ALL_OPTIONS = [...APARTMENTS, ...ROOMS];
