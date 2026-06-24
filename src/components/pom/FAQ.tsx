@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
-
-const faqs = [
-  { q: "Is it freehold?", a: "Yes, full freehold ownership. Ready to transfer." },
-  { q: "Can I book nightly stays?", a: "Yes, via Book a Stay. 2-night minimum. Instant request." },
-  { q: "How far is the lake really?", a: "180 meters, about a 3-minute walk to Phewa Lake." },
-  { q: "Airport transfer?", a: "Yes, रू3,500 add-on at booking. 25 minutes from PKR." },
-  { q: "Is the penthouse furnished?", a: "Fully. Linen, ceramics, oak, Sonos — move-in ready." },
-];
+import { useSettings } from "@/lib/hooks";
 
 export function FAQ() {
+  const { data: settings } = useSettings();
+  const faq = settings?.faq_settings || {};
+  const title = faq.title || "Questions";
+  const faqs = faq.items || [
+    { q: "Is it freehold?", a: "Yes, full freehold ownership. Ready to transfer." },
+    { q: "Can I book nightly stays?", a: "Yes, via Book a Stay. 2-night minimum. Instant request." },
+  ];
+
   const [open, setOpen] = useState<number | null>(0);
   return (
     <section className="bg-background py-24">
@@ -18,9 +19,9 @@ export function FAQ() {
         <div className="mb-4 flex items-center justify-center gap-3 text-[10px] uppercase tracking-[0.4em] text-gold">
           <span className="h-px w-8 bg-gold" />FAQ<span className="h-px w-8 bg-gold" />
         </div>
-        <h2 className="font-display text-center text-4xl font-medium leading-tight text-luxury-black sm:text-5xl mb-12">Questions</h2>
+        <h2 className="font-display text-center text-4xl font-medium leading-tight text-luxury-black sm:text-5xl mb-12">{title}</h2>
         <ul className="divide-y border-y border-border">
-          {faqs.map((f, i) => {
+          {faqs.map((f: any, i: number) => {
             const isOpen = open === i;
             return (
               <li key={i}>

@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { Phone, ArrowRight, Moon, Sun } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { useSettings } from "@/lib/hooks";
 import logoUrl from "../../favicon/logo.png?url";
-
-const links = [
-  ["Home", "/"], ["Apartments", "/apartments"], ["Amenities", "/amenities"],
-  ["Rooms", "/rooms"], ["Gallery", "/gallery"], ["About", "/about"], ["Contact", "/contact"],
-] as const;
 
 function openBooking() {
   window.dispatchEvent(new CustomEvent("poms:open-booking"));
 }
 
-function MobileMenu({ scrolled, links }: { scrolled: boolean; links: readonly (readonly [string, string])[] }) {
+function MobileMenu({ scrolled, links }: { scrolled: boolean; links: { label: string; href: string }[] }) {
   const [open, setOpen] = useState(false);
+  const { data: settings } = useSettings();
+  const navbar = settings?.navbar_settings || {};
+  const phone = navbar.phone || "+977 984-081-4142";
+
   return (
     <div className="xl:hidden">
       <button
@@ -31,7 +31,7 @@ function MobileMenu({ scrolled, links }: { scrolled: boolean; links: readonly (r
       {open && (
         <div className="absolute right-4 top-full mt-2 w-52 overflow-hidden rounded-xl border border-border bg-background/95 p-2 shadow-xl backdrop-blur-xl">
           <nav className="flex flex-col">
-            {links.map(([label, href]) => (
+            {links.map(({ label, href }) => (
               <Link
                 key={href}
                 to={href}
@@ -43,10 +43,9 @@ function MobileMenu({ scrolled, links }: { scrolled: boolean; links: readonly (r
             ))}
           </nav>
           <div className="mt-2 border-t border-border pt-2">
-            <a href="tel:+9779840814142" className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-luxury-black/80 transition hover:bg-muted hover:text-gold">
-              <Phone className="size-4" /> +977 984-081-4142
+            <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-luxury-black/80 transition hover:bg-muted hover:text-gold">
+              <Phone className="size-4" /> {phone}
             </a>
-
           </div>
         </div>
       )}
@@ -55,6 +54,20 @@ function MobileMenu({ scrolled, links }: { scrolled: boolean; links: readonly (r
 }
 
 export function Navbar({ transparent = true }: { transparent?: boolean }) {
+  const { data: settings } = useSettings();
+  const navbar = settings?.navbar_settings || {};
+  const links = navbar.links || [
+    { label: "Home", href: "/" },
+    { label: "Apartments", href: "/apartments" },
+    { label: "Amenities", href: "/amenities" },
+    { label: "Rooms", href: "/rooms" },
+    { label: "Gallery", href: "/gallery" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
+  ];
+  const phone = navbar.phone || "+977 984-081-4142";
+  const navLogo = navbar.logo || logoUrl;
+
   const [scrolled, setScrolled] = useState(false);
   const solid = scrolled || !transparent;
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -91,11 +104,11 @@ export function Navbar({ transparent = true }: { transparent?: boolean }) {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
         <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex flex-1 items-center">
-          <img src={logoUrl} alt="POM'S Penthouse" className="h-16 w-auto" />
+          <img src={navLogo} alt="POM'S Penthouse" className="h-16 w-auto" />
         </Link>
 
         <nav className={`hidden xl:flex flex-1 items-center justify-center gap-5 text-[13px] ${solid ? "text-luxury-black/80" : "text-white/85"}`}>
-          {links.map(([label, href]) => (
+          {links.map(({ label, href }: { label: string; href: string }) => (
             <Link key={href} to={href} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="relative whitespace-nowrap transition hover:text-gold after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-gold after:transition-all hover:after:w-full">
               {label}
             </Link>
@@ -104,13 +117,13 @@ export function Navbar({ transparent = true }: { transparent?: boolean }) {
 
         <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
           <a
-            href="tel:+9779840814142"
+            href={`tel:${phone.replace(/[^+\d]/g, "")}`}
             className={`hidden items-center gap-1.5 whitespace-nowrap text-xs font-medium transition lg:inline-flex ${
               solid ? "text-luxury-black hover:text-gold" : "text-white hover:text-gold"
             }`}
           >
             <Phone className="size-3.5 shrink-0" />
-            <span className="hidden xl:inline">+977 984-081-4142</span>
+            <span className="hidden xl:inline">{phone}</span>
             <span className="xl:hidden">Call</span>
           </a>
           <button

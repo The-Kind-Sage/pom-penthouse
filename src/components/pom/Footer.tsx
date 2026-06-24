@@ -1,7 +1,32 @@
 import { Instagram, Facebook, MessageCircle, MapPin, Phone, Mail, Mountain } from "lucide-react";
+import { useSettings } from "@/lib/hooks";
 import logoUrl from "../../favicon/logo.png?url";
 
 export function Footer() {
+  const { data: settings } = useSettings();
+  const footer = settings?.footer_settings || {};
+  const desc = footer.description || "Luxury serviced apartments in Lakeside, Pokhara — hotel comfort with home privacy.";
+  const fb = footer.facebook || "https://www.facebook.com/poms.penthouse";
+  const ig = footer.instagram || "https://www.instagram.com/poms_penthouse";
+  const wa = footer.whatsapp || "https://wa.me/9779840814142";
+  const contact = footer.contact || {};
+  const exploreLinks = footer.explore_links || [
+    { label: "Apartments", href: "/apartments" },
+    { label: "Amenities", href: "/amenities" },
+    { label: "Gallery", href: "/gallery" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
+  ];
+  const residenceLinks = footer.residence_links || [
+    { label: "3 BHK", href: "/apartments" },
+    { label: "2 BHK", href: "/apartments" },
+    { label: "1 BHK", href: "/apartments" },
+    { label: "Studio Apartment", href: "/apartments" },
+    { label: "Single Bed Room", href: "/rooms" },
+    { label: "Double Bed Room", href: "/rooms" },
+    { label: "Twin Bed Room", href: "/rooms" },
+  ];
+
   return (
     <footer className="bg-luxury-black pt-20 pb-10 text-white/70">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-4">
@@ -9,17 +34,15 @@ export function Footer() {
           <a href="/" className="block">
             <img src={logoUrl} alt="POM'S Penthouse" className="h-24 w-auto" />
           </a>
-          <p className="mt-5 text-sm leading-relaxed">
-            Luxury serviced apartments in Lakeside, Pokhara — hotel comfort with home privacy.
-          </p>
+          <p className="mt-5 text-sm leading-relaxed">{desc}</p>
           <div className="mt-6 flex gap-3">
-            <a href="https://www.facebook.com/poms.penthouse" target="_blank" rel="noreferrer" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
+            <a href={fb} target="_blank" rel="noreferrer" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
               <Facebook className="size-4" />
             </a>
-            <a href="https://www.instagram.com/poms_penthouse" target="_blank" rel="noreferrer" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
+            <a href={ig} target="_blank" rel="noreferrer" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
               <Instagram className="size-4" />
             </a>
-            <a href="https://wa.me/9779840814142" target="_blank" rel="noreferrer" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
+            <a href={wa} target="_blank" rel="noreferrer" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
               <MessageCircle className="size-4" />
             </a>
           </div>
@@ -27,26 +50,26 @@ export function Footer() {
         <div>
           <h4 className="font-display text-sm uppercase tracking-[0.3em] text-gold">Explore</h4>
           <ul className="mt-5 space-y-3 text-sm">
-            {["Apartments", "Amenities", "Gallery", "About", "Contact"].map((l) => (
-              <li key={l}><a href={`/${l.toLowerCase()}`} className="transition hover:text-gold">{l}</a></li>
+            {exploreLinks.map((l: any) => (
+              <li key={l.label}><a href={l.href} className="transition hover:text-gold">{l.label}</a></li>
             ))}
           </ul>
         </div>
         <div>
           <h4 className="font-display text-sm uppercase tracking-[0.3em] text-gold">Residences</h4>
           <ul className="mt-5 space-y-3 text-sm">
-            {["3 BHK", "2 BHK", "1 BHK", "Studio Apartment", "Single Bed Room", "Double Bed Room", "Twin Bed Room"].map((a) => (
-              <li key={a}><a href="/apartments" className="transition hover:text-gold">{a}</a></li>
+            {residenceLinks.map((a: any) => (
+              <li key={a.label}><a href={a.href} className="transition hover:text-gold">{a.label}</a></li>
             ))}
           </ul>
         </div>
         <div>
           <h4 className="font-display text-sm uppercase tracking-[0.3em] text-gold">Contact</h4>
           <ul className="mt-5 space-y-3 text-sm">
-            <li className="flex gap-3"><MapPin className="mt-0.5 size-4 text-gold" /> Lakeside, Pokhara, Nepal</li>
-            <li className="flex gap-3"><Phone className="mt-0.5 size-4 text-gold" /> +977 984-081-4142</li>
-            <li className="flex gap-3"><Mail className="mt-0.5 size-4 text-gold" /> stay@pomspenthouse.com</li>
-            <li className="flex gap-3"><Mountain className="mt-0.5 size-4 text-gold" /> Views of Phewa & Annapurna</li>
+            {contact.address && <li className="flex gap-3"><MapPin className="mt-0.5 size-4 text-gold" /> {contact.address}</li>}
+            {contact.phone && <li className="flex gap-3"><Phone className="mt-0.5 size-4 text-gold" /> {contact.phone}</li>}
+            {contact.email && <li className="flex gap-3"><Mail className="mt-0.5 size-4 text-gold" /> {contact.email}</li>}
+            {contact.tagline && <li className="flex gap-3"><Mountain className="mt-0.5 size-4 text-gold" /> {contact.tagline}</li>}
           </ul>
         </div>
       </div>

@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 import { Bed, Square, ArrowRight } from "lucide-react";
-import roomSingle from "@/assets/10.jpeg";
-import roomDouble from "@/assets/405915702.jpg";
-import roomTwin from "@/assets/405915696.jpg";
+import { useSettings } from "@/lib/hooks";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
@@ -11,13 +9,15 @@ function openBooking(room?: string) {
   window.dispatchEvent(new CustomEvent("poms:open-booking", { detail: room }));
 }
 
-const ROOMS = [
-  { name: "Single Room — Single Bed", img: roomSingle, price: "$30", size: "18 m²", beds: "1 Single Bed", view: "Courtyard View", features: ["Single Bed", "Desk", "WiFi", "AC"] },
-  { name: "Single Room — Double Bed", img: roomDouble, price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
-  { name: "Single Room — Twin Bed", img: roomTwin, price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
-];
-
 export function Rooms() {
+  const { data: settings } = useSettings();
+  const roomsData = settings?.rooms_settings || {};
+  const rooms = roomsData.items || [
+    { name: "Single Room — Single Bed", image: "", price: "$30", size: "18 m²", beds: "1 Single Bed", view: "Courtyard View", features: ["Single Bed", "Desk", "WiFi", "AC"] },
+    { name: "Single Room — Double Bed", image: "", price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
+    { name: "Single Room — Twin Bed", image: "", price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
+  ];
+
   return (
     <section id="rooms" className="bg-background py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6">
@@ -36,13 +36,13 @@ export function Rooms() {
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={stagger}
           className="mt-16 grid gap-7 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {ROOMS.map((r) => (
+          {rooms.map((r: any) => (
             <motion.article
               key={r.name} variants={fadeUp}
               className="group flex flex-col overflow-hidden border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_30px_60px_-25px_rgba(17,17,17,0.35)]"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
-                <img src={r.img} alt={r.name} loading="lazy" className="size-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
+                <img src={r.image || ""} alt={r.name} loading="lazy" className="size-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/75 via-luxury-black/10 to-transparent" />
                 <span className="absolute left-4 top-4 rounded-full bg-luxury-black/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold backdrop-blur-md">
                   {r.view}
@@ -57,7 +57,7 @@ export function Rooms() {
               </div>
               <div className="flex flex-1 flex-col p-6">
                 <div className="flex flex-wrap gap-1.5">
-                  {r.features.map((f) => (
+                  {r.features?.map((f: string) => (
                     <span key={f} className="rounded-full border border-border bg-muted px-2.5 py-1 text-[10px] text-luxury-black/75">{f}</span>
                   ))}
                 </div>
