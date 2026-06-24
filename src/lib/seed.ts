@@ -128,7 +128,7 @@ async function seed() {
     { key: "location_settings", value: {
       title: "Lakeside, Pokhara",
       subtitle: "Tucked between the lake and the mountains — moments from the city's best dining, boating and trails.",
-      map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3213.7720105159715!2d83.95791376583846!3d28.209697011336996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3995952ed26a383f%3A0x9b2bdf424583384a!2sPOM's+Penthouse!5e1!3m2!1sen!2snp!4v1782229596936!5m2!1sen!2snp",
+      map_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3213.7720105159715!2d83.95791376583846!3d28.209697011336996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f12!3m3!1m2!1s0x3995952ed26a383f%3A0x9b2bdf424583384a!2sPOM%27s+Penthouse!5e1!3m2!1sen!2snp!4v1782229596936!5m2!1sen!2snp",
       nearby: [
         { name: "Phewa Lake", distance: "200 m" },
         { name: "Lakeside Market", distance: "350 m" },
