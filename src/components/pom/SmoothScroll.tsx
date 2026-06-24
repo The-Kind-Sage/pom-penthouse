@@ -1,20 +1,24 @@
 import { useEffect } from "react";
 
+declare global {
+  interface Window { __lenis?: { stop: () => void; start: () => void; destroy: () => void; raf: (t: number) => void; scrollTo: (target: string | number) => void } }
+}
+
 export function SmoothScroll() {
   useEffect(() => {
     const isMobile = window.matchMedia("(pointer: coarse)").matches;
     if (isMobile) return;
 
     let raf = 0;
-    let lenis: { raf: (t: number) => void; destroy: () => void; scrollTo: (target: string | number) => void; stop: () => void; start: () => void } | null = null;
     (async () => {
       const { default: Lenis } = await import("lenis");
-      lenis = new Lenis({
+      const lenis = new Lenis({
         lerp: 0.12,
         duration: 1.2,
         smoothWheel: true,
         anchors: true,
-      }) as unknown as typeof lenis;
+      }) as unknown as NonNullable<typeof window.__lenis>;
+      window.__lenis = lenis;
       const loop = (t: number) => {
         lenis?.raf(t);
         raf = requestAnimationFrame(loop);
@@ -24,26 +28,20 @@ export function SmoothScroll() {
 
     const handleClick = (e: Event) => {
       const anchor = (e.target as HTMLElement).closest("a[href^=\"#\"]");
-      if (anchor && lenis) {
+      if (anchor && window.__lenis) {
         e.preventDefault();
         const target = anchor.getAttribute("href");
-        if (target) lenis.scrollTo(target);
+        if (target) window.__lenis.scrollTo(target);
         history.pushState(null, "", target);
       }
     };
 
-    const onStop = () => lenis?.stop();
-    const onStart = () => lenis?.start();
-
     document.addEventListener("click", handleClick, true);
-    document.addEventListener("poms:stop-scroll", onStop);
-    document.addEventListener("poms:start-scroll", onStart);
     return () => {
       cancelAnimationFrame(raf);
-      lenis?.destroy();
+      window.__lenis?.destroy();
+      delete window.__lenis;
       document.removeEventListener("click", handleClick, true);
-      document.removeEventListener("poms:stop-scroll", onStop);
-      document.removeEventListener("poms:start-scroll", onStart);
     };
   }, []);
   return null;
