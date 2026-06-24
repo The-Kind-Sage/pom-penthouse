@@ -34,6 +34,7 @@ import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminPenthousesRouteImport } from './routes/admin.penthouses'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
 import { Route as AdminBuildingRouteImport } from './routes/admin.building'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
@@ -166,6 +167,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminInquiriesRoute = AdminInquiriesRouteImport.update({
+  id: '/inquiries',
+  path: '/inquiries',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBuildingRoute = AdminBuildingRouteImport.update({
   id: '/building',
   path: '/building',
@@ -209,6 +215,7 @@ export interface FileRoutesByFullPath {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/building': typeof AdminBuildingRoute
+  '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -241,6 +248,7 @@ export interface FileRoutesByTo {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/building': typeof AdminBuildingRoute
+  '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -275,6 +283,7 @@ export interface FileRoutesById {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/building': typeof AdminBuildingRoute
+  '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -310,6 +319,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/bookings'
     | '/admin/building'
+    | '/admin/inquiries'
     | '/admin/login'
     | '/admin/penthouses'
     | '/admin/settings'
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/bookings'
     | '/admin/building'
+    | '/admin/inquiries'
     | '/admin/login'
     | '/admin/penthouses'
     | '/admin/settings'
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/bookings'
     | '/admin/building'
+    | '/admin/inquiries'
     | '/admin/login'
     | '/admin/penthouses'
     | '/admin/settings'
@@ -600,6 +612,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/inquiries': {
+      id: '/admin/inquiries'
+      path: '/inquiries'
+      fullPath: '/admin/inquiries'
+      preLoaderRoute: typeof AdminInquiriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/building': {
       id: '/admin/building'
       path: '/building'
@@ -649,6 +668,7 @@ interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminBuildingRoute: typeof AdminBuildingRoute
+  AdminInquiriesRoute: typeof AdminInquiriesRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminPenthousesRoute: typeof AdminPenthousesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -660,6 +680,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminBookingsRoute: AdminBookingsRoute,
   AdminBuildingRoute: AdminBuildingRoute,
+  AdminInquiriesRoute: AdminInquiriesRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminPenthousesRoute: AdminPenthousesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
