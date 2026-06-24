@@ -23,7 +23,7 @@ export function SmoothScroll() {
     })();
 
     const handleClick = (e: Event) => {
-      const anchor = (e.currentTarget as HTMLElement).closest("a[href^=\"#\"]");
+      const anchor = (e.target as HTMLElement).closest("a[href^=\"#\"]");
       if (anchor && lenis) {
         e.preventDefault();
         const target = anchor.getAttribute("href");
