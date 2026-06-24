@@ -26,7 +26,7 @@ function InquiriesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Booking Requests</h1>
+          <h1 className="text-2xl font-semibold">Inquiries</h1>
           <p className="text-sm text-foreground/60">
             {unread > 0 ? `${unread} unread message${unread > 1 ? "s" : ""}` : "No new messages"}
           </p>
@@ -38,7 +38,7 @@ function InquiriesPage() {
       ) : !messages?.length ? (
         <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border py-20 text-foreground/40">
           <Mail className="size-10" />
-          <p className="text-sm">No booking requests yet.</p>
+          <p className="text-sm">No inquiries yet.</p>
         </div>
       ) : (
         <div className="space-y-3">
