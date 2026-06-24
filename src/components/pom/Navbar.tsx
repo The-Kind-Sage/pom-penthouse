@@ -88,7 +88,7 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-        <a href="#home" className="flex flex-1 items-center">
+        <a href="#top" className="flex flex-1 items-center">
           <img src={logoUrl} alt="POM'S Penthouse" className="h-16 w-auto" />
         </a>
 
