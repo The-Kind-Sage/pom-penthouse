@@ -67,13 +67,17 @@ async function seed() {
       badge: "Freehold",
       btn_primary: "Schedule a Private Viewing",
       btn_secondary: "Book a Stay",
-      slides: [],
+      slides: [
+        { src: "/images/home.jpg", alt: "Penthouse living room" },
+        { src: "/images/1.jpeg", alt: "Pom PentHouse living room" },
+        { src: "/images/2.jpeg", alt: "Pom PentHouse interior" },
+      ],
     }},
     { key: "about_settings", value: {
       title: "About POM'S Penthouse",
       subtitle: "",
       text: "POM'S Penthouse provides luxury serviced apartments in Lakeside, Pokhara — offering hotel-level comfort with the privacy and convenience of home.",
-      image: "",
+      image: "/images/3.jpeg",
       stats: [
         { label: "Residences", value: "12+" },
         { label: "Guest Rating", value: "4.9★" },
@@ -83,7 +87,7 @@ async function seed() {
     { key: "whychoose_settings", value: {
       title: "A new standard for serviced living in Pokhara.",
       subtitle: "Designed for travelers who expect the consistency of a five-star hotel and the soul of a private residence.",
-      image: "",
+      image: "/images/apt-family.jpg",
       items: [
         { title: "Fully Furnished", desc: "Designer interiors, every detail considered." },
         { title: "High-Speed WiFi", desc: "Fibre-grade connectivity, ideal for remote work." },
@@ -115,10 +119,10 @@ async function seed() {
     }},
     { key: "lifestyle_settings", value: {
       items: [
-        { title: "Hotel comfort. Home privacy.", body: "Crisp linens, daily housekeeping and a concierge that anticipates — without ever knocking unannounced.", tag: "The Experience", image: "" },
-        { title: "Perfect for digital nomads.", body: "Quiet workspaces, fibre WiFi and backup power so deadlines never depend on the city grid.", tag: "Work From Pokhara", image: "" },
-        { title: "Ideal for long-term living.", body: "Monthly rates, utilities included, flexible contracts — designed for stays measured in months, not nights.", tag: "Extended Stays", image: "" },
-        { title: "Designed for modern travelers.", body: "From late check-ins to airport pickups, every touchpoint is curated to feel effortless and discreet.", tag: "Signature Service", image: "" },
+        { title: "Hotel comfort. Home privacy.", body: "Crisp linens, daily housekeeping and a concierge that anticipates — without ever knocking unannounced.", tag: "The Experience", image: "/images/life-balcony.jpg" },
+        { title: "Perfect for digital nomads.", body: "Quiet workspaces, fibre WiFi and backup power so deadlines never depend on the city grid.", tag: "Work From Pokhara", image: "/images/405267760.jpg" },
+        { title: "Ideal for long-term living.", body: "Monthly rates, utilities included, flexible contracts — designed for stays measured in months, not nights.", tag: "Extended Stays", image: "/images/405915676.jpg" },
+        { title: "Designed for modern travelers.", body: "From late check-ins to airport pickups, every touchpoint is curated to feel effortless and discreet.", tag: "Signature Service", image: "/images/405916201.jpg" },
       ],
     }},
     { key: "location_settings", value: {
@@ -144,18 +148,18 @@ async function seed() {
         { title: "Business Travelers", desc: "Tailored stay packages and rates available on request." },
         { title: "Relocating Families", desc: "Tailored stay packages and rates available on request." },
       ],
-      image: "",
+      image: "/images/gal-lake.jpg",
     }},
     { key: "offer_settings", value: {
       title: "Ready to Experience Premium Living?",
       subtitle: "Book your luxury serviced apartment today. Our team will respond within the hour.",
       btn_text: "Book Now",
-      image: "",
+      image: "/images/4.jpeg",
     }},
     { key: "testimonial_settings", value: {
       title: "Loved by guests worldwide",
       widget_id: "a1bde9c4-658b-40a3-ac19-a19822b5bfa6",
-      image: "",
+      image: "/images/5.jpeg",
     }},
     { key: "gallery_settings", value: {
       title: "Inside POM'S Penthouse",
@@ -173,17 +177,17 @@ async function seed() {
     }},
     { key: "residence_settings", value: {
       items: [
-        { name: "3 BHK", image: "", price: "$150", desc: "Spacious three-bedroom apartment with modern living room, fully equipped kitchen, and scenic balcony views.", capacity: "4–6 Guests", area: "120 m²", features: ["3 Bedrooms", "Living Room", "Full Kitchen", "2 Bathrooms"] },
-        { name: "2 BHK", image: "", price: "$110", desc: "Comfortable two-bedroom apartment perfect for families, featuring a bright hall and modular kitchen.", capacity: "3–5 Guests", area: "85 m²", features: ["2 Bedrooms", "Living Room", "Full Kitchen", "1 Bathroom"] },
-        { name: "1 BHK", image: "", price: "$75", desc: "Cozy one-bedroom apartment with an attached hall and kitchen — ideal for couples or solo travelers.", capacity: "1–3 Guests", area: "55 m²", features: ["1 Bedroom", "Living Room", "Kitchenette", "1 Bathroom"] },
-        { name: "Studio Apartment", image: "", price: "$55", desc: "Compact open-plan studio with a kitchenette and smart storage — designed for modern urban living.", capacity: "1–2 Guests", area: "35 m²", features: ["Open Layout", "Kitchenette", "Workspace", "Smart TV"] },
+        { name: "3 BHK", image: "/images/6.jpeg", price: "$150", desc: "Spacious three-bedroom apartment with modern living room, fully equipped kitchen, and scenic balcony views.", capacity: "4–6 Guests", area: "120 m²", features: ["3 Bedrooms", "Living Room", "Full Kitchen", "2 Bathrooms"] },
+        { name: "2 BHK", image: "/images/7.jpeg", price: "$110", desc: "Comfortable two-bedroom apartment perfect for families, featuring a bright hall and modular kitchen.", capacity: "3–5 Guests", area: "85 m²", features: ["2 Bedrooms", "Living Room", "Full Kitchen", "1 Bathroom"] },
+        { name: "1 BHK", image: "/images/8.jpeg", price: "$75", desc: "Cozy one-bedroom apartment with an attached hall and kitchen — ideal for couples or solo travelers.", capacity: "1–3 Guests", area: "55 m²", features: ["1 Bedroom", "Living Room", "Kitchenette", "1 Bathroom"] },
+        { name: "Studio Apartment", image: "/images/9.jpeg", price: "$55", desc: "Compact open-plan studio with a kitchenette and smart storage — designed for modern urban living.", capacity: "1–2 Guests", area: "35 m²", features: ["Open Layout", "Kitchenette", "Workspace", "Smart TV"] },
       ],
     }},
     { key: "rooms_settings", value: {
       items: [
-        { name: "Single Room — Single Bed", image: "", price: "$30", size: "18 m²", beds: "1 Single Bed", view: "Courtyard View", features: ["Single Bed", "Desk", "WiFi", "AC"] },
-        { name: "Single Room — Double Bed", image: "", price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
-        { name: "Single Room — Twin Bed", image: "", price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
+        { name: "Single Room — Single Bed", image: "/images/gal-bedroom.jpg", price: "$30", size: "18 m²", beds: "1 Single Bed", view: "Courtyard View", features: ["Single Bed", "Desk", "WiFi", "AC"] },
+        { name: "Single Room — Double Bed", image: "/images/10.jpeg", price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
+        { name: "Single Room — Twin Bed", image: "/images/11.jpeg", price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
       ],
     }},
     { key: "footer_settings", value: {

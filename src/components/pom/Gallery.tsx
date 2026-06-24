@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSettings } from "@/lib/hooks";
+import { IMAGES } from "@/lib/images";
 
 const SPANS = ["", "", "row-span-2", "", "col-span-2", ""];
 
