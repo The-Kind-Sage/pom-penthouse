@@ -35,7 +35,7 @@ export function Residence() {
         </div>
         <motion.div
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={stagger}
-          className="mt-16 grid gap-7 sm:grid-cols-2 lg:grid-cols-2"
+          className="mt-16 grid gap-7 sm:grid-cols-2 lg:grid-cols-3"
         >
           {apartments.map((a: any) => (
             <motion.article
