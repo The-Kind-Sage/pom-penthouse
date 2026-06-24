@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getDb } from "@/lib/mongodb";
 import { json } from "@/lib/auth";
+import { sendBookingNotification } from "@/lib/email";
 
 function buildWhatsAppMessage(body: {
   name: string;
@@ -106,10 +107,18 @@ export const Route = createFileRoute("/api/booking-whatsapp")({
             }
           }
 
+          let emailSent = false;
+          try {
+            emailSent = await sendBookingNotification(body);
+          } catch (err) {
+            console.error("[Email] Unexpected error:", err);
+          }
+
           return json({
             success: true,
             whatsapp_sent: whatsappSent,
             whatsapp_configured: !!(token && phoneNumberId),
+            email_sent: emailSent,
             id: result.insertedId.toString(),
           }, 201);
         } catch (err: any) {
