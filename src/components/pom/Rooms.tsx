@@ -13,9 +13,9 @@ export function Rooms() {
   const { data: settings } = useSettings();
   const roomsData = settings?.rooms_settings || {};
   const rooms = roomsData.items || [
-    { name: "Single Room — Single Bed", image: "", price: "$30", size: "18 m²", beds: "1 Single Bed", view: "Courtyard View", features: ["Single Bed", "Desk", "WiFi", "AC"] },
-    { name: "Single Room — Double Bed", image: "", price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
-    { name: "Single Room — Twin Bed", image: "", price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
+    { name: "Single Room — Single Bed", images: [], price: "$30", size: "18 m²", beds: "1 Single Bed", view: "Courtyard View", features: ["Single Bed", "Desk", "WiFi", "AC"] },
+    { name: "Single Room — Double Bed", images: [], price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
+    { name: "Single Room — Twin Bed", images: [], price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
   ];
 
   return (
@@ -42,7 +42,7 @@ export function Rooms() {
               className="group flex flex-col overflow-hidden border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_30px_60px_-25px_rgba(17,17,17,0.35)]"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
-                <img src={r.image || ""} alt={r.name} loading="lazy" className="size-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
+                <img src={r.images?.[0] || r.image || ""} alt={r.name} loading="lazy" className="size-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/75 via-luxury-black/10 to-transparent" />
                 <span className="absolute left-4 top-4 rounded-full bg-luxury-black/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold backdrop-blur-md">
                   {r.view}
