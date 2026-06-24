@@ -22,7 +22,7 @@ export function LongTerm() {
               </li>
             ))}
           </ul>
-          <a href="#contact" className="mt-10 inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.25em] text-black transition hover:brightness-110">
+          <a href="/contact" className="mt-10 inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.25em] text-black transition hover:brightness-110">
             Request Long-Term Pricing <ArrowRight className="size-4" />
           </a>
         </div>

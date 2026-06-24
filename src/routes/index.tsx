@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Navbar } from "@/components/pom/Navbar";
+import { PageLayout } from "@/components/pom/PageLayout";
 import { Hero } from "@/components/pom/Hero";
 import { Residence } from "@/components/pom/Residence";
 import { Rooms } from "@/components/pom/Rooms";
@@ -13,12 +13,6 @@ import { LongTerm } from "@/components/pom/LongTerm";
 import { About } from "@/components/pom/About";
 import { Offer } from "@/components/pom/Offer";
 import { FAQ } from "@/components/pom/FAQ";
-import { Footer } from "@/components/pom/Footer";
-import { BookingModal } from "@/components/pom/BookingModal";
-import { FloatingBook, BackToTop } from "@/components/pom/Floating";
-import { Lightbox } from "@/components/pom/Lightbox";
-import { SmoothScroll } from "@/components/pom/SmoothScroll";
-import { Toaster } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -43,30 +37,20 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="bg-background text-foreground">
-      <SmoothScroll />
-      <Navbar />
-      <main>
-        <Hero />
-        <Residence />
-        <Rooms />
-        <WhyChoose />
-        <Amenities />
-        <Lifestyle />
-        <Gallery />
-        <Location />
-        <Testimonial />
-        <LongTerm />
-        <About />
-        <Offer />
-        <FAQ />
-      </main>
-      <Footer />
-      <FloatingBook />
-      <BackToTop />
-      <BookingModal />
-      <Lightbox />
-      <Toaster position="top-center" />
-    </div>
+    <PageLayout>
+      <Hero />
+      <Residence />
+      <Rooms />
+      <WhyChoose />
+      <Amenities />
+      <Lifestyle />
+      <Gallery />
+      <Location />
+      <Testimonial />
+      <LongTerm />
+      <About />
+      <Offer />
+      <FAQ />
+    </PageLayout>
   );
 }

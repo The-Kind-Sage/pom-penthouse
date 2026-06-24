@@ -65,7 +65,7 @@ export function Hero() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#contact" className="btn-primary">
+            <a href="/contact" className="btn-primary">
               Schedule a Private Viewing
             </a>
             <button onClick={ui.openBooking} className="btn-ghost text-[var(--off-white)]">
@@ -78,10 +78,6 @@ export function Hero() {
       <div className="absolute bottom-8 left-6 lg:left-12 z-10 text-[var(--off-white)] flex items-center gap-3 text-xs uppercase tracking-[0.2em]">
         <span>Scroll</span>
         <span className="block w-px h-12 bg-[var(--off-white)]/70 origin-top animate-[scroll-line_2.4s_ease-in-out_infinite]" />
-      </div>
-
-      <div className="absolute bottom-8 right-6 lg:right-12 z-10 text-[var(--off-white)]/90 text-xs tracking-[0.2em] tabular-nums">
-        {String(i + 1).padStart(2, "0")} / {String(IMAGES.length).padStart(2, "0")}
       </div>
 
       <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 flex gap-2">

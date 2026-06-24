@@ -6,11 +6,11 @@ import { BookingModal } from "@/components/pom/BookingModal";
 import { Lightbox } from "@/components/pom/Lightbox";
 import { SmoothScroll } from "@/components/pom/SmoothScroll";
 
-export function PageLayout({ children }: { children: ReactNode }) {
+export function PageLayout({ children, transparent }: { children: ReactNode; transparent?: boolean }) {
   return (
     <div className="bg-background text-foreground">
       <SmoothScroll />
-      <Navbar />
+      <Navbar transparent={transparent} />
       <main>{children}</main>
       <Footer />
       <FloatingBook />

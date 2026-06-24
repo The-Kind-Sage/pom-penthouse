@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Phone, ArrowRight, Moon, Sun } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import logoUrl from "../../favicon/logo.png?url";
 
 const links = [
-  ["Home", "#home"], ["Apartments", "#apartments"], ["Amenities", "#amenities"],
-  ["Rooms", "#rooms"], ["Gallery", "#gallery"], ["About", "#about"], ["Contact", "#contact"],
+  ["Home", "/"], ["Apartments", "/apartments"], ["Amenities", "/amenities"],
+  ["Rooms", "/rooms"], ["Gallery", "/gallery"], ["About", "/about"], ["Contact", "/contact"],
 ] as const;
 
 function openBooking() {
@@ -31,14 +32,14 @@ function MobileMenu({ scrolled, links }: { scrolled: boolean; links: readonly (r
         <div className="absolute right-4 top-full mt-2 w-52 overflow-hidden rounded-xl border border-border bg-background/95 p-2 shadow-xl backdrop-blur-xl">
           <nav className="flex flex-col">
             {links.map(([label, href]) => (
-              <a
+              <Link
                 key={href}
-                href={href}
+                to={href}
                 onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm text-luxury-black/80 transition hover:bg-muted hover:text-gold"
               >
                 {label}
-              </a>
+              </Link>
             ))}
           </nav>
           <div className="mt-2 border-t border-border pt-2">
@@ -53,8 +54,9 @@ function MobileMenu({ scrolled, links }: { scrolled: boolean; links: readonly (r
   );
 }
 
-export function Navbar() {
+export function Navbar({ transparent = true }: { transparent?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
+  const solid = scrolled || !transparent;
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
@@ -82,21 +84,21 @@ export function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled
+        solid
           ? "bg-background/85 backdrop-blur-xl border-b border-border shadow-[0_4px_30px_-15px_rgba(0,0,0,0.15)]"
           : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-        <a href="#top" className="flex flex-1 items-center">
+        <Link to="/" className="flex flex-1 items-center">
           <img src={logoUrl} alt="POM'S Penthouse" className="h-16 w-auto" />
-        </a>
+        </Link>
 
-        <nav className={`hidden xl:flex flex-1 items-center justify-center gap-5 text-[13px] ${scrolled ? "text-luxury-black/80" : "text-white/85"}`}>
+        <nav className={`hidden xl:flex flex-1 items-center justify-center gap-5 text-[13px] ${solid ? "text-luxury-black/80" : "text-white/85"}`}>
           {links.map(([label, href]) => (
-            <a key={href} href={href} className="relative whitespace-nowrap transition hover:text-gold after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-gold after:transition-all hover:after:w-full">
+            <Link key={href} to={href} className="relative whitespace-nowrap transition hover:text-gold after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-gold after:transition-all hover:after:w-full">
               {label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -104,7 +106,7 @@ export function Navbar() {
           <a
             href="tel:+9779840814142"
             className={`hidden items-center gap-1.5 whitespace-nowrap text-xs font-medium transition lg:inline-flex ${
-              scrolled ? "text-luxury-black hover:text-gold" : "text-white hover:text-gold"
+              solid ? "text-luxury-black hover:text-gold" : "text-white hover:text-gold"
             }`}
           >
             <Phone className="size-3.5 shrink-0" />
@@ -114,7 +116,7 @@ export function Navbar() {
           <button
             onClick={toggleTheme}
             className={`p-2 rounded-full transition ${
-              scrolled
+              solid
                 ? "text-luxury-black hover:bg-luxury-black/5"
                 : "text-white hover:bg-white/10"
             }`}
@@ -131,7 +133,7 @@ export function Navbar() {
             Book Now <ArrowRight className="size-3.5 shrink-0" />
           </button>
 
-          <MobileMenu scrolled={scrolled} links={links} />
+          <MobileMenu scrolled={solid} links={links} />
         </div>
       </div>
     </header>

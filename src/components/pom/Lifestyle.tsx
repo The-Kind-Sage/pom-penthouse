@@ -38,7 +38,7 @@ export function Lifestyle() {
                   {item.title}
                 </motion.h3>
                 <motion.p variants={fadeUp} className="mt-5 max-w-lg text-muted-foreground">{item.body}</motion.p>
-                <motion.a variants={fadeUp} href="#contact" className="mt-8 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-luxury-black transition hover:text-gold">
+                <motion.a variants={fadeUp} href="/contact" className="mt-8 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-luxury-black transition hover:text-gold">
                   Enquire Now <ArrowRight className="size-4" />
                 </motion.a>
               </motion.div>

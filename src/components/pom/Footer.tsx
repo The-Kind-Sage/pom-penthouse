@@ -28,7 +28,7 @@ export function Footer() {
           <h4 className="font-display text-sm uppercase tracking-[0.3em] text-gold">Explore</h4>
           <ul className="mt-5 space-y-3 text-sm">
             {["Apartments", "Amenities", "Gallery", "About", "Contact"].map((l) => (
-              <li key={l}><a href={`#${l.toLowerCase()}`} className="transition hover:text-gold">{l}</a></li>
+              <li key={l}><a href={`/${l.toLowerCase()}`} className="transition hover:text-gold">{l}</a></li>
             ))}
           </ul>
         </div>
@@ -36,7 +36,7 @@ export function Footer() {
           <h4 className="font-display text-sm uppercase tracking-[0.3em] text-gold">Residences</h4>
           <ul className="mt-5 space-y-3 text-sm">
             {["Deluxe Studio", "Executive Suite", "Family Apartment", "Penthouse Suite"].map((a) => (
-              <li key={a}><a href="#apartments" className="transition hover:text-gold">{a}</a></li>
+              <li key={a}><a href="/apartments" className="transition hover:text-gold">{a}</a></li>
             ))}
           </ul>
         </div>
