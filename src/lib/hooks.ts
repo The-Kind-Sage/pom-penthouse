@@ -284,3 +284,88 @@ export function useRemoveGalleryImage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["gallery-images"] }),
   });
 }
+
+export interface RoomType {
+  id: string;
+  name: string;
+  price: number;
+  max_guests: number;
+  description: string;
+}
+
+export function useRoomTypes() {
+  return useQuery<RoomType[]>({
+    queryKey: ["room-types"],
+    queryFn: () => apiGet("/api/room-types"),
+  });
+}
+
+export function useCreateRoomType() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Omit<RoomType, "id"> & { id?: string }) =>
+      apiMutate("/api/room-types", { method: "POST", body: JSON.stringify(data) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["room-types"] }),
+  });
+}
+
+export function useUpdateRoomType() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Partial<RoomType> & { id: string }) =>
+      apiMutate("/api/room-types", { method: "PATCH", body: JSON.stringify(data) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["room-types"] }),
+  });
+}
+
+export function useDeleteRoomType() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiMutate("/api/room-types", { method: "DELETE", body: JSON.stringify({ id }) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["room-types"] }),
+  });
+}
+
+export interface ApartmentType {
+  id: string;
+  name: string;
+  price: number;
+  max_guests: number;
+  bedrooms: number;
+  description: string;
+}
+
+export function useApartmentTypes() {
+  return useQuery<ApartmentType[]>({
+    queryKey: ["apartment-types"],
+    queryFn: () => apiGet("/api/apartment-types"),
+  });
+}
+
+export function useCreateApartmentType() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Omit<ApartmentType, "id"> & { id?: string }) =>
+      apiMutate("/api/apartment-types", { method: "POST", body: JSON.stringify(data) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["apartment-types"] }),
+  });
+}
+
+export function useUpdateApartmentType() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Partial<ApartmentType> & { id: string }) =>
+      apiMutate("/api/apartment-types", { method: "PATCH", body: JSON.stringify(data) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["apartment-types"] }),
+  });
+}
+
+export function useDeleteApartmentType() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiMutate("/api/apartment-types", { method: "DELETE", body: JSON.stringify({ id }) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["apartment-types"] }),
+  });
+}

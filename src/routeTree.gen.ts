@@ -22,6 +22,7 @@ import { Route as ApiUsersRouteImport } from './routes/api/users'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as ApiSettingsRouteImport } from './routes/api/settings'
 import { Route as ApiRoomsRouteImport } from './routes/api/rooms'
+import { Route as ApiRoomTypesRouteImport } from './routes/api/room-types'
 import { Route as ApiPenthousesRouteImport } from './routes/api/penthouses'
 import { Route as ApiGalleryImagesRouteImport } from './routes/api/gallery-images'
 import { Route as ApiContactMessagesRouteImport } from './routes/api/contact-messages'
@@ -29,13 +30,16 @@ import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiBookingsRouteImport } from './routes/api/bookings'
 import { Route as ApiBookingWhatsappRouteImport } from './routes/api/booking-whatsapp'
 import { Route as ApiBookingInquiriesRouteImport } from './routes/api/booking-inquiries'
+import { Route as ApiApartmentTypesRouteImport } from './routes/api/apartment-types'
 import { Route as ApiActivitiesRouteImport } from './routes/api/activities'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
+import { Route as AdminApartmentsRouteImport } from './routes/admin.apartments'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
 import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
@@ -106,6 +110,11 @@ const ApiRoomsRoute = ApiRoomsRouteImport.update({
   path: '/api/rooms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRoomTypesRoute = ApiRoomTypesRouteImport.update({
+  id: '/api/room-types',
+  path: '/api/room-types',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPenthousesRoute = ApiPenthousesRouteImport.update({
   id: '/api/penthouses',
   path: '/api/penthouses',
@@ -141,6 +150,11 @@ const ApiBookingInquiriesRoute = ApiBookingInquiriesRouteImport.update({
   path: '/api/booking-inquiries',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiApartmentTypesRoute = ApiApartmentTypesRouteImport.update({
+  id: '/api/apartment-types',
+  path: '/api/apartment-types',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiActivitiesRoute = ApiActivitiesRouteImport.update({
   id: '/api/activities',
   path: '/api/activities',
@@ -154,6 +168,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRoomsRoute = AdminRoomsRouteImport.update({
+  id: '/rooms',
+  path: '/rooms',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -174,6 +193,11 @@ const AdminGalleryRoute = AdminGalleryRouteImport.update({
 const AdminBookingsRoute = AdminBookingsRouteImport.update({
   id: '/bookings',
   path: '/bookings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminApartmentsRoute = AdminApartmentsRouteImport.update({
+  id: '/apartments',
+  path: '/apartments',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
@@ -207,13 +231,16 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/rooms': typeof RoomsRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/apartments': typeof AdminApartmentsRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/rooms': typeof AdminRoomsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/activities': typeof ApiActivitiesRoute
+  '/api/apartment-types': typeof ApiApartmentTypesRoute
   '/api/booking-inquiries': typeof ApiBookingInquiriesRoute
   '/api/booking-whatsapp': typeof ApiBookingWhatsappRoute
   '/api/bookings': typeof ApiBookingsRoute
@@ -221,6 +248,7 @@ export interface FileRoutesByFullPath {
   '/api/contact-messages': typeof ApiContactMessagesRoute
   '/api/gallery-images': typeof ApiGalleryImagesRoute
   '/api/penthouses': typeof ApiPenthousesRoute
+  '/api/room-types': typeof ApiRoomTypesRoute
   '/api/rooms': typeof ApiRoomsRoute
   '/api/settings': typeof ApiSettingsRoute
   '/api/upload': typeof ApiUploadRoute
@@ -239,13 +267,16 @@ export interface FileRoutesByTo {
   '/gallery': typeof GalleryRoute
   '/rooms': typeof RoomsRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/apartments': typeof AdminApartmentsRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/rooms': typeof AdminRoomsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/activities': typeof ApiActivitiesRoute
+  '/api/apartment-types': typeof ApiApartmentTypesRoute
   '/api/booking-inquiries': typeof ApiBookingInquiriesRoute
   '/api/booking-whatsapp': typeof ApiBookingWhatsappRoute
   '/api/bookings': typeof ApiBookingsRoute
@@ -253,6 +284,7 @@ export interface FileRoutesByTo {
   '/api/contact-messages': typeof ApiContactMessagesRoute
   '/api/gallery-images': typeof ApiGalleryImagesRoute
   '/api/penthouses': typeof ApiPenthousesRoute
+  '/api/room-types': typeof ApiRoomTypesRoute
   '/api/rooms': typeof ApiRoomsRoute
   '/api/settings': typeof ApiSettingsRoute
   '/api/upload': typeof ApiUploadRoute
@@ -273,13 +305,16 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/rooms': typeof RoomsRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/apartments': typeof AdminApartmentsRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/rooms': typeof AdminRoomsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/activities': typeof ApiActivitiesRoute
+  '/api/apartment-types': typeof ApiApartmentTypesRoute
   '/api/booking-inquiries': typeof ApiBookingInquiriesRoute
   '/api/booking-whatsapp': typeof ApiBookingWhatsappRoute
   '/api/bookings': typeof ApiBookingsRoute
@@ -287,6 +322,7 @@ export interface FileRoutesById {
   '/api/contact-messages': typeof ApiContactMessagesRoute
   '/api/gallery-images': typeof ApiGalleryImagesRoute
   '/api/penthouses': typeof ApiPenthousesRoute
+  '/api/room-types': typeof ApiRoomTypesRoute
   '/api/rooms': typeof ApiRoomsRoute
   '/api/settings': typeof ApiSettingsRoute
   '/api/upload': typeof ApiUploadRoute
@@ -308,13 +344,16 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/rooms'
     | '/admin/analytics'
+    | '/admin/apartments'
     | '/admin/bookings'
     | '/admin/gallery'
     | '/admin/inquiries'
     | '/admin/login'
+    | '/admin/rooms'
     | '/admin/settings'
     | '/admin/users'
     | '/api/activities'
+    | '/api/apartment-types'
     | '/api/booking-inquiries'
     | '/api/booking-whatsapp'
     | '/api/bookings'
@@ -322,6 +361,7 @@ export interface FileRouteTypes {
     | '/api/contact-messages'
     | '/api/gallery-images'
     | '/api/penthouses'
+    | '/api/room-types'
     | '/api/rooms'
     | '/api/settings'
     | '/api/upload'
@@ -340,13 +380,16 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/rooms'
     | '/admin/analytics'
+    | '/admin/apartments'
     | '/admin/bookings'
     | '/admin/gallery'
     | '/admin/inquiries'
     | '/admin/login'
+    | '/admin/rooms'
     | '/admin/settings'
     | '/admin/users'
     | '/api/activities'
+    | '/api/apartment-types'
     | '/api/booking-inquiries'
     | '/api/booking-whatsapp'
     | '/api/bookings'
@@ -354,6 +397,7 @@ export interface FileRouteTypes {
     | '/api/contact-messages'
     | '/api/gallery-images'
     | '/api/penthouses'
+    | '/api/room-types'
     | '/api/rooms'
     | '/api/settings'
     | '/api/upload'
@@ -373,13 +417,16 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/rooms'
     | '/admin/analytics'
+    | '/admin/apartments'
     | '/admin/bookings'
     | '/admin/gallery'
     | '/admin/inquiries'
     | '/admin/login'
+    | '/admin/rooms'
     | '/admin/settings'
     | '/admin/users'
     | '/api/activities'
+    | '/api/apartment-types'
     | '/api/booking-inquiries'
     | '/api/booking-whatsapp'
     | '/api/bookings'
@@ -387,6 +434,7 @@ export interface FileRouteTypes {
     | '/api/contact-messages'
     | '/api/gallery-images'
     | '/api/penthouses'
+    | '/api/room-types'
     | '/api/rooms'
     | '/api/settings'
     | '/api/upload'
@@ -407,6 +455,7 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   RoomsRoute: typeof RoomsRoute
   ApiActivitiesRoute: typeof ApiActivitiesRoute
+  ApiApartmentTypesRoute: typeof ApiApartmentTypesRoute
   ApiBookingInquiriesRoute: typeof ApiBookingInquiriesRoute
   ApiBookingWhatsappRoute: typeof ApiBookingWhatsappRoute
   ApiBookingsRoute: typeof ApiBookingsRoute
@@ -414,6 +463,7 @@ export interface RootRouteChildren {
   ApiContactMessagesRoute: typeof ApiContactMessagesRoute
   ApiGalleryImagesRoute: typeof ApiGalleryImagesRoute
   ApiPenthousesRoute: typeof ApiPenthousesRoute
+  ApiRoomTypesRoute: typeof ApiRoomTypesRoute
   ApiRoomsRoute: typeof ApiRoomsRoute
   ApiSettingsRoute: typeof ApiSettingsRoute
   ApiUploadRoute: typeof ApiUploadRoute
@@ -516,6 +566,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRoomsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/room-types': {
+      id: '/api/room-types'
+      path: '/api/room-types'
+      fullPath: '/api/room-types'
+      preLoaderRoute: typeof ApiRoomTypesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/penthouses': {
       id: '/api/penthouses'
       path: '/api/penthouses'
@@ -565,6 +622,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBookingInquiriesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/apartment-types': {
+      id: '/api/apartment-types'
+      path: '/api/apartment-types'
+      fullPath: '/api/apartment-types'
+      preLoaderRoute: typeof ApiApartmentTypesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/activities': {
       id: '/api/activities'
       path: '/api/activities'
@@ -584,6 +648,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/rooms': {
+      id: '/admin/rooms'
+      path: '/rooms'
+      fullPath: '/admin/rooms'
+      preLoaderRoute: typeof AdminRoomsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/login': {
@@ -612,6 +683,13 @@ declare module '@tanstack/react-router' {
       path: '/bookings'
       fullPath: '/admin/bookings'
       preLoaderRoute: typeof AdminBookingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/apartments': {
+      id: '/admin/apartments'
+      path: '/apartments'
+      fullPath: '/admin/apartments'
+      preLoaderRoute: typeof AdminApartmentsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/analytics': {
@@ -647,10 +725,12 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  AdminApartmentsRoute: typeof AdminApartmentsRoute
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminRoomsRoute: typeof AdminRoomsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -658,10 +738,12 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
+  AdminApartmentsRoute: AdminApartmentsRoute,
   AdminBookingsRoute: AdminBookingsRoute,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminRoomsRoute: AdminRoomsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -679,6 +761,7 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   RoomsRoute: RoomsRoute,
   ApiActivitiesRoute: ApiActivitiesRoute,
+  ApiApartmentTypesRoute: ApiApartmentTypesRoute,
   ApiBookingInquiriesRoute: ApiBookingInquiriesRoute,
   ApiBookingWhatsappRoute: ApiBookingWhatsappRoute,
   ApiBookingsRoute: ApiBookingsRoute,
@@ -686,6 +769,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiContactMessagesRoute: ApiContactMessagesRoute,
   ApiGalleryImagesRoute: ApiGalleryImagesRoute,
   ApiPenthousesRoute: ApiPenthousesRoute,
+  ApiRoomTypesRoute: ApiRoomTypesRoute,
   ApiRoomsRoute: ApiRoomsRoute,
   ApiSettingsRoute: ApiSettingsRoute,
   ApiUploadRoute: ApiUploadRoute,
