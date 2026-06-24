@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { useSettings } from "@/lib/hooks";
-import offerBg from "@/assets/home.jpg";
+import offerBg from "@/assets/gal-lake.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
@@ -22,7 +22,7 @@ export function Offer() {
   return (
     <section className="relative isolate overflow-hidden">
       {bgImg ? (
-        <img src={bgImg} alt="" className="absolute inset-0 size-full object-cover blur-[2px]" loading="lazy" />
+        <img src={bgImg} alt="" className="absolute inset-0 size-full object-cover blur-3xl scale-110" loading="lazy" />
       ) : (
         <div className="absolute inset-0 bg-luxury-black" />
       )}
@@ -33,10 +33,10 @@ export function Offer() {
           <motion.div variants={fadeUp} className="mb-5 flex items-center justify-center gap-3 text-[10px] uppercase tracking-[0.4em] text-gold">
             <span className="h-px w-8 bg-gold" />Reserve Your Stay<span className="h-px w-8 bg-gold" />
           </motion.div>
-          <motion.h2 variants={fadeUp} className="font-display text-4xl font-medium leading-tight sm:text-6xl">
+          <motion.h2 variants={fadeUp} className="font-display text-4xl font-medium leading-tight sm:text-6xl [text-shadow:0_4px_40px_rgba(0,0,0,0.95),0_2px_8px_rgba(0,0,0,0.8)]">
             {title}
           </motion.h2>
-          <motion.p variants={fadeUp} className="mx-auto mt-6 max-w-xl text-white/75">{subtitle}</motion.p>
+          <motion.p variants={fadeUp} className="mx-auto mt-6 max-w-xl text-white/90 [text-shadow:0_2px_20px_rgba(0,0,0,0.9)]">{subtitle}</motion.p>
           <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <button type="button" onClick={openBooking} className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.25em] text-black transition hover:brightness-110">
               {btnText} <ArrowRight className="size-4" />
