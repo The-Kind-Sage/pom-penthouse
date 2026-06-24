@@ -88,7 +88,7 @@ export function Gallery({ preview: isPreview }: { preview?: boolean }) {
           {displayed.map((g, i) => (
             <motion.figure
               key={`${g.src}-${i}`} variants={item}
-              className={`group relative cursor-pointer overflow-hidden rounded-sm bg-muted ${g.span}`}
+              className={`group relative cursor-pointer overflow-hidden rounded-sm bg-muted ${g.span} ${isPreview && i >= 12 ? "col-span-2" : ""}`}
               onClick={() => open(i)}
             >
               <img
@@ -106,7 +106,7 @@ export function Gallery({ preview: isPreview }: { preview?: boolean }) {
           {isPreview && (
             <a
               href="/gallery"
-              className="group relative flex items-center justify-center overflow-hidden rounded-sm bg-muted [grid-row:span_2] [grid-column:span_2] sm:[grid-column:span_1] lg:[grid-column:span_1]"
+              className="group relative flex items-center justify-center overflow-hidden rounded-sm bg-muted col-span-2"
             >
               <div className="flex flex-col items-center gap-3 text-luxury-black transition group-hover:text-gold">
                 <svg className="size-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
