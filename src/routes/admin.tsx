@@ -2,9 +2,9 @@ import { Outlet, createFileRoute, Link, useLocation, useNavigate } from "@tansta
 import { useState, useEffect } from "react";
 import { useAdmin, adminStore } from "@/lib/admin-store";
 import {
-  LayoutDashboard, CalendarCheck, Building2, Users, BarChart3, Settings,
+  LayoutDashboard, CalendarCheck, Users, BarChart3, Settings,
   ChevronLeft, ChevronRight, Bell, Search, Moon, Sun, LogOut, User,
-  Menu, LayoutGrid, MessageSquare,
+  Menu, LayoutGrid, MessageSquare, Building2,
 } from "lucide-react";
 import logoUrl from "../favicon/logo.png?url";
 

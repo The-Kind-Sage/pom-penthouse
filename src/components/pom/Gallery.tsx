@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import aptPent from "@/assets/home.jpg";
@@ -50,7 +51,7 @@ import n211 from "@/assets/405916211.jpg";
 import n216 from "@/assets/405916216.jpg";
 import n939 from "@/assets/405916939.jpg";
 
-const GALLERY = [
+const STATIC_GALLERY = [
   { src: aptPent, label: "Building Exterior", span: "row-span-2" },
   { src: heroImg, label: "Bedroom View", span: "" },
   { src: galKitchen, label: "Kitchen", span: "" },
@@ -101,6 +102,20 @@ const GALLERY = [
   { src: n939, label: "Bedroom", span: "" },
 ];
 
+const SPANS = ["", "", "row-span-2", "", "col-span-2", ""];
+
+function useGalleryImages() {
+  return useQuery<{ url: string; label: string }[]>({
+    queryKey: ["gallery-images"],
+    queryFn: async () => {
+      const res = await fetch("/api/gallery-images");
+      if (!res.ok) return [];
+      return res.json();
+    },
+    staleTime: 60_000,
+  });
+}
+
 const item = {
   hidden: { opacity: 0, scale: 0.92, filter: "blur(6px)" },
   show: { opacity: 1, scale: 1, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
@@ -114,11 +129,20 @@ const container = {
 export function Gallery() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(0);
+  const { data: remoteImages } = useGalleryImages();
+
+  const remoteGallery = (remoteImages || []).map((img, i) => ({
+    src: img.url,
+    label: img.label || "Gallery",
+    span: SPANS[i % SPANS.length],
+  }));
+
+  const GALLERY = [...remoteGallery, ...STATIC_GALLERY];
 
   const open = useCallback((i: number) => { setActiveIdx(i); setLightboxOpen(true); }, []);
   const close = useCallback(() => setLightboxOpen(false), []);
-  const next = useCallback(() => setActiveIdx((p) => (p + 1) % GALLERY.length), []);
-  const prev = useCallback(() => setActiveIdx((p) => (p - 1 + GALLERY.length) % GALLERY.length), []);
+  const next = useCallback(() => setActiveIdx((p) => (p + 1) % GALLERY.length), [GALLERY.length]);
+  const prev = useCallback(() => setActiveIdx((p) => (p - 1 + GALLERY.length) % GALLERY.length), [GALLERY.length]);
 
   useEffect(() => {
     if (!lightboxOpen) return;
@@ -150,7 +174,7 @@ export function Gallery() {
         >
           {GALLERY.map((g, i) => (
             <motion.figure
-              key={i} variants={item}
+              key={`${g.src}-${i}`} variants={item}
               className={`group relative cursor-pointer overflow-hidden rounded-sm bg-muted ${g.span}`}
               onClick={() => open(i)}
             >
@@ -194,10 +218,10 @@ export function Gallery() {
               onClick={(e) => e.stopPropagation()}
             >
               <img
-                src={GALLERY[activeIdx].src} alt={GALLERY[activeIdx].label}
+                src={GALLERY[activeIdx]?.src} alt={GALLERY[activeIdx]?.label}
                 className="max-h-[80vh] max-w-full rounded-sm object-contain shadow-2xl"
               />
-              <span className="mt-4 text-sm text-white/50">{GALLERY[activeIdx].label}</span>
+              <span className="mt-4 text-sm text-white/50">{GALLERY[activeIdx]?.label}</span>
               <span className="mt-1 text-xs text-white/25">{activeIdx + 1} / {GALLERY.length}</span>
             </motion.div>
           </motion.div>

@@ -32,10 +32,8 @@ import { Route as ApiBookingInquiriesRouteImport } from './routes/api/booking-in
 import { Route as ApiActivitiesRouteImport } from './routes/api/activities'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
-import { Route as AdminPenthousesRouteImport } from './routes/admin.penthouses'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
-import { Route as AdminBuildingRouteImport } from './routes/admin.building'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
@@ -157,11 +155,6 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminPenthousesRoute = AdminPenthousesRouteImport.update({
-  id: '/penthouses',
-  path: '/penthouses',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -170,11 +163,6 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
 const AdminInquiriesRoute = AdminInquiriesRouteImport.update({
   id: '/inquiries',
   path: '/inquiries',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminBuildingRoute = AdminBuildingRouteImport.update({
-  id: '/building',
-  path: '/building',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminBookingsRoute = AdminBookingsRouteImport.update({
@@ -214,10 +202,8 @@ export interface FileRoutesByFullPath {
   '/rooms': typeof RoomsRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/bookings': typeof AdminBookingsRoute
-  '/admin/building': typeof AdminBuildingRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/activities': typeof ApiActivitiesRoute
@@ -247,10 +233,8 @@ export interface FileRoutesByTo {
   '/rooms': typeof RoomsRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/bookings': typeof AdminBookingsRoute
-  '/admin/building': typeof AdminBuildingRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/activities': typeof ApiActivitiesRoute
@@ -282,10 +266,8 @@ export interface FileRoutesById {
   '/rooms': typeof RoomsRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/bookings': typeof AdminBookingsRoute
-  '/admin/building': typeof AdminBuildingRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/penthouses': typeof AdminPenthousesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/activities': typeof ApiActivitiesRoute
@@ -318,10 +300,8 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/admin/analytics'
     | '/admin/bookings'
-    | '/admin/building'
     | '/admin/inquiries'
     | '/admin/login'
-    | '/admin/penthouses'
     | '/admin/settings'
     | '/admin/users'
     | '/api/activities'
@@ -351,10 +331,8 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/admin/analytics'
     | '/admin/bookings'
-    | '/admin/building'
     | '/admin/inquiries'
     | '/admin/login'
-    | '/admin/penthouses'
     | '/admin/settings'
     | '/admin/users'
     | '/api/activities'
@@ -385,10 +363,8 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/admin/analytics'
     | '/admin/bookings'
-    | '/admin/building'
     | '/admin/inquiries'
     | '/admin/login'
-    | '/admin/penthouses'
     | '/admin/settings'
     | '/admin/users'
     | '/api/activities'
@@ -598,13 +574,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/penthouses': {
-      id: '/admin/penthouses'
-      path: '/penthouses'
-      fullPath: '/admin/penthouses'
-      preLoaderRoute: typeof AdminPenthousesRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -617,13 +586,6 @@ declare module '@tanstack/react-router' {
       path: '/inquiries'
       fullPath: '/admin/inquiries'
       preLoaderRoute: typeof AdminInquiriesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/building': {
-      id: '/admin/building'
-      path: '/building'
-      fullPath: '/admin/building'
-      preLoaderRoute: typeof AdminBuildingRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/bookings': {
@@ -667,10 +629,8 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminBookingsRoute: typeof AdminBookingsRoute
-  AdminBuildingRoute: typeof AdminBuildingRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
   AdminLoginRoute: typeof AdminLoginRoute
-  AdminPenthousesRoute: typeof AdminPenthousesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -679,10 +639,8 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminBookingsRoute: AdminBookingsRoute,
-  AdminBuildingRoute: AdminBuildingRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
   AdminLoginRoute: AdminLoginRoute,
-  AdminPenthousesRoute: AdminPenthousesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
