@@ -149,7 +149,7 @@ function BookingsPage() {
         <>
           <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setSelectedBooking(null)} />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-paper border rounded-2xl p-6 max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-background border rounded-2xl p-6 max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="font-semibold text-lg">{selectedBooking.guest_name}</h3>
