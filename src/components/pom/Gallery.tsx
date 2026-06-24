@@ -29,7 +29,7 @@ const container = {
   show: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
 };
 
-export function Gallery() {
+export function Gallery({ preview: isPreview }: { preview?: boolean }) {
   const { data: settings } = useSettings();
   const gallerySettings = settings?.gallery_settings || {};
   const galleryTitle = gallerySettings.title || "Inside POM'S Penthouse";
@@ -52,6 +52,11 @@ export function Gallery() {
   }));
 
   const GALLERY = remoteGallery.length > 0 ? remoteGallery : localGallery;
+  const displayed = isPreview
+    ? (GALLERY.length >= 23
+        ? [...GALLERY.slice(0, 12), GALLERY[20], GALLERY[21], GALLERY[22]]
+        : GALLERY.slice(0, 15))
+    : GALLERY;
 
   const open = useCallback((i: number) => { setActiveIdx(i); setLightboxOpen(true); }, []);
   const close = useCallback(() => setLightboxOpen(false), []);
@@ -84,10 +89,10 @@ export function Gallery() {
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={container}
           className="mt-16 grid auto-rows-[180px] grid-cols-2 gap-3 sm:auto-rows-[220px] sm:grid-cols-3 lg:grid-cols-4 lg:gap-4"
         >
-          {GALLERY.map((g, i) => (
+          {displayed.map((g, i) => (
             <motion.figure
               key={`${g.src}-${i}`} variants={item}
-              className={`group relative cursor-pointer overflow-hidden rounded-sm bg-muted ${g.span}`}
+              className={`group relative cursor-pointer overflow-hidden rounded-sm bg-muted ${isPreview && i >= 12 ? "col-span-2" : g.span}`}
               onClick={() => open(i)}
             >
               <img
@@ -102,6 +107,22 @@ export function Gallery() {
               </figcaption>
             </motion.figure>
           ))}
+          {isPreview && (
+            <a
+              href="/gallery"
+              className="group relative flex items-center justify-center overflow-hidden rounded-sm bg-muted col-span-2"
+            >
+              <div className="flex flex-col items-center gap-3 text-luxury-black transition group-hover:text-gold">
+                <svg className="size-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+                <span className="text-xs font-semibold uppercase tracking-[0.25em]">Explore More</span>
+              </div>
+              <div className="pointer-events-none absolute inset-0 opacity-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.15)] transition-opacity duration-500 group-hover:opacity-100" />
+            </a>
+          )}
         </motion.div>
       </div>
 

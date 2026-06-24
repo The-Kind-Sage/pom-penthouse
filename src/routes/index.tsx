@@ -45,13 +45,13 @@ function Index() {
       <WhyChoose />
       <Amenities />
       <Lifestyle />
-      <Gallery />
+      <Gallery preview />
       <Location />
       <Testimonial />
       <LongTerm />
       <About />
-      <Offer />
       <FAQ />
+      <Offer />
     </PageLayout>
   );
 }

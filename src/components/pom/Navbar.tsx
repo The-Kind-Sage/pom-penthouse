@@ -81,8 +81,7 @@ export function Navbar({ transparent = true }: { transparent?: boolean }) {
 
   useEffect(() => {
     const stored = localStorage.getItem("pom-theme") as "light" | "dark" | null;
-    const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    const next = stored ?? prefers;
+    const next = stored ?? "light";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
   }, []);

@@ -35,12 +35,12 @@ export function Location() {
             <motion.div
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.9 }}
-              className="relative overflow-hidden border border-white/10"
+              className="relative h-80 overflow-hidden border border-white/10 sm:h-96 lg:h-full"
             >
               <iframe
                 title="Map"
                 src={mapUrl}
-                className="aspect-[4/3] w-full"
+                className="h-full w-full"
                 style={{ colorScheme: "light" }}
                 loading="lazy"
               />
