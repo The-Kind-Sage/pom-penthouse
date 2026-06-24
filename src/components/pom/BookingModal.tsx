@@ -62,7 +62,10 @@ export function BookingModal() {
       .catch(() => {});
   }, []);
 
+  const [selectedImg, setSelectedImg] = useState<string>("");
+
   const selected = ALL_OPTIONS.find((o) => o.name === form.apartment) ?? ALL_OPTIONS[0];
+  const displayImg = selectedImg || selected.img;
 
   const nights = useMemo(() => {
     if (!checkinDate || !checkoutDate) return 0;
@@ -98,9 +101,13 @@ export function BookingModal() {
 
   useEffect(() => {
     function onOpen(e: Event) {
-      const name = (e as CustomEvent<string>).detail;
-      if (typeof name === "string" && name) {
-        setForm((f) => ({ ...f, apartment: name }));
+      const detail = (e as CustomEvent).detail;
+      if (typeof detail === "object" && detail?.name) {
+        setForm((f) => ({ ...f, apartment: detail.name }));
+        setSelectedImg(detail.image || "");
+      } else if (typeof detail === "string") {
+        setForm((f) => ({ ...f, apartment: detail }));
+        setSelectedImg("");
       }
       setOpen(true);
     }
@@ -122,6 +129,7 @@ export function BookingModal() {
       setOpen(false);
       showToast("Booking request has been sent! We'll get back to you shortly.");
       setForm({ name: "", email: "", phone: "", checkin: "", checkout: "", guests: "2", apartment: "Studio Apartment", message: "" });
+      setSelectedImg("");
       setCheckinDate(undefined);
       setCheckoutDate(undefined);
     } catch (err: any) {
@@ -144,7 +152,7 @@ export function BookingModal() {
 
         {/* Left: image */}
         <div className="relative shrink-0 overflow-hidden md:hidden">
-          <img src={selected.img} alt={selected.name} className="aspect-[16/9] w-full object-cover" />
+          <img src={displayImg} alt={selected.name} className="aspect-[16/9] w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           <div className="absolute bottom-3 left-4 right-4 text-white">
             <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Selected</div>
@@ -156,7 +164,7 @@ export function BookingModal() {
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">
           {/* Left: image (desktop) */}
           <div className="relative hidden shrink-0 overflow-hidden md:block md:w-2/5">
-            <img src={selected.img} alt={selected.name} className="absolute inset-0 size-full object-cover" />
+            <img src={displayImg} alt={selected.name} className="absolute inset-0 size-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute bottom-5 left-5 right-5 text-white">
               <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Selected</div>

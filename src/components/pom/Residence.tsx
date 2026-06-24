@@ -5,8 +5,8 @@ import { useSettings } from "@/lib/hooks";
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
 
-function openBooking(apartment?: string) {
-  window.dispatchEvent(new CustomEvent("poms:open-booking", { detail: apartment }));
+function openBooking(apartment?: string, image?: string) {
+  window.dispatchEvent(new CustomEvent("poms:open-booking", { detail: { name: apartment, image } }));
 }
 
 export function Residence() {
@@ -69,7 +69,7 @@ export function Residence() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => openBooking(a.name)}
+                    onClick={() => openBooking(a.name, a.image)}
                     className="inline-flex items-center gap-1.5 rounded-full bg-luxury-black px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-gold hover:text-black"
                   >
                     Book Now <ArrowRight className="size-3" />
