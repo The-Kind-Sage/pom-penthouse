@@ -123,7 +123,7 @@ function PenthousesPage() {
         </button>
       </div>
 
-      <div className="bg-paper border rounded-xl overflow-hidden">
+      <div className="bg-background border rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -168,7 +168,7 @@ function PenthousesPage() {
         <>
           <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setShowForm(false)} />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
-            <div className="bg-paper border rounded-2xl p-6 max-w-lg w-full shadow-xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-background border rounded-2xl p-6 max-w-lg w-full shadow-xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <h3 className="font-semibold text-lg mb-4">{editing ? "Edit Penthouse" : "Add Penthouse"}</h3>
               <div className="space-y-4">
                 <input placeholder="Name*" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}

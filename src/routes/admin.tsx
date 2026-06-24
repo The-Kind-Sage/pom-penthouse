@@ -86,7 +86,7 @@ function AdminLayout() {
       )}
 
       <aside
-        className={`fixed lg:sticky top-0 left-0 z-50 h-screen bg-paper border-r transition-all duration-300 flex flex-col ${
+        className={`fixed lg:sticky top-0 left-0 z-50 h-screen bg-background border-r transition-all duration-300 flex flex-col ${
           sidebarOpen ? "w-64" : "w-0 lg:w-16 overflow-hidden"
         } ${mobileOpen ? "w-64" : "-translate-x-full lg:translate-x-0"}`}
       >
@@ -128,7 +128,7 @@ function AdminLayout() {
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 border-b bg-paper flex items-center justify-between px-4 lg:px-6 shrink-0">
+        <header className="h-16 border-b bg-background flex items-center justify-between px-4 lg:px-6 shrink-0">
           <div className="flex items-center gap-3">
             <button className="lg:hidden p-2" onClick={() => setMobileOpen(true)}>
               <Menu size={20} />
@@ -150,7 +150,7 @@ function AdminLayout() {
               {notifOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setNotifOpen(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-72 bg-paper border rounded-xl shadow-lg z-20 py-2">
+                  <div className="absolute right-0 top-full mt-2 w-72 bg-background border rounded-xl shadow-lg z-20 py-2">
                     <p className="px-4 py-2 text-sm font-medium border-b">Notifications</p>
                     <div className="px-4 py-6 text-sm text-foreground/40 text-center">No notifications</div>
                   </div>
@@ -166,7 +166,7 @@ function AdminLayout() {
               {profileOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setProfileOpen(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-paper border rounded-xl shadow-lg z-20 py-2">
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-background border rounded-xl shadow-lg z-20 py-2">
                     <div className="px-4 py-2 text-sm border-b">
                       <p className="font-medium">{user?.name || "Admin"}</p>
                       <p className="text-foreground/60">{user?.email || ""}</p>

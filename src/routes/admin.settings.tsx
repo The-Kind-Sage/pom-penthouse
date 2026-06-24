@@ -59,7 +59,7 @@ function PricingTab() {
   };
 
   return (
-    <div className="bg-paper border rounded-xl p-6 space-y-6 max-w-xl">
+    <div className="bg-background border rounded-xl p-6 space-y-6 max-w-xl">
       <div>
         <h3 className="font-medium mb-1">Peak Season Multiplier</h3>
         <p className="text-xs text-foreground/60 mb-2">Additional % added during peak season (Oct-Feb)</p>
@@ -121,7 +121,7 @@ function CMSTab() {
   };
 
   return (
-    <div className="bg-paper border rounded-xl p-6 space-y-4 max-w-xl">
+    <div className="bg-background border rounded-xl p-6 space-y-4 max-w-xl">
       <div>
         <label className="text-sm font-medium mb-1 block">Hero Title</label>
         <input value={heroTitle} onChange={(e) => setHeroTitle(e.target.value)} placeholder="Enter hero title"

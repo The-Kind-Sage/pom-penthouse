@@ -44,7 +44,7 @@ function AnalyticsPage() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-paper border rounded-xl p-5">
+        <div className="bg-background border rounded-xl p-5">
           <h3 className="font-medium mb-4">Monthly Revenue</h3>
           <div className="h-72">
             {monthlyData.some((d) => d.revenue > 0) ? (
@@ -63,7 +63,7 @@ function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-paper border rounded-xl p-5">
+        <div className="bg-background border rounded-xl p-5">
           <h3 className="font-medium mb-4">Bookings by Status</h3>
           <div className="h-72">
             {statusData.length > 0 ? (

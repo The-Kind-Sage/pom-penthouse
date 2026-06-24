@@ -93,7 +93,7 @@ function BookingsPage() {
         </select>
       </div>
 
-      <div className="bg-paper border rounded-xl overflow-hidden">
+      <div className="bg-background border rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

@@ -65,7 +65,7 @@ function UsersPage() {
         <input placeholder="Search users..." value={search} onChange={(e) => setSearch(e.target.value)} className="bg-transparent outline-none w-full" />
       </div>
 
-      <div className="bg-paper border rounded-xl overflow-hidden">
+      <div className="bg-background border rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

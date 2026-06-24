@@ -11,7 +11,7 @@ function MetricCard({ label, value, trend, icon: Icon, color }: {
   icon: any; color: string;
 }) {
   return (
-    <div className="bg-paper border rounded-xl p-5 flex items-start justify-between">
+    <div className="bg-background border rounded-xl p-5 flex items-start justify-between">
       <div>
         <p className="text-sm text-foreground/60">{label}</p>
         <p className="text-2xl font-semibold mt-1">{value}</p>
@@ -85,7 +85,7 @@ function AdminDashboard() {
         {metrics.map((m) => <MetricCard key={m.label} {...m} />)}
       </div>
 
-      <div className="bg-paper border rounded-xl p-5">
+      <div className="bg-background border rounded-xl p-5">
         <h3 className="font-medium mb-4">Recent Activity</h3>
         {activities.length === 0 ? (
           <div className="flex items-center justify-center py-12 text-sm text-foreground/40">
