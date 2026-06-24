@@ -22,7 +22,7 @@ export function Offer() {
   return (
     <section className="relative isolate overflow-hidden">
       {bgImg ? (
-        <img src={bgImg} alt="" className="absolute inset-0 size-full object-cover blur-3xl scale-110" loading="lazy" />
+        <img src={bgImg} alt="" className="absolute inset-0 size-full object-cover blur-xl scale-105" loading="lazy" />
       ) : (
         <div className="absolute inset-0 bg-luxury-black" />
       )}
