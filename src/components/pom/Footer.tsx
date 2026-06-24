@@ -13,11 +13,15 @@ export function Footer() {
             Luxury serviced apartments in Lakeside, Pokhara — hotel comfort with home privacy.
           </p>
           <div className="mt-6 flex gap-3">
-            {[Instagram, Facebook, MessageCircle].map((Icon, idx) => (
-              <a key={idx} href="#" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
-                <Icon className="size-4" />
-              </a>
-            ))}
+            <a href="https://www.facebook.com/poms.penthouse" target="_blank" rel="noreferrer" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
+              <Facebook className="size-4" />
+            </a>
+            <a href="https://www.instagram.com/poms_penthouse" target="_blank" rel="noreferrer" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
+              <Instagram className="size-4" />
+            </a>
+            <a href="https://wa.me/9779840814142" target="_blank" rel="noreferrer" className="grid size-9 place-items-center rounded-full border border-white/15 transition hover:border-gold hover:text-gold">
+              <MessageCircle className="size-4" />
+            </a>
           </div>
         </div>
         <div>
