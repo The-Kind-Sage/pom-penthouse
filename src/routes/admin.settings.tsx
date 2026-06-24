@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSettings, useUpdateSetting } from "@/lib/hooks";
 import { ImageUpload } from "@/components/admin/ImageUpload";
+import { MultiImageUpload } from "@/components/admin/MultiImageUpload";
 import { toast } from "sonner";
 import { Plus, Trash2, GripVertical } from "lucide-react";
 
@@ -760,11 +762,20 @@ function ApartmentsTab() {
     items[i] = { ...items[i], [f]: v };
     updateField("items", items);
   };
-  const updateFeatures = (i: number, features: string) => {
-    updateItem(i, "features", features.split(",").map((s: string) => s.trim()));
-  };
-  const addItem = () => updateField("items", [...(apt.items || []), { name: "", image: "", price: "", desc: "", capacity: "", area: "", features: [] }]);
+  const addItem = () => updateField("items", [...(apt.items || []), { name: "", images: [], price: "", desc: "", capacity: "", area: "", features: [] }]);
   const removeItem = (i: number) => updateField("items", (apt.items || []).filter((_: any, idx: number) => idx !== i));
+
+  const areaOptions = ["60 m²", "80 m²", "100 m²", "120 m²", "150 m²", "180 m²", "200 m²", "250 m²"];
+  const capacityOptions = ["1-2 Guests", "2-3 Guests", "3-4 Guests", "4-6 Guests", "6-8 Guests", "8-10 Guests"];
+  const aptFeatureOptions = ["Full Kitchen", "Living Room", "Dining Area", "Balcony", "WiFi", "AC", "Washer", "Dryer", "Parking", "Security"];
+
+  const toggleFeature = (i: number, feature: string) => {
+    const currentFeatures = apt.items?.[i]?.features || [];
+    const newFeatures = currentFeatures.includes(feature)
+      ? currentFeatures.filter((f: string) => f !== feature)
+      : [...currentFeatures, feature];
+    updateItem(i, "features", newFeatures);
+  };
 
   const save = async () => {
     try {
@@ -785,12 +796,54 @@ function ApartmentsTab() {
             <div className="grid grid-cols-2 gap-3">
               <InputRow label="Name" value={item.name || ""} onChange={(v) => updateItem(i, "name", v)} placeholder="3 BHK" />
               <InputRow label="Price" value={item.price || ""} onChange={(v) => updateItem(i, "price", v)} placeholder="$150" />
-              <InputRow label="Capacity" value={item.capacity || ""} onChange={(v) => updateItem(i, "capacity", v)} placeholder="4–6 Guests" />
-              <InputRow label="Area" value={item.area || ""} onChange={(v) => updateItem(i, "area", v)} placeholder="120 m²" />
+              <div>
+                <label className="text-sm font-medium mb-1 block">Capacity</label>
+                <Select value={item.capacity || ""} onValueChange={(v) => updateItem(i, "capacity", v)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select capacity" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {capacityOptions.map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-1 block">Area</label>
+                <Select value={item.area || ""} onValueChange={(v) => updateItem(i, "area", v)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select area" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {areaOptions.map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <TextAreaRow label="Description" value={item.desc || ""} onChange={(v) => updateItem(i, "desc", v)} />
-            <InputRow label="Features (comma-separated)" value={(item.features || []).join(", ")} onChange={(v) => updateFeatures(i, v)} placeholder="3 Bedrooms, Living Room, Full Kitchen" />
-            <ImageUpload value={item.image || ""} onChange={(url) => updateItem(i, "image", url)} label={`Image`} />
+            <div>
+              <label className="text-sm font-medium mb-2 block">Features</label>
+              <div className="flex flex-wrap gap-2">
+                {aptFeatureOptions.map((feature) => (
+                  <button
+                    key={feature}
+                    type="button"
+                    onClick={() => toggleFeature(i, feature)}
+                    className={`px-3 py-1.5 text-xs rounded-full border transition ${
+                      (item.features || []).includes(feature)
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background hover:bg-muted border-border"
+                    }`}
+                  >
+                    {feature}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <MultiImageUpload value={item.images || []} onChange={(urls) => updateItem(i, "images", urls)} label="Images" maxImages={10} />
           </div>
         ))}
         <button onClick={addItem} className="text-xs text-gold hover:underline flex items-center gap-1"><Plus className="size-3" /> Add Apartment</button>
@@ -817,11 +870,21 @@ function RoomsListTab() {
     items[i] = { ...items[i], [f]: v };
     updateField("items", items);
   };
-  const updateFeatures = (i: number, features: string) => {
-    updateItem(i, "features", features.split(",").map((s: string) => s.trim()));
-  };
-  const addItem = () => updateField("items", [...(rooms.items || []), { name: "", image: "", price: "", size: "", beds: "", view: "", features: [] }]);
+  const addItem = () => updateField("items", [...(rooms.items || []), { name: "", images: [], price: "", size: "", beds: "", view: "", features: [] }]);
   const removeItem = (i: number) => updateField("items", (rooms.items || []).filter((_: any, idx: number) => idx !== i));
+
+  const sizeOptions = ["12 m²", "15 m²", "18 m²", "20 m²", "25 m²", "30 m²", "35 m²", "40 m²"];
+  const bedsOptions = ["1 Single Bed", "2 Single Beds", "1 Double Bed", "1 Queen Bed", "1 King Bed", "2 Double Beds", "Bunk Bed"];
+  const viewOptions = ["Courtyard View", "Lake View", "Mountain View", "City View", "Garden View"];
+  const featureOptions = ["WiFi", "AC", "Desk", "TV", "Mini Fridge", "Balcony", "Safe", "Coffee Maker", "Hair Dryer", "Iron"];
+
+  const toggleFeature = (i: number, feature: string) => {
+    const currentFeatures = rooms.items?.[i]?.features || [];
+    const newFeatures = currentFeatures.includes(feature)
+      ? currentFeatures.filter((f: string) => f !== feature)
+      : [...currentFeatures, feature];
+    updateItem(i, "features", newFeatures);
+  };
 
   const save = async () => {
     try {
@@ -842,12 +905,66 @@ function RoomsListTab() {
             <div className="grid grid-cols-2 gap-3">
               <InputRow label="Name" value={item.name || ""} onChange={(v) => updateItem(i, "name", v)} placeholder="Single Room — Single Bed" />
               <InputRow label="Price" value={item.price || ""} onChange={(v) => updateItem(i, "price", v)} placeholder="$30" />
-              <InputRow label="Size" value={item.size || ""} onChange={(v) => updateItem(i, "size", v)} placeholder="18 m²" />
-              <InputRow label="Beds" value={item.beds || ""} onChange={(v) => updateItem(i, "beds", v)} placeholder="1 Single Bed" />
-              <InputRow label="View" value={item.view || ""} onChange={(v) => updateItem(i, "view", v)} placeholder="Courtyard View" />
+              <div>
+                <label className="text-sm font-medium mb-1 block">Size</label>
+                <Select value={item.size || ""} onValueChange={(v) => updateItem(i, "size", v)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {sizeOptions.map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-1 block">Beds</label>
+                <Select value={item.beds || ""} onValueChange={(v) => updateItem(i, "beds", v)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select beds" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {bedsOptions.map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="col-span-2">
+                <label className="text-sm font-medium mb-1 block">View</label>
+                <Select value={item.view || ""} onValueChange={(v) => updateItem(i, "view", v)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select view" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {viewOptions.map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <InputRow label="Features (comma-separated)" value={(item.features || []).join(", ")} onChange={(v) => updateFeatures(i, v)} placeholder="Single Bed, Desk, WiFi, AC" />
-            <ImageUpload value={item.image || ""} onChange={(url) => updateItem(i, "image", url)} label={`Image`} />
+            <div>
+              <label className="text-sm font-medium mb-2 block">Features</label>
+              <div className="flex flex-wrap gap-2">
+                {featureOptions.map((feature) => (
+                  <button
+                    key={feature}
+                    type="button"
+                    onClick={() => toggleFeature(i, feature)}
+                    className={`px-3 py-1.5 text-xs rounded-full border transition ${
+                      (item.features || []).includes(feature)
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-background hover:bg-muted border-border"
+                    }`}
+                  >
+                    {feature}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <MultiImageUpload value={item.images || []} onChange={(urls) => updateItem(i, "images", urls)} label="Images" maxImages={10} />
           </div>
         ))}
         <button onClick={addItem} className="text-xs text-gold hover:underline flex items-center gap-1"><Plus className="size-3" /> Add Room</button>
