@@ -1,9 +1,14 @@
 import { ArrowRight, Briefcase, Wifi, Star, Bed, Sparkles } from "lucide-react";
+import longImg from "@/assets/405915676.jpg";
 
 export function LongTerm() {
   return (
-    <section className="bg-luxury-black py-24 text-white sm:py-32">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-20">
+    <section className="relative bg-luxury-black py-24 text-white sm:py-32 overflow-hidden">
+      <div className="absolute inset-0 opacity-20">
+        <img src={longImg} alt="" className="size-full object-cover" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-r from-luxury-black via-luxury-black/95 to-luxury-black/80" />
+      <div className="relative mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-20">
         <div>
           <div className="mb-4 flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-gold">
             <span className="h-px w-8 bg-gold" />Stay Longer, Live Better

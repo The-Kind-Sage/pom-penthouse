@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Users, Square, ArrowRight } from "lucide-react";
-import aptPent from "@/assets/apt-penthouse.jpg";
+import aptPent from "@/assets/405915699.jpg";
 import aptFamily from "@/assets/apt-family.jpg";
-import aptExec from "@/assets/apt-executive.jpg";
-import aptStudio from "@/assets/apt-studio.jpg";
+import aptExec from "@/assets/405267735.jpg";
+import aptStudio from "@/assets/395344888.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };

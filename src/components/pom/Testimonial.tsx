@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import testImg from "@/assets/405915677.jpg";
 
 declare global {
   interface Window {
@@ -27,7 +28,10 @@ export function Testimonial() {
   }, []);
 
   return (
-    <section className="bg-muted overflow-hidden py-24 sm:py-32">
+    <section className="relative bg-muted overflow-hidden py-24 sm:py-32">
+      <div className="absolute inset-0 opacity-[0.03]">
+        <img src={testImg} alt="" className="size-full object-cover" />
+      </div>
       <div className="mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-4 flex items-center justify-center gap-3 text-[10px] uppercase tracking-[0.4em] text-gold">

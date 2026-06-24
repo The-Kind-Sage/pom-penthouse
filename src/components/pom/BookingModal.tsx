@@ -9,10 +9,13 @@ import { ArrowRight, CalendarIcon, ShieldCheck, Info } from "lucide-react";
 import { format, differenceInCalendarDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { showToast } from "@/components/ui/toast";
-import aptStudio from "@/assets/apt-studio.jpg";
-import aptExec from "@/assets/apt-executive.jpg";
 import aptFamily from "@/assets/apt-family.jpg";
-import aptPent from "@/assets/apt-penthouse.jpg";
+import aptPent from "@/assets/405915699.jpg";
+import aptStudio from "@/assets/395344888.jpg";
+import aptExec from "@/assets/405267735.jpg";
+import roomSingle from "@/assets/10.jpeg";
+import roomDouble from "@/assets/405915702.jpg";
+import roomTwin from "@/assets/405915696.jpg";
 
 const USD_TO_NPR_FALLBACK = 134.5;
 const VAT_RATE = 0.13;

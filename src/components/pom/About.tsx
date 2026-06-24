@@ -1,7 +1,12 @@
+import aboutImg from "@/assets/405915680.jpg";
+
 export function About() {
   return (
-    <section id="about" className="bg-background py-24 sm:py-32">
-      <div className="mx-auto max-w-3xl px-6 text-center">
+    <section id="about" className="relative bg-background py-24 sm:py-32 overflow-hidden">
+      <div className="absolute inset-0 opacity-5">
+        <img src={aboutImg} alt="" className="size-full object-cover" />
+      </div>
+      <div className="relative mx-auto max-w-3xl px-6 text-center">
         <div className="mb-4 flex items-center justify-center gap-3 text-[10px] uppercase tracking-[0.4em] text-gold">
           <span className="h-px w-8 bg-gold" />About Us<span className="h-px w-8 bg-gold" />
         </div>

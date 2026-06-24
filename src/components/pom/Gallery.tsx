@@ -1,19 +1,54 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import aptPent from "@/assets/apt-penthouse.jpg";
-import aptExec from "@/assets/apt-executive.jpg";
+import aptPent from "@/assets/home.jpg";
 import aptFamily from "@/assets/apt-family.jpg";
-import aptStudio from "@/assets/apt-studio.jpg";
 import galBedroom from "@/assets/gal-bedroom.jpg";
 import galKitchen from "@/assets/gal-kitchen.jpg";
 import lifeBalcony from "@/assets/life-balcony.jpg";
 import galLake from "@/assets/gal-lake.jpg";
 import galBath from "@/assets/gal-bath.jpg";
-import whyImg from "@/assets/why-choose.jpg";
-import heroImg from "@/assets/hero.jpg";
-import ctaImg from "@/assets/cta.jpg";
-import lifeNomad from "@/assets/life-nomad.jpg";
+import whyImg from "@/assets/5.jpeg";
+import lifeNomad from "@/assets/395344844.jpg";
+import aptExec from "@/assets/2.jpeg";
+import aptStudio from "@/assets/1.jpeg";
+import heroImg from "@/assets/3.jpeg";
+import ctaImg from "@/assets/4.jpeg";
+import img6 from "@/assets/6.jpeg";
+import img7 from "@/assets/7.jpeg";
+import img8 from "@/assets/8.jpeg";
+import img9 from "@/assets/9.jpeg";
+import img10 from "@/assets/10.jpeg";
+import img11 from "@/assets/11.jpeg";
+import img12 from "@/assets/12.jpeg";
+import img13 from "@/assets/13.jpeg";
+import img14 from "@/assets/14.jpeg";
+import img15 from "@/assets/15.jpeg";
+import n857 from "@/assets/395344857.jpg";
+import n874 from "@/assets/395344874.jpg";
+import n879 from "@/assets/395344879.jpg";
+import n888 from "@/assets/395344888.jpg";
+import n900 from "@/assets/395344900.jpg";
+import n698 from "@/assets/405267698.jpg";
+import n709 from "@/assets/405267709.jpg";
+import n735 from "@/assets/405267735.jpg";
+import n751 from "@/assets/405267751.jpg";
+import n760 from "@/assets/405267760.jpg";
+import n676 from "@/assets/405915676.jpg";
+import n677 from "@/assets/405915677.jpg";
+import n678 from "@/assets/405915678.jpg";
+import n680 from "@/assets/405915680.jpg";
+import n696 from "@/assets/405915696.jpg";
+import n699 from "@/assets/405915699.jpg";
+import n702 from "@/assets/405915702.jpg";
+import n703 from "@/assets/405915703.jpg";
+import n703b from "@/assets/405915703b.jpg";
+import n706 from "@/assets/405915706.jpg";
+import n201 from "@/assets/405916201.jpg";
+import n209 from "@/assets/405916209.jpg";
+import n211 from "@/assets/405916211.jpg";
+import n216 from "@/assets/405916216.jpg";
+import n939 from "@/assets/405916939.jpg";
 
 const GALLERY = [
   { src: aptPent, label: "Penthouse Living Room", span: "row-span-2" },
@@ -29,6 +64,41 @@ const GALLERY = [
   { src: aptStudio, label: "Studio Apartment", span: "" },
   { src: ctaImg, label: "Rooftop Lounge", span: "" },
   { src: lifeNomad, label: "Workspace", span: "" },
+  { src: img6, label: "Building Facade", span: "" },
+  { src: img7, label: "Lounge Area", span: "" },
+  { src: img8, label: "Dining Space", span: "" },
+  { src: img9, label: "Sunset View", span: "row-span-2" },
+  { src: img10, label: "Corridor", span: "" },
+  { src: img11, label: "Rooftop Terrace", span: "" },
+  { src: img12, label: "Night View", span: "" },
+  { src: img13, label: "Reception", span: "" },
+  { src: img14, label: "Garden Area", span: "col-span-2" },
+  { src: img15, label: "Poolside", span: "" },
+  { src: n857, label: "Interior Detail", span: "" },
+  { src: n874, label: "Room View", span: "" },
+  { src: n879, label: "Modern Interior", span: "" },
+  { src: n888, label: "Cozy Corner", span: "" },
+  { src: n900, label: "Open Layout", span: "row-span-2" },
+  { src: n698, label: "Suite Interior", span: "" },
+  { src: n709, label: "Living Area", span: "" },
+  { src: n735, label: "Bedroom Suite", span: "" },
+  { src: n751, label: "Designer Space", span: "" },
+  { src: n760, label: "Contemporary Room", span: "" },
+  { src: n676, label: "Elegant Interior", span: "col-span-2" },
+  { src: n677, label: "Spacious Lounge", span: "" },
+  { src: n678, label: "Wooden Accents", span: "" },
+  { src: n680, label: "Warm Ambiance", span: "" },
+  { src: n696, label: "Comfort Living", span: "row-span-2" },
+  { src: n699, label: "Premium Suite", span: "" },
+  { src: n702, label: "Natural Light", span: "" },
+  { src: n703, label: "Quiet Retreat", span: "" },
+  { src: n703b, label: "Relaxation Space", span: "" },
+  { src: n706, label: "Urban Comfort", span: "" },
+  { src: n201, label: "Bright Interior", span: "col-span-2" },
+  { src: n209, label: "Cozy Bedroom", span: "" },
+  { src: n211, label: "Open Space", span: "" },
+  { src: n216, label: "Modern Living", span: "" },
+  { src: n939, label: "Peaceful Corner", span: "" },
 ];
 
 const item = {
