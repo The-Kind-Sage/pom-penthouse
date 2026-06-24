@@ -86,6 +86,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: logoUrl },
       { rel: "stylesheet", href: appCss },
     ],
+    scripts: [
+      { src: "https://widgets.sociablekit.com/google-reviews/widget.js", async: true },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,

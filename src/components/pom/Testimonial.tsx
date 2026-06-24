@@ -1,19 +1,6 @@
-import { useEffect, useRef } from "react";
 import testImg from "@/assets/405915677.jpg";
 
 export function Testimonial() {
-  const mounted = useRef(false);
-
-  useEffect(() => {
-    if (mounted.current) return;
-    mounted.current = true;
-
-    const script = document.createElement("script");
-    script.src = "https://widgets.sociablekit.com/google-reviews/widget.js";
-    script.defer = true;
-    document.body.appendChild(script);
-  }, []);
-
   return (
     <section className="relative bg-muted overflow-hidden py-24 sm:py-32">
       <div className="absolute inset-0 opacity-[0.03]">
@@ -30,7 +17,10 @@ export function Testimonial() {
         </div>
 
         <div className="mt-16">
-          <div className="sk-ww-google-reviews" data-embed-id="25692242" />
+          <div
+            className="sk-ww-google-reviews"
+            data-embed-id="25692242"
+          />
         </div>
       </div>
     </section>
