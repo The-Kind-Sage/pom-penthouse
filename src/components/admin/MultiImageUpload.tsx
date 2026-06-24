@@ -27,7 +27,11 @@ export function MultiImageUpload({ value, onChange, label = "Images", folder = "
       fd.append("folder", folder);
       const res = await fetch("/api/upload", { method: "POST", body: fd });
       const data = await res.json();
-      if (data.success) onChange([...value, data.url]);
+      if (data.success) {
+        // Store local URL in database (it will display from src/assets)
+        const urlToStore = data.local_url || data.url;
+        onChange([...value, urlToStore]);
+      }
     } catch { }
     setUploading(false);
     if (inputRef.current) inputRef.current.value = "";

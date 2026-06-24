@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { uploadImage } from "@/lib/cloudinary";
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
+import { existsSync } from "fs";
 
 export const Route = createFileRoute("/api/upload")({
   server: {
@@ -24,20 +27,43 @@ export const Route = createFileRoute("/api/upload")({
             });
           }
 
-          // Try Cloudinary first, fall back to base64 data URI
+          // Generate unique filename
+          const timestamp = Date.now();
+          const randomStr = Math.random().toString(36).substring(2, 8);
+          const extension = file.name.split('.').pop() || 'jpg';
+          const filename = `${timestamp}-${randomStr}.${extension}`;
+
+          // Save to local public/assets folder
+          const assetsDir = join(process.cwd(), "public", "assets");
+          if (!existsSync(assetsDir)) {
+            await mkdir(assetsDir, { recursive: true });
+          }
+          const localPath = join(assetsDir, filename);
+          const bytes = await file.arrayBuffer();
+          const buffer = Buffer.from(bytes);
+          await writeFile(localPath, buffer);
+          const localUrl = `/assets/${filename}`;
+
+          // Try Cloudinary first, fall back to local path
           try {
             const result = await uploadImage(file, folder);
-            return new Response(JSON.stringify({ success: true, url: result.url, public_id: result.public_id }), {
+            return new Response(JSON.stringify({ 
+              success: true, 
+              url: result.url, 
+              public_id: result.public_id,
+              local_url: localUrl 
+            }), {
               status: 200,
               headers: { "Content-Type": "application/json" },
             });
           } catch {
-            // Cloudinary not configured — store as base64 data URI
-            const bytes = await file.arrayBuffer();
-            const base64 = Buffer.from(bytes).toString("base64");
-            const mimeType = file.type || "image/jpeg";
-            const dataUri = `data:${mimeType};base64,${base64}`;
-            return new Response(JSON.stringify({ success: true, url: dataUri, public_id: "" }), {
+            // Cloudinary not configured — use local path
+            return new Response(JSON.stringify({ 
+              success: true, 
+              url: localUrl, 
+              public_id: "",
+              local_url: localUrl 
+            }), {
               status: 200,
               headers: { "Content-Type": "application/json" },
             });
