@@ -102,8 +102,8 @@ export function Navbar({ transparent = true }: { transparent?: boolean }) {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-        <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex flex-1 items-center outline-none">
-          <img src={navLogo} alt="POM'S Penthouse" className="h-32 w-auto outline-none" style={{ clipPath: "inset(2.5% 2.5% 2.5% 2.5%)" }} />
+        <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex flex-1 items-center">
+          <img src={navLogo} alt="POM'S Penthouse" className="h-14 w-auto" />
         </Link>
 
         <nav className={`hidden xl:flex flex-1 items-center justify-center gap-5 text-[13px] ${solid ? "text-luxury-black/80" : "text-white/85"}`}>
