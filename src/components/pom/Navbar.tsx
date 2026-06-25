@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Phone, ArrowRight, Moon, Sun } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useSettings } from "@/lib/hooks";
-import logoUrl from "../../favicon/logo.png?url";
+import logoUrl from "../../favicon/logo.svg?url";
 
 function openBooking() {
   window.dispatchEvent(new CustomEvent("poms:open-booking"));

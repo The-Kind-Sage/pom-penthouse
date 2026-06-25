@@ -4,7 +4,7 @@ import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/toast";
 
 import appCss from "../styles.css?url";
-import logoUrl from "../favicon/logo.png?url";
+import logoUrl from "../favicon/logo.svg?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {

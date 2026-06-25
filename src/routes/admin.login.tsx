@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { adminStore } from "@/lib/admin-store";
-import logoUrl from "../favicon/logo.png?url";
+import logoUrl from "../favicon/logo.svg?url";
 
 export const Route = createFileRoute("/admin/login")({
   component: LoginPage,
