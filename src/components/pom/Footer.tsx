@@ -34,7 +34,7 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-4">
         <div>
           <a href="/" className="block outline-none">
-            <img src={navLogo} alt="POM'S Penthouse" className="h-24 w-auto outline-none" style={{ clipPath: "inset(2.5% 2.5% 2.5% 2.5%)" }} />
+            <img src={navLogo} alt="POM'S Penthouse" className="h-48 w-auto outline-none" style={{ clipPath: "inset(2.5% 2.5% 2.5% 2.5%)" }} />
           </a>
           <p className="mt-5 text-sm leading-relaxed">{desc}</p>
           <div className="mt-6 flex gap-3">
