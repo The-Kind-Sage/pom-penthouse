@@ -93,7 +93,7 @@ function RoomsPage() {
             <div>
               <label className="text-sm font-medium mb-1 block">Name *</label>
               <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="Single Room — Single Bed"
+                placeholder="e.g. Deluxe Suite"
                 className="w-full rounded-xl border px-4 py-3 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm" />
             </div>
             <div className="grid grid-cols-2 gap-4">

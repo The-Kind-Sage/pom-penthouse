@@ -28,7 +28,6 @@ const APARTMENTS = [
 ];
 
 const ROOMS = [
-  { name: "Single Room — Single Bed", priceUsd: 30, img: aptExec, gallery: [aptExec, galBedroom, galBath] },
   { name: "Single Room — Double Bed", priceUsd: 40, img: aptStudio, gallery: [aptStudio, galBedroom, galBath] },
   { name: "Single Room — Twin Bed", priceUsd: 45, img: aptFamily, gallery: [aptFamily, galBedroom, galBath] },
 ];

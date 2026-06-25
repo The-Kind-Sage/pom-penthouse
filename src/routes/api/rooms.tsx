@@ -3,8 +3,8 @@ import { getDb } from "@/lib/mongodb";
 import { json } from "@/lib/auth";
 
 const ROOM_TYPES: Record<number, string[]> = {
-  1: ["Studio Apartment", "Single Room — Single Bed", "Single Room — Double Bed", "Single Room — Twin Bed"],
-  2: ["Studio Apartment", "1 BHK", "Single Room — Single Bed", "Single Room — Double Bed"],
+  1: ["Studio Apartment", "Single Room — Double Bed", "Single Room — Double Bed", "Single Room — Twin Bed"],
+  2: ["Studio Apartment", "1 BHK", "Single Room — Double Bed", "Single Room — Double Bed"],
   3: ["1 BHK", "1 BHK", "2 BHK", "Single Room — Twin Bed"],
   4: ["1 BHK", "2 BHK", "2 BHK", "Studio Apartment"],
   5: ["2 BHK", "2 BHK", "3 BHK", "Studio Apartment"],

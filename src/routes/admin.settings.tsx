@@ -903,7 +903,7 @@ function RoomsListTab() {
               <button onClick={() => removeItem(i)} className="p-1 text-red-500 hover:text-red-600"><Trash2 className="size-4" /></button>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <InputRow label="Name" value={item.name || ""} onChange={(v) => updateItem(i, "name", v)} placeholder="Single Room — Single Bed" />
+              <InputRow label="Name" value={item.name || ""} onChange={(v) => updateItem(i, "name", v)} placeholder="e.g. Deluxe Suite" />
               <InputRow label="Price" value={item.price || ""} onChange={(v) => updateItem(i, "price", v)} placeholder="$30" />
               <div>
                 <label className="text-sm font-medium mb-1 block">Size</label>

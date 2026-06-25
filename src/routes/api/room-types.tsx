@@ -3,7 +3,6 @@ import { getDb } from "@/lib/mongodb";
 import { json } from "@/lib/auth";
 
 const DEFAULT_ROOM_TYPES = [
-  { id: "single-single", name: "Single Room — Single Bed", price: 30, max_guests: 1, description: "Cozy single room with one bed" },
   { id: "single-double", name: "Single Room — Double Bed", price: 40, max_guests: 2, description: "Single room with double bed" },
   { id: "single-twin", name: "Single Room — Twin Bed", price: 45, max_guests: 2, description: "Single room with two separate beds" },
 ];
