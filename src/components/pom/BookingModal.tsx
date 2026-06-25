@@ -55,6 +55,8 @@ export function BookingModal() {
   });
   const [checkinDate, setCheckinDate] = useState<Date>();
   const [checkoutDate, setCheckoutDate] = useState<Date>();
+  const [checkinOpen, setCheckinOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [rate, setRate] = useState(USD_TO_NPR_FALLBACK);
 
@@ -97,11 +99,13 @@ export function BookingModal() {
   function onSelectCheckin(d: Date | undefined) {
     setCheckinDate(d);
     setForm((f) => ({ ...f, checkin: d ? format(d, "yyyy-MM-dd") : "" }));
+    setCheckinOpen(false);
   }
 
   function onSelectCheckout(d: Date | undefined) {
     setCheckoutDate(d);
     setForm((f) => ({ ...f, checkout: d ? format(d, "yyyy-MM-dd") : "" }));
+    setCheckoutOpen(false);
   }
 
   useEffect(() => {
@@ -139,6 +143,8 @@ export function BookingModal() {
       setActiveImg(0);
       setCheckinDate(undefined);
       setCheckoutDate(undefined);
+      setCheckinOpen(false);
+      setCheckoutOpen(false);
     } catch (err: any) {
       alert(err?.message || "Something went wrong. Please try again.");
     } finally {
@@ -278,7 +284,7 @@ export function BookingModal() {
               {/* Dates row */}
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Field label="Check-in *">
-                  <Popover>
+                  <Popover open={checkinOpen} onOpenChange={setCheckinOpen}>
                     <PopoverTrigger asChild>
                       <Button variant="outline" className={cn("h-10 w-full justify-start text-left font-normal", !checkinDate && "text-muted-foreground")}>
                         <CalendarIcon className="mr-2 size-4" />
@@ -291,7 +297,7 @@ export function BookingModal() {
                   </Popover>
                 </Field>
                 <Field label="Check-out *">
-                  <Popover>
+                  <Popover open={checkoutOpen} onOpenChange={setCheckoutOpen}>
                     <PopoverTrigger asChild>
                       <Button variant="outline" className={cn("h-10 w-full justify-start text-left font-normal", !checkoutDate && "text-muted-foreground")}>
                         <CalendarIcon className="mr-2 size-4" />
