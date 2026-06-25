@@ -87,9 +87,17 @@ export function BookingModal() {
   const totalNpr = totalUsd * rate;
 
   useEffect(() => {
-    if (!open) { window.__lenis?.start(); return; }
+    if (!open) {
+      document.body.style.overflow = "";
+      window.__lenis?.start();
+      return;
+    }
+    document.body.style.overflow = "hidden";
     window.__lenis?.stop();
-    return () => { window.__lenis?.start(); };
+    return () => {
+      document.body.style.overflow = "";
+      window.__lenis?.start();
+    };
   }, [open]);
 
   function update<K extends keyof typeof form>(k: K, v: string) {
