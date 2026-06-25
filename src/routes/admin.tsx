@@ -100,7 +100,7 @@ function AdminLayout() {
       >
         <div className="flex items-center justify-between h-16 px-4 border-b shrink-0">
           {sidebarOpen && (
-            <Link to="/" className="flex items-center gap-2 outline-none"><img src={logoUrl} alt="Pom" className="h-10 w-auto outline-none" style={{ clipPath: "inset(2.5% 2.5% 2.5% 2.5%)" }} /></Link>
+            <Link to="/" className="flex items-center gap-2"><img src={logoUrl} alt="Pom" className="h-10 w-auto" style={{ clipPath: "inset(8% 8% 8% 8%)" }} /></Link>
           )}
           <button onClick={() => { adminStore.toggleSidebar(); setMobileOpen(false); }}
             className="p-1.5 rounded-lg hover:bg-muted transition">
