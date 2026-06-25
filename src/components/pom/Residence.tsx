@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Maximize, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useSettings } from "@/lib/hooks";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
@@ -55,9 +55,6 @@ export function Residence() {
                 <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/75 via-luxury-black/10 to-transparent" />
                 <div className="absolute inset-x-4 bottom-4 text-white">
                   <h3 className="font-display text-xl font-medium">{a.name}</h3>
-                  <div className="mt-1 flex items-center gap-3 text-[11px] text-white/85">
-                    <span className="inline-flex items-center gap-1"><Maximize className="size-3 text-gold" />{a.area}</span>
-                  </div>
                 </div>
               </div>
               <div className="flex flex-1 flex-col p-6">
