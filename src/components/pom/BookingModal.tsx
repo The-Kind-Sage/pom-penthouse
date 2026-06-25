@@ -87,15 +87,37 @@ export function BookingModal() {
   const totalNpr = totalUsd * rate;
 
   useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
     if (!open) {
-      document.body.style.overflow = "";
+      html.style.overflow = "";
+      html.style.height = "";
+      body.style.overflow = "";
+      body.style.height = "";
+      body.style.position = "";
+      body.style.width = "";
+      body.style.top = "";
       window.__lenis?.start();
       return;
     }
-    document.body.style.overflow = "hidden";
+    const scrollY = window.scrollY;
     window.__lenis?.stop();
+    html.style.overflow = "hidden";
+    html.style.height = "100%";
+    body.style.overflow = "hidden";
+    body.style.height = "100%";
+    body.style.position = "fixed";
+    body.style.width = "100%";
+    body.style.top = `-${scrollY}px`;
     return () => {
-      document.body.style.overflow = "";
+      html.style.overflow = "";
+      html.style.height = "";
+      body.style.overflow = "";
+      body.style.height = "";
+      body.style.position = "";
+      body.style.width = "";
+      body.style.top = "";
+      window.scrollTo(0, scrollY);
       window.__lenis?.start();
     };
   }, [open]);
@@ -165,7 +187,7 @@ export function BookingModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="flex max-h-[90vh] max-w-5xl flex-col border-gold/30 p-0 overflow-hidden">
+      <DialogContent className="flex max-h-[90vh] max-w-5xl flex-col border-gold/30 p-0 overflow-hidden" onWheel={(e) => e.stopPropagation()}>
         {/* Close button */}
         <button onClick={() => setOpen(false)} className="absolute right-4 top-4 z-10 rounded-full bg-black/40 p-1.5 text-white/70 backdrop-blur-sm transition hover:bg-black/60 hover:text-white">
           <X className="size-4" />
