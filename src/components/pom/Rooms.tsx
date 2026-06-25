@@ -12,10 +12,13 @@ function openBooking(room?: string, image?: string) {
 export function Rooms() {
   const { data: settings } = useSettings();
   const roomsData = settings?.rooms_settings || {};
-  const rooms = roomsData.items || [
+  const rooms = (roomsData.items || [
     { name: "Single Room — Double Bed", images: [], price: "$40", size: "22 m²", beds: "1 Double Bed", view: "Garden View", features: ["Double Bed", "Desk", "WiFi", "Smart TV"] },
     { name: "Single Room — Twin Bed", images: [], price: "$45", size: "24 m²", beds: "2 Single Beds", view: "Mountain View", features: ["2 Singles", "Mini Fridge", "WiFi", "AC"] },
-  ];
+  ]).map((r: any) => ({
+    ...r,
+    name: r.name === "Single Room — Single Bed" ? "Single Room — Double Bed" : r.name,
+  }));
 
   return (
     <section id="rooms" className="bg-background py-24 sm:py-32">
