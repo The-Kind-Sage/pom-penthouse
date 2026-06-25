@@ -32,7 +32,7 @@ function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <form onSubmit={handleLogin} className="w-full max-w-sm bg-background border rounded-2xl p-8 space-y-6 shadow-lg">
           <div className="text-center">
-            <img src={logoUrl} alt="Pom" className="h-20 w-auto mx-auto mb-4" />
+            <img src={logoUrl} alt="Pom" className="h-20 w-auto mx-auto mb-4 outline-none" />
             <p className="text-sm text-foreground/60">Sign in to your dashboard</p>
           </div>
         {error && (

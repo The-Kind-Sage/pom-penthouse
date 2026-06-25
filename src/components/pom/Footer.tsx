@@ -33,8 +33,8 @@ export function Footer() {
     <footer className="bg-luxury-black pt-20 pb-10 text-white/70">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-4">
         <div>
-          <a href="/" className="block">
-            <img src={navLogo} alt="POM'S Penthouse" className="h-24 w-auto" />
+          <a href="/" className="block outline-none">
+            <img src={navLogo} alt="POM'S Penthouse" className="h-24 w-auto outline-none" />
           </a>
           <p className="mt-5 text-sm leading-relaxed">{desc}</p>
           <div className="mt-6 flex gap-3">
