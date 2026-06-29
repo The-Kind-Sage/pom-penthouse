@@ -36,6 +36,7 @@ export const Route = createFileRoute("/api/auth/login")({
 
           return json({ token, user: profile });
         } catch (err: any) {
+          console.error("[auth/login]", err?.message || err);
           return json({ error: err?.message || "Login failed" }, 500);
         }
       },
