@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useSettings } from "@/lib/hooks";
-import dipImg from "@/assets/dip.webp";
+import homeImg from "@/assets/home.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
@@ -20,7 +20,7 @@ export function WhyChoose() {
     { title: "Mountain Views", desc: "Wake up to the Annapurnas from your window." },
     { title: "Lakeside Location", desc: "Steps from Phewa Lake and Lakeside Marg." },
   ];
-  const imgSrc = wc.image || dipImg;
+  const imgSrc = wc.image || homeImg;
 
   return (
     <section className="bg-muted py-24 sm:py-32">
