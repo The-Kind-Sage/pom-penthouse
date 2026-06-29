@@ -17,7 +17,7 @@ export function Hero() {
   const slides = heroSlides.length > 0
     ? heroSlides.map((s: any, idx: number) => ({ id: idx, src: s.src, alt: s.alt || `Slide ${idx + 1}` }))
     : [
-        { id: 0, src: "/images/gal-lake.jpg", alt: "Phewa Lake view" },
+        { id: 0, src: "/images/pokhara_view.jpg", alt: "Pokhara view" },
         { id: 1, src: "/images/1.jpeg", alt: "Pom PentHouse living room" },
         { id: 2, src: "/images/2.jpeg", alt: "Pom PentHouse interior" },
       ];
