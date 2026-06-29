@@ -30,7 +30,7 @@ export function Location() {
     <section id="location" className="relative overflow-hidden bg-luxury-black">
       <div className="absolute inset-0">
         <img
-          src="/images/gal-lake.jpg"
+          src="/images/life-balcony.jpg"
           alt=""
           className="size-full object-cover opacity-30"
         />
