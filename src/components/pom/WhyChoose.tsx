@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useSettings } from "@/lib/hooks";
+import homeImg from "@/assets/home.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
@@ -19,23 +20,11 @@ export function WhyChoose() {
     { title: "Mountain Views", desc: "Wake up to the Annapurnas from your window." },
     { title: "Lakeside Location", desc: "Steps from Phewa Lake and Lakeside Marg." },
   ];
-  const imgSrc = wc.image || "";
+  const imgSrc = wc.image || homeImg;
 
   return (
     <section className="bg-muted py-24 sm:py-32">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-2 lg:items-center lg:gap-20">
-        {imgSrc && (
-          <motion.div
-            initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.9, ease: [0.22,1,0.36,1] }}
-            className="relative"
-          >
-            <div className="relative overflow-hidden">
-              <img src={imgSrc} alt="" loading="lazy" className="aspect-[4/5] w-full object-cover" />
-            </div>
-          </motion.div>
-        )}
-
         <div>
           <div className="mb-4 flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-gold">
             <span className="h-px w-8 bg-gold" />Why POM&apos;S Penthouse
@@ -60,6 +49,16 @@ export function WhyChoose() {
             ))}
           </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.9, ease: [0.22,1,0.36,1] }}
+          className="relative"
+        >
+          <div className="relative overflow-hidden">
+            <img src={imgSrc} alt="POM'S Penthouse" loading="lazy" className="aspect-[4/5] w-full object-cover" />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
