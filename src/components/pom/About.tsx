@@ -2,8 +2,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useSettings } from "@/lib/hooks";
 import aboutBg from "@/assets/8.jpeg";
 import { useRef } from "react";
+import { fadeUp } from "@/lib/animations";
 
-const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.15 } } };
 
 export function About() {

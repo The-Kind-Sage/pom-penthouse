@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Phone, ArrowRight, Moon, Sun } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useSettings } from "@/lib/hooks";
+import { motion, AnimatePresence } from "framer-motion";
 import logoUrl from "../../favicon/logo.png?url";
 
 function openBooking() {
@@ -24,31 +25,39 @@ function MobileMenu({ scrolled, links }: { scrolled: boolean; links: { label: st
         }`}
         aria-label="Toggle menu"
       >
-        <span className={`block h-px w-5 bg-current transition-transform ${open ? "translate-y-[3px] rotate-45" : ""}`} />
-        <span className={`block h-px w-5 bg-current transition-opacity ${open ? "opacity-0" : ""}`} />
-        <span className={`block h-px w-5 bg-current transition-transform ${open ? "-translate-y-[3px] -rotate-45" : ""}`} />
+        <span className={`block h-px w-5 bg-current transition-transform duration-300 ${open ? "translate-y-[3px] rotate-45" : ""}`} />
+        <span className={`block h-px w-5 bg-current transition-opacity duration-300 ${open ? "opacity-0" : ""}`} />
+        <span className={`block h-px w-5 bg-current transition-transform duration-300 ${open ? "-translate-y-[3px] -rotate-45" : ""}`} />
       </button>
-      {open && (
-        <div className="absolute right-4 top-full mt-2 w-52 overflow-hidden rounded-xl border border-border bg-background/95 p-2 shadow-xl backdrop-blur-xl">
-          <nav className="flex flex-col">
-            {links.map(({ label, href }) => (
-              <Link
-                key={href}
-                to={href}
-                onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                className="rounded-lg px-3 py-2.5 text-sm text-luxury-black/80 transition hover:bg-muted hover:text-gold"
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
-          <div className="mt-2 border-t border-border pt-2">
-            <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-luxury-black/80 transition hover:bg-muted hover:text-gold">
-              <Phone className="size-4" /> {phone}
-            </a>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute right-4 top-full mt-2 w-52 overflow-hidden rounded-xl border border-border bg-background/95 p-2 shadow-xl backdrop-blur-xl"
+          >
+            <nav className="flex flex-col">
+              {links.map(({ label, href }) => (
+                <Link
+                  key={href}
+                  to={href}
+                  onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                  className="rounded-lg px-3 py-2.5 text-sm text-luxury-black/80 transition hover:bg-muted hover:text-gold"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+            <div className="mt-2 border-t border-border pt-2">
+              <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-luxury-black/80 transition hover:bg-muted hover:text-gold">
+                <Phone className="size-4" /> {phone}
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

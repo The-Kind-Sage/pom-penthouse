@@ -5,16 +5,17 @@ import { ui, useUI } from "@/lib/ui-store";
 import { IMAGES } from "@/lib/images";
 
 export function Lightbox() {
-  const { lightboxIndex } = useUI();
+  const { lightboxIndex, lightboxImages } = useUI();
   const open = lightboxIndex !== null;
   const idx = lightboxIndex ?? 0;
+  const images = lightboxImages.length > 0 ? lightboxImages : IMAGES;
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") ui.closeLightbox();
-      if (e.key === "ArrowRight") ui.setLightbox((idx + 1) % IMAGES.length);
-      if (e.key === "ArrowLeft") ui.setLightbox((idx - 1 + IMAGES.length) % IMAGES.length);
+      if (e.key === "ArrowRight") ui.setLightbox((idx + 1) % images.length);
+      if (e.key === "ArrowLeft") ui.setLightbox((idx - 1 + images.length) % images.length);
     };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
@@ -22,7 +23,7 @@ export function Lightbox() {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [open, idx]);
+  }, [open, idx, images.length]);
 
   return (
     <AnimatePresence>
@@ -41,13 +42,13 @@ export function Lightbox() {
             <X className="size-8" />
           </button>
           <button
-            onClick={(e) => { e.stopPropagation(); ui.setLightbox((idx - 1 + IMAGES.length) % IMAGES.length); }}
+            onClick={(e) => { e.stopPropagation(); ui.setLightbox((idx - 1 + images.length) % images.length); }}
             className="absolute left-4 z-10 text-white/30 transition hover:text-white"
           >
             <ChevronLeft className="size-10" />
           </button>
           <button
-            onClick={(e) => { e.stopPropagation(); ui.setLightbox((idx + 1) % IMAGES.length); }}
+            onClick={(e) => { e.stopPropagation(); ui.setLightbox((idx + 1) % images.length); }}
             className="absolute right-4 z-10 text-white/30 transition hover:text-white"
           >
             <ChevronRight className="size-10" />
@@ -63,12 +64,12 @@ export function Lightbox() {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={IMAGES[idx].src}
-              alt={IMAGES[idx].alt}
+              src={images[idx].src}
+              alt={images[idx].alt}
               className="max-h-[80vh] max-w-full rounded-sm object-contain shadow-2xl"
             />
-            <span className="mt-4 text-sm text-white/50">{IMAGES[idx].alt}</span>
-            <span className="mt-1 text-xs text-white/25">{idx + 1} / {IMAGES.length}</span>
+            <span className="mt-4 text-sm text-white/50">{images[idx].alt}</span>
+            <span className="mt-1 text-xs text-white/25">{idx + 1} / {images.length}</span>
           </motion.div>
         </motion.div>
       )}

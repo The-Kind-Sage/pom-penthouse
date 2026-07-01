@@ -2,14 +2,27 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useSettings } from "@/lib/hooks";
 import { useRef } from "react";
+import { fadeUp, stagger } from "@/lib/animations";
 
-const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
+const fallbackItems = [
+  {
+    tag: "The Space",
+    title: "Designed for Modern Living",
+    body: "Every detail has been thoughtfully curated to create a space that feels like home from the moment you step inside. From the custom Italian furniture to the panoramic windows framing the lakeside, this is luxury redefined.",
+    image: "/images/lifestyle-1.jpg"
+  },
+  {
+    tag: "The Experience",
+    title: "Where Comfort Meets Elegance",
+    body: "Wake up to breathtaking views of Phewa Lake and the Annapurna range. Our residences blend contemporary design with warm Nepali hospitality to create an unforgettable stay.",
+    image: "/images/lifestyle-2.jpg"
+  }
+];
 
 export function Lifestyle() {
   const { data: settings } = useSettings();
   const life = settings?.lifestyle_settings || {};
-  const items = life.items || [];
+  const items = life.items?.length > 0 ? life.items : fallbackItems;
 
   if (items.length === 0) return null;
 

@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { Send, CheckCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 export function ContactForm() {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -34,36 +38,36 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div>
-        <label htmlFor="name" className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Name</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="name" className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Name</Label>
+        <Input
           id="name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-gold"
+          className="border-border focus:border-gold focus:ring-gold/20"
           placeholder="Your name"
         />
       </div>
-      <div>
-        <label htmlFor="email" className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Email</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Email</Label>
+        <Input
           id="email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-          className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-gold"
+          className="border-border focus:border-gold focus:ring-gold/20"
           placeholder="your@email.com"
         />
       </div>
-      <div>
-        <label htmlFor="message" className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Message</label>
-        <textarea
+      <div className="space-y-2">
+        <Label htmlFor="message" className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Message</Label>
+        <Textarea
           id="message" required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
-          className="w-full resize-none rounded-lg border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-gold"
+          className="border-border focus:border-gold focus:ring-gold/20 resize-none"
           placeholder="How can we help you?"
         />
       </div>
-      <button
+      <Button
         type="submit" disabled={state === "sending"}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.25em] text-black transition hover:brightness-110 disabled:opacity-60"
+        className="w-full rounded-full bg-gold px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.25em] text-black hover:bg-gold/90 hover:brightness-110"
       >
         {state === "sending" ? "Sending..." : <>Send Message <Send className="size-3.5" /></>}
-      </button>
+      </Button>
       {state === "error" && <p className="text-center text-sm text-red-500">Something went wrong. Try again.</p>}
     </form>
   );

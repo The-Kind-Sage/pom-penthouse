@@ -1,12 +1,15 @@
 // Tiny module-level store for UI overlays (booking modal, lightbox)
 import { useSyncExternalStore } from "react";
 
+type LightboxImage = { src: string; alt: string };
+
 type UIState = {
   bookingOpen: boolean;
   lightboxIndex: number | null;
+  lightboxImages: LightboxImage[];
 };
 
-let state: UIState = { bookingOpen: false, lightboxIndex: null };
+let state: UIState = { bookingOpen: false, lightboxIndex: null, lightboxImages: [] };
 const listeners = new Set<() => void>();
 function emit() {
   listeners.forEach((l) => l());
@@ -31,8 +34,8 @@ export const ui = {
     state = { ...state, bookingOpen: false };
     emit();
   },
-  openLightbox(i: number) {
-    state = { ...state, lightboxIndex: i };
+  openLightbox(i: number, images?: LightboxImage[]) {
+    state = { ...state, lightboxIndex: i, lightboxImages: images || state.lightboxImages };
     emit();
   },
   closeLightbox() {

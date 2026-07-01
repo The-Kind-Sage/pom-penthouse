@@ -12,6 +12,27 @@ export function FloatingBook() {
   );
 }
 
+import { useState, useEffect } from "react";
+import { ArrowUp } from "lucide-react";
+
 export function BackToTop() {
-  return null;
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      className="fixed bottom-4 left-4 z-40 grid size-11 place-items-center rounded-full bg-background/80 border border-border text-luxury-black shadow-lg backdrop-blur-sm transition hover:scale-105 hover:border-gold/40 sm:bottom-6 sm:left-6 sm:size-14"
+      aria-label="Back to top"
+    >
+      <ArrowUp className="size-5" />
+    </button>
+  );
 }

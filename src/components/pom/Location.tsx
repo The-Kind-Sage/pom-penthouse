@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
 import { MapPin, Navigation, Plane } from "lucide-react";
 import { useSettings } from "@/lib/hooks";
-
-const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } } };
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
+import { fadeUp, stagger } from "@/lib/animations";
 
 const icons: Record<string, typeof MapPin> = {
   "Phewa Lake": Navigation,
