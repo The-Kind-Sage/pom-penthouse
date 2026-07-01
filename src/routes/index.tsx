@@ -13,7 +13,6 @@ import { LongTerm } from "@/components/pom/LongTerm";
 import { About } from "@/components/pom/About";
 import { Offer } from "@/components/pom/Offer";
 import { FAQ } from "@/components/pom/FAQ";
-import { Property360 } from "@/components/three/Property360";
 import { Statistics } from "@/components/pom/Statistics";
 import { FAQJsonLd, BreadcrumbJsonLd } from "@/components/pom/JsonLd";
 
@@ -60,7 +59,6 @@ function Index() {
     <PageLayout>
       <Hero />
       <Residence />
-      <Property360 />
       <Rooms />
       <WhyChoose />
       <Amenities />

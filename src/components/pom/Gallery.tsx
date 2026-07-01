@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useSettings } from "@/lib/hooks";
 import { IMAGES } from "@/lib/images";
 import { ui } from "@/lib/ui-store";
 import { blurIn, staggerFast } from "@/lib/animations";
+import { useRef } from "react";
 
 const SPANS = ["", "", "row-span-2", "", "col-span-2", ""];
 
@@ -17,6 +18,64 @@ function useGalleryImages() {
     },
     staleTime: 60_000,
   });
+}
+
+function GalleryImage({ g, index, onClick }: { g: { src: string; alt: string; span: string }; index: number; onClick: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useSpring(useMotionValue(0), { stiffness: 100, damping: 20 });
+  const rotateY = useSpring(useMotionValue(0), { stiffness: 100, damping: 20 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(x);
+    mouseY.set(y);
+    rotateX.set(-y * 5);
+    rotateY.set(x * 5);
+  };
+
+  const handleMouseLeave = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+  };
+
+  return (
+    <motion.figure
+      ref={ref}
+      variants={blurIn}
+      style={{ rotateX, rotateY, transformPerspective: 1000 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`group relative cursor-pointer overflow-hidden rounded-lg bg-muted ${g.span}`}
+      onClick={onClick}
+    >
+      <img
+        src={g.src}
+        alt={g.alt}
+        loading="lazy"
+        className="size-full object-cover transition-all duration-700 ease-out group-hover:scale-110"
+      />
+
+      {/* Golden glow on hover */}
+      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-t from-gold/20 via-transparent to-gold/10" />
+
+      {/* Gradient overlay */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-luxury-black/70 via-luxury-black/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      {/* Border glow */}
+      <div className="pointer-events-none absolute inset-0 opacity-0 shadow-[inset_0_0_0_1px_rgba(201,168,108,0.4)] transition-opacity duration-500 group-hover:opacity-100" />
+
+      {/* Caption */}
+      <figcaption className="pointer-events-none absolute bottom-0 left-0 right-0 translate-y-6 p-4 text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+        <span className="text-[10px] uppercase tracking-[0.3em] text-gold">View</span>
+        <div className="font-display text-lg">{g.alt}</div>
+      </figcaption>
+    </motion.figure>
+  );
 }
 
 export function Gallery({ preview: isPreview }: { preview?: boolean }) {
@@ -64,29 +123,15 @@ export function Gallery({ preview: isPreview }: { preview?: boolean }) {
         <motion.div
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={staggerFast}
           className="mt-16 grid auto-rows-[180px] grid-cols-2 gap-3 sm:auto-rows-[220px] sm:grid-cols-3 lg:grid-cols-4 lg:gap-4"
+          style={{ perspective: 1000 }}
         >
           {displayed.map((g, i) => (
-            <motion.figure
-               key={`${g.src}-${i}`} variants={blurIn}
-              className={`group relative cursor-pointer overflow-hidden rounded-sm bg-muted ${isPreview && i >= 12 ? "col-span-2" : g.span}`}
-              onClick={() => open(i)}
-            >
-              <img
-                src={g.src} alt={g.alt} loading="lazy"
-                className="size-full object-cover transition-all duration-1000 ease-out group-hover:scale-110"
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-luxury-black/70 via-luxury-black/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-              <div className="pointer-events-none absolute inset-0 opacity-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)] transition-opacity duration-500 group-hover:opacity-100" />
-              <figcaption className="pointer-events-none absolute bottom-0 left-0 right-0 translate-y-6 p-4 text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                <span className="text-[10px] uppercase tracking-[0.3em] text-gold">View</span>
-                <div className="font-display text-lg">{g.alt}</div>
-              </figcaption>
-            </motion.figure>
+            <GalleryImage key={`${g.src}-${i}`} g={g} index={i} onClick={() => open(i)} />
           ))}
           {isPreview && (
             <a
               href="/gallery"
-              className="group relative flex items-center justify-center overflow-hidden rounded-sm bg-muted col-span-2"
+              className="group relative flex items-center justify-center overflow-hidden rounded-lg bg-muted col-span-2"
             >
               <div className="flex flex-col items-center gap-3 text-luxury-black transition group-hover:text-gold">
                 <svg className="size-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -96,7 +141,7 @@ export function Gallery({ preview: isPreview }: { preview?: boolean }) {
                 </svg>
                 <span className="text-xs font-semibold uppercase tracking-[0.25em]">Explore More</span>
               </div>
-              <div className="pointer-events-none absolute inset-0 opacity-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.15)] transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="pointer-events-none absolute inset-0 opacity-0 shadow-[inset_0_0_0_1px_rgba(201,168,108,0.3)] transition-opacity duration-500 group-hover:opacity-100" />
             </a>
           )}
         </motion.div>
