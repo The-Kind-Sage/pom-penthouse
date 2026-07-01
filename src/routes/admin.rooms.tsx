@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useRoomTypes, useCreateRoomType, useUpdateRoomType, useDeleteRoomType } from "@/lib/hooks";
+import { useRoomTypes, useCreateRoomType, useDeleteRoomType } from "@/lib/hooks";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, X, BedDouble, Copy } from "lucide-react";
+import { Plus, Trash2, X, BedDouble, Copy } from "lucide-react";
 
 export const Route = createFileRoute("/admin/rooms")({
   component: RoomsPage,
@@ -20,11 +20,9 @@ const EMPTY_FORM: RoomForm = { name: "", price: 0, max_guests: 1, description: "
 function RoomsPage() {
   const { data: roomTypes, isLoading } = useRoomTypes();
   const createType = useCreateRoomType();
-  const updateType = useUpdateRoomType();
   const deleteType = useDeleteRoomType();
 
   const [showForm, setShowForm] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<RoomForm>(EMPTY_FORM);
   const [bulkMode, setBulkMode] = useState(false);
   const [form2, setForm2] = useState<RoomForm>(EMPTY_FORM);
@@ -32,7 +30,6 @@ function RoomsPage() {
   const resetForm = () => {
     setForm(EMPTY_FORM);
     setForm2(EMPTY_FORM);
-    setEditingId(null);
     setShowForm(false);
     setBulkMode(false);
   };
@@ -40,7 +37,6 @@ function RoomsPage() {
   const openCreate = () => {
     setForm(EMPTY_FORM);
     setForm2(EMPTY_FORM);
-    setEditingId(null);
     setBulkMode(false);
     setShowForm(true);
   };
@@ -48,28 +44,15 @@ function RoomsPage() {
   const openBulkCreate = () => {
     setForm(EMPTY_FORM);
     setForm2(EMPTY_FORM);
-    setEditingId(null);
     setBulkMode(true);
-    setShowForm(true);
-  };
-
-  const openEdit = (room: any) => {
-    setForm({ name: room.name, price: room.price, max_guests: room.max_guests, description: room.description || "" });
-    setEditingId(room.id);
-    setBulkMode(false);
     setShowForm(true);
   };
 
   const handleSave = async () => {
     if (!form.name.trim()) return toast.error("Name is required");
     try {
-      if (editingId) {
-        await updateType.mutateAsync({ id: editingId, ...form });
-        toast.success("Room type updated");
-      } else {
-        await createType.mutateAsync(form);
-        toast.success("Room type added");
-      }
+      await createType.mutateAsync(form);
+      toast.success("Room type added");
       resetForm();
     } catch {
       toast.error("Failed to save");
@@ -151,9 +134,7 @@ function RoomsPage() {
       {showForm && (
         <div className="bg-background border rounded-xl p-6 space-y-4 max-w-2xl">
           <div className="flex items-center justify-between">
-            <h3 className="font-medium">
-              {editingId ? "Edit Room Type" : bulkMode ? "Add Two Room Types" : "New Room Type"}
-            </h3>
+            <h3 className="font-medium">{bulkMode ? "Add Two Room Types" : "New Room Type"}</h3>
             <button onClick={resetForm} className="p-1 hover:bg-muted rounded-lg"><X className="size-4" /></button>
           </div>
 
@@ -169,9 +150,9 @@ function RoomsPage() {
           <div className="flex gap-3">
             <button onClick={resetForm} className="px-4 py-2 text-sm border rounded-lg hover:bg-muted">Cancel</button>
             <button onClick={bulkMode ? handleBulkSave : handleSave}
-              disabled={createType.isPending || updateType.isPending}
+              disabled={createType.isPending}
               className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:opacity-90 disabled:opacity-50">
-              {editingId ? "Update" : bulkMode ? "Create Both" : "Create"}
+              {bulkMode ? "Create Both" : "Create"}
             </button>
           </div>
         </div>
@@ -204,9 +185,6 @@ function RoomsPage() {
                   <td className="px-4 py-3">{room.max_guests}</td>
                   <td className="px-4 py-3 text-muted-foreground">{room.description || "—"}</td>
                   <td className="px-4 py-3 text-right">
-                    <button onClick={() => openEdit(room)} className="p-1.5 hover:bg-muted rounded-lg mr-1">
-                      <Pencil className="size-4" />
-                    </button>
                     <button onClick={() => handleDelete(room.id, room.name)} className="p-1.5 hover:bg-red-500/10 text-red-500 rounded-lg">
                       <Trash2 className="size-4" />
                     </button>

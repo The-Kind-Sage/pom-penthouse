@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useApartmentTypes, useCreateApartmentType, useUpdateApartmentType, useDeleteApartmentType } from "@/lib/hooks";
+import { useApartmentTypes, useCreateApartmentType, useDeleteApartmentType } from "@/lib/hooks";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, X, Building, Copy } from "lucide-react";
+import { Plus, Trash2, X, Building, Copy } from "lucide-react";
 
 export const Route = createFileRoute("/admin/apartments")({
   component: ApartmentsPage,
@@ -21,11 +21,9 @@ const EMPTY_FORM: AptForm = { name: "", price: 0, max_guests: 2, bedrooms: 1, de
 function ApartmentsPage() {
   const { data: aptTypes, isLoading } = useApartmentTypes();
   const createType = useCreateApartmentType();
-  const updateType = useUpdateApartmentType();
   const deleteType = useDeleteApartmentType();
 
   const [showForm, setShowForm] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<AptForm>(EMPTY_FORM);
   const [bulkMode, setBulkMode] = useState(false);
   const [form2, setForm2] = useState<AptForm>(EMPTY_FORM);
@@ -33,7 +31,6 @@ function ApartmentsPage() {
   const resetForm = () => {
     setForm(EMPTY_FORM);
     setForm2(EMPTY_FORM);
-    setEditingId(null);
     setShowForm(false);
     setBulkMode(false);
   };
@@ -41,7 +38,6 @@ function ApartmentsPage() {
   const openCreate = () => {
     setForm(EMPTY_FORM);
     setForm2(EMPTY_FORM);
-    setEditingId(null);
     setBulkMode(false);
     setShowForm(true);
   };
@@ -49,28 +45,15 @@ function ApartmentsPage() {
   const openBulkCreate = () => {
     setForm(EMPTY_FORM);
     setForm2(EMPTY_FORM);
-    setEditingId(null);
     setBulkMode(true);
-    setShowForm(true);
-  };
-
-  const openEdit = (apt: any) => {
-    setForm({ name: apt.name, price: apt.price, max_guests: apt.max_guests, bedrooms: apt.bedrooms, description: apt.description || "" });
-    setEditingId(apt.id);
-    setBulkMode(false);
     setShowForm(true);
   };
 
   const handleSave = async () => {
     if (!form.name.trim()) return toast.error("Name is required");
     try {
-      if (editingId) {
-        await updateType.mutateAsync({ id: editingId, ...form });
-        toast.success("Apartment type updated");
-      } else {
-        await createType.mutateAsync(form);
-        toast.success("Apartment type added");
-      }
+      await createType.mutateAsync(form);
+      toast.success("Apartment type added");
       resetForm();
     } catch {
       toast.error("Failed to save");
@@ -157,9 +140,7 @@ function ApartmentsPage() {
       {showForm && (
         <div className="bg-background border rounded-xl p-6 space-y-4 max-w-2xl">
           <div className="flex items-center justify-between">
-            <h3 className="font-medium">
-              {editingId ? "Edit Apartment Type" : bulkMode ? "Add Two Apartment Types" : "New Apartment Type"}
-            </h3>
+            <h3 className="font-medium">{bulkMode ? "Add Two Apartment Types" : "New Apartment Type"}</h3>
             <button onClick={resetForm} className="p-1 hover:bg-muted rounded-lg"><X className="size-4" /></button>
           </div>
 
@@ -175,9 +156,9 @@ function ApartmentsPage() {
           <div className="flex gap-3">
             <button onClick={resetForm} className="px-4 py-2 text-sm border rounded-lg hover:bg-muted">Cancel</button>
             <button onClick={bulkMode ? handleBulkSave : handleSave}
-              disabled={createType.isPending || updateType.isPending}
+              disabled={createType.isPending}
               className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:opacity-90 disabled:opacity-50">
-              {editingId ? "Update" : bulkMode ? "Create Both" : "Create"}
+              {bulkMode ? "Create Both" : "Create"}
             </button>
           </div>
         </div>
@@ -212,9 +193,6 @@ function ApartmentsPage() {
                   <td className="px-4 py-3">{apt.max_guests}</td>
                   <td className="px-4 py-3 text-muted-foreground">{apt.description || "—"}</td>
                   <td className="px-4 py-3 text-right">
-                    <button onClick={() => openEdit(apt)} className="p-1.5 hover:bg-muted rounded-lg mr-1">
-                      <Pencil className="size-4" />
-                    </button>
                     <button onClick={() => handleDelete(apt.id, apt.name)} className="p-1.5 hover:bg-red-500/10 text-red-500 rounded-lg">
                       <Trash2 className="size-4" />
                     </button>
