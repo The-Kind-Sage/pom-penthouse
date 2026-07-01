@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageLayout } from "@/components/pom/PageLayout";
 import { Hero } from "@/components/pom/Hero";
+import { VideoScroll } from "@/components/pom/VideoScroll";
 import { Residence } from "@/components/pom/Residence";
 import { Rooms } from "@/components/pom/Rooms";
 import { WhyChoose } from "@/components/pom/WhyChoose";
@@ -58,6 +59,7 @@ function Index() {
   return (
     <PageLayout>
       <Hero />
+      <VideoScroll />
       <Residence />
       <Rooms />
       <WhyChoose />
