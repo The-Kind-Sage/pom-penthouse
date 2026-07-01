@@ -874,7 +874,7 @@ function RoomsListTab() {
   const removeItem = (i: number) => updateField("items", (rooms.items || []).filter((_: any, idx: number) => idx !== i));
 
   const sizeOptions = ["12 m²", "15 m²", "18 m²", "20 m²", "25 m²", "30 m²", "35 m²", "40 m²"];
-  const bedsOptions = ["1 Single Bed", "2 Single Beds", "1 Double Bed", "1 Queen Bed", "1 King Bed", "2 Double Beds", "Bunk Bed"];
+  const bedsOptions = ["1 Single Bed", "1 Single & 1 Double Bed", "2 Single Beds", "1 Double Bed", "1 Queen Bed", "1 King Bed", "2 Double Beds", "Bunk Bed"];
   const viewOptions = ["Courtyard View", "Lake View", "Mountain View", "City View", "Garden View"];
   const featureOptions = ["WiFi", "AC", "Desk", "TV", "Mini Fridge", "Balcony", "Safe", "Coffee Maker", "Hair Dryer", "Iron"];
 

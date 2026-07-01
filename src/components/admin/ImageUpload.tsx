@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Upload, X, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 type ImageUploadProps = {
   value: string;
@@ -20,10 +21,20 @@ export function ImageUpload({ value, onChange, label = "Image", folder = "pom-pe
       const fd = new FormData();
       fd.append("file", file);
       fd.append("folder", folder);
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const token = localStorage.getItem("token");
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch("/api/upload", { method: "POST", body: fd, headers });
       const data = await res.json();
-      if (data.success) onChange(data.url);
-    } catch { }
+      if (data.success) {
+        onChange(data.url);
+        toast.success("Image uploaded");
+      } else {
+        toast.error(data.error || "Upload failed");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Upload failed");
+    }
     setUploading(false);
     if (inputRef.current) inputRef.current.value = "";
   };
