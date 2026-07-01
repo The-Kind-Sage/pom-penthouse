@@ -121,7 +121,7 @@ export function Navbar({ transparent = true }: { transparent?: boolean }) {
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${
         solid
-          ? "bg-background/85 backdrop-blur-xl border-b border-border shadow-[0_4px_30px_-15px_rgba(0,0,0,0.15)]"
+          ? "glass-dark border-b border-white/5 shadow-[0_4px_30px_-15px_rgba(0,0,0,0.3)]"
           : "bg-transparent"
       }`}
     >

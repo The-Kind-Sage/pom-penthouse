@@ -280,3 +280,86 @@
 .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
 .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(201,162,39,0.3); border-radius: 3px; }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: rgba(201,162,39,0.5); }
+
+/* Luxury 3D & Glassmorphism Utilities */
+@utility glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@utility glass-gold {
+  background: rgba(201, 168, 108, 0.08);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border: 1px solid rgba(201, 168, 108, 0.15);
+}
+
+@utility glass-dark {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@utility luxury-shadow {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(201, 168, 108, 0.05);
+}
+
+@utility luxury-shadow-gold {
+  box-shadow: 0 25px 50px -12px rgba(201, 168, 108, 0.15), 0 0 0 1px rgba(201, 168, 108, 0.1);
+}
+
+@utility glow-gold {
+  box-shadow: 0 0 60px -15px rgba(201, 168, 108, 0.4);
+}
+
+@utility text-gradient-gold {
+  background: linear-gradient(135deg, #c9a86c 0%, #f0d89a 50%, #c9a86c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility perspective-1200 {
+  perspective: 1200px;
+}
+
+@utility preserve-3d {
+  transform-style: preserve-3d;
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-6px) rotate(0.5deg); }
+  75% { transform: translateY(4px) rotate(-0.5deg); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes shimmer-gold {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-float-gentle { animation: float-gentle 6s ease-in-out infinite; }
+.animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-shimmer-gold {
+  background: linear-gradient(90deg, transparent, rgba(201,168,108,0.3), transparent);
+  background-size: 200% 100%;
+  animation: shimmer-gold 3s ease-in-out infinite;
+}
+
+/* Canvas container optimizations */
+canvas {
+  touch-action: none;
+  outline: none;
+}
+
+[data-r3f] {
+  outline: none;
+}
