@@ -1,43 +1,22 @@
-import { useState, useRef } from "react";
-import { Upload, X, Loader2, Plus } from "lucide-react";
-import { toast } from "sonner";
+import { useState } from "react";
+import { X, Plus } from "lucide-react";
 
 type MultiImageUploadProps = {
   value: string[];
   onChange: (urls: string[]) => void;
   label?: string;
-  folder?: string;
   maxImages?: number;
 };
 
-export function MultiImageUpload({ value, onChange, label = "Images", folder = "pom-penthouse", maxImages = 10 }: MultiImageUploadProps) {
-  const [uploading, setUploading] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+export function MultiImageUpload({ value, onChange, label = "Images", maxImages = 10 }: MultiImageUploadProps) {
+  const [urlInput, setUrlInput] = useState("");
 
-  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("folder", folder);
-      const token = localStorage.getItem("token");
-      const headers: Record<string, string> = {};
-      if (token) headers["Authorization"] = `Bearer ${token}`;
-      const res = await fetch("/api/upload", { method: "POST", body: fd, headers });
-      const data = await res.json();
-      if (data.success) {
-        onChange([...value, data.url]);
-        toast.success("Image uploaded");
-      } else {
-        toast.error(data.error || "Upload failed");
-      }
-    } catch (err: any) {
-      toast.error(err?.message || "Upload failed");
-    }
-    setUploading(false);
-    if (inputRef.current) inputRef.current.value = "";
+  const addUrl = () => {
+    const trimmed = urlInput.trim();
+    if (!trimmed) return;
+    if (value.length >= maxImages) return;
+    onChange([...value, trimmed]);
+    setUrlInput("");
   };
 
   const removeImage = (index: number) => {
@@ -53,23 +32,29 @@ export function MultiImageUpload({ value, onChange, label = "Images", folder = "
         {value.map((url, i) => (
           <div key={i} className="relative w-full rounded-xl overflow-hidden border group">
             <img src={url} alt={`${label} ${i + 1}`} className="w-full h-32 object-cover" />
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-              <button type="button" onClick={() => removeImage(i)}
-                className="p-1.5 rounded-lg bg-red-500/70 hover:bg-red-500 text-white transition">
-                <X size={16} />
-              </button>
-            </div>
+            <button type="button" onClick={() => removeImage(i)}
+              className="absolute top-2 right-2 p-1.5 rounded-lg bg-red-500/70 hover:bg-red-500 text-white transition opacity-0 group-hover:opacity-100">
+              <X size={16} />
+            </button>
           </div>
         ))}
-        {canAddMore && (
-          <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading}
-            className="w-full h-32 rounded-xl border-2 border-dashed border-border hover:border-gold/50 transition flex flex-col items-center justify-center gap-2 text-foreground/40 hover:text-foreground/70 disabled:opacity-50">
-            {uploading ? <Loader2 className="size-6 animate-spin" /> : <Plus className="size-6" />}
-            <span className="text-xs">{uploading ? "Uploading..." : "Add Image"}</span>
-          </button>
-        )}
       </div>
-      <input ref={inputRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
+      {canAddMore && (
+        <div className="flex gap-2">
+          <input
+            type="url"
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addUrl())}
+            placeholder="Paste image URL..."
+            className="flex-1 rounded-xl border px-4 py-2 bg-transparent focus:ring-2 focus:ring-primary outline-none text-sm"
+          />
+          <button type="button" onClick={addUrl}
+            className="px-3 py-2 rounded-lg border hover:bg-muted text-sm flex items-center gap-1">
+            <Plus className="size-4" /> Add
+          </button>
+        </div>
+      )}
     </div>
   );
 }
