@@ -290,7 +290,7 @@ function Hero() {
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.8, x: 100 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-6 right-6 z-50 sm:top-8 sm:right-8 md:top-10 md:right-10"
+            className="fixed top-24 right-6 z-50 sm:top-28 sm:right-8 md:top-28 md:right-10"
           >
             <div
               className="group relative w-[220px] h-[124px] sm:w-[280px] sm:h-[158px] md:w-[320px] md:h-[180px] overflow-hidden rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] hover:shadow-[0_25px_70px_-15px_rgba(201,168,108,0.3)] transition-all duration-500 hover:scale-105 cursor-pointer"
