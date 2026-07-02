@@ -112,14 +112,14 @@ function LuxuryRoomCard({ image, title, description, price, features, onBook }: 
         {/* Gold accent line */}
         <div className="mb-4 h-px bg-gradient-to-r from-gold/60 via-gold/30 to-transparent" />
 
-        <p className="text-[13px] text-white/50 leading-relaxed line-clamp-2">{description}</p>
+        <p className="text-[13px] text-white/70 leading-relaxed line-clamp-2">{description}</p>
 
         {/* Features */}
         <div className="mt-4 flex flex-wrap gap-1.5">
           {features.map((feature) => (
             <span
               key={feature}
-              className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white/50 transition-all duration-300 group-hover:border-gold/20 group-hover:text-gold/70"
+              className="rounded-full border border-white/15 bg-white/[0.06] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white/60 transition-all duration-300 group-hover:border-gold/30 group-hover:text-gold"
             >
               {feature}
             </span>
