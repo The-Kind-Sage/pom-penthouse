@@ -4,6 +4,7 @@ import { useSettings } from "@/lib/hooks";
 import { LuxuryRoomCard } from "@/components/three/LuxuryRoomCard";
 
 const fadeUp = { hidden: { opacity: 0, y: 32 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const } } };
+const scaleIn = { hidden: { opacity: 0, scale: 0.92 }, show: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
 
 function openBooking(apartment?: string, image?: string) {
@@ -37,10 +38,10 @@ export function Residence() {
         </div>
         <motion.div
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={stagger}
-          className="mt-16 perspective-1200 grid gap-7 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-16 grid gap-7 sm:grid-cols-2 lg:grid-cols-3"
         >
           {apartments.map((a: any, i: number) => (
-            <motion.div key={a.name} variants={fadeUp}>
+            <motion.div key={a.name} variants={scaleIn}>
               <LuxuryRoomCard
                 image={a.images?.[0] || a.image || "/images/placeholder.jpg"}
                 title={a.name}
