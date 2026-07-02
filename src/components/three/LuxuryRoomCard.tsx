@@ -130,6 +130,16 @@ function LuxuryRoomCard({ image, title, description, price, features, onBook }: 
             </span>
           ))}
         </div>
+
+        {/* Book Now button */}
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={onBook}
+          className="mt-5 w-full rounded-full bg-gold px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:bg-gold/90 hover:shadow-[0_0_30px_rgba(201,168,108,0.3)]"
+        >
+          Book Now
+        </motion.button>
       </div>
 
       {/* Hover border glow */}
