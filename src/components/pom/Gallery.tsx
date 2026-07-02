@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 import { useSettings } from "@/lib/hooks";
 import { IMAGES } from "@/lib/images";
 import { ui } from "@/lib/ui-store";
 import { blurIn, staggerFast } from "@/lib/animations";
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 
 const SPANS = ["", "", "row-span-2", "", "col-span-2", ""];
 
@@ -20,43 +20,64 @@ function useGalleryImages() {
   });
 }
 
-function GalleryImage({ g, index, onClick }: { g: { src: string; alt: string; span: string }; index: number; onClick: () => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const rotateX = useSpring(useMotionValue(0), { stiffness: 100, damping: 20 });
-  const rotateY = useSpring(useMotionValue(0), { stiffness: 100, damping: 20 });
+// CSS-only 3D tilt via custom properties.
+//
+// Why: the previous implementation used 4 useMotionValue + 2 useSpring per
+// card. With 15 gallery cards that's 90 reactive JS values all subscribing
+// to pointermove at the same time, keeping the main thread busy every frame.
+//
+// The new approach writes two CSS custom properties (--rx, --ry) directly on
+// the element's style object inside a native pointermove handler. CSS picks
+// them up in a transform declaration. No React state, no RAF loop, no Framer
+// Motion overhead — the tilt is handled entirely by the browser's style engine
+// and composited on the GPU.
+function GalleryImage({
+  g,
+  onClick,
+}: {
+  g: { src: string; alt: string; span: string };
+  index: number;
+  onClick: () => void;
+}) {
+  const ref = useRef<HTMLElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x);
-    mouseY.set(y);
-    rotateX.set(-y * 5);
-    rotateY.set(x * 5);
-  };
+    // Write directly to style — bypasses React reconciler entirely
+    el.style.setProperty("--rx", `${(-y * 5).toFixed(2)}deg`);
+    el.style.setProperty("--ry", `${(x * 5).toFixed(2)}deg`);
+  }, []);
 
-  const handleMouseLeave = () => {
-    rotateX.set(0);
-    rotateY.set(0);
-  };
+  const handlePointerLeave = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+  }, []);
 
   return (
     <motion.figure
+      // @ts-expect-error — motion.figure does accept ref
       ref={ref}
       variants={blurIn}
-      style={{ rotateX, rotateY, transformPerspective: 1000 }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={`group relative cursor-pointer overflow-hidden rounded-lg bg-muted ${g.span}`}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      className={`gallery-card group relative cursor-pointer overflow-hidden rounded-lg bg-muted ${g.span}`}
       onClick={onClick}
     >
       <img
         src={g.src}
         alt={g.alt}
         loading="lazy"
+        decoding="async"
+        // width/height prevent CLS — gallery grid cells have explicit auto-rows
+        // heights, so these just need to preserve aspect-ratio during decode.
+        width={600}
+        height={400}
         className="size-full object-cover transition-all duration-700 ease-out group-hover:scale-110"
       />
 
@@ -123,7 +144,6 @@ export function Gallery({ preview: isPreview }: { preview?: boolean }) {
         <motion.div
           initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }} variants={staggerFast}
           className="mt-16 grid auto-rows-[180px] grid-cols-2 gap-3 sm:auto-rows-[220px] sm:grid-cols-3 lg:grid-cols-4 lg:gap-4"
-          style={{ perspective: 1000 }}
         >
           {displayed.map((g, i) => (
             <GalleryImage key={`${g.src}-${i}`} g={g} index={i} onClick={() => open(i)} />

@@ -1,20 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 import { PageLayout } from "@/components/pom/PageLayout";
 import { Hero } from "@/components/pom/Hero";
+// Above-the-fold sections are imported eagerly so they ship in the initial
+// bundle and render without any dynamic-import waterfall.
 import { Residence } from "@/components/pom/Residence";
-import { Rooms } from "@/components/pom/Rooms";
-import { WhyChoose } from "@/components/pom/WhyChoose";
-import { Amenities } from "@/components/pom/Amenities";
-import { Lifestyle } from "@/components/pom/Lifestyle";
-import { Gallery } from "@/components/pom/Gallery";
-import { Location } from "@/components/pom/Location";
-import { Testimonial } from "@/components/pom/Testimonial";
-import { LongTerm } from "@/components/pom/LongTerm";
-import { About } from "@/components/pom/About";
-import { Offer } from "@/components/pom/Offer";
-import { FAQ } from "@/components/pom/FAQ";
-import { Statistics } from "@/components/pom/Statistics";
 import { FAQJsonLd, BreadcrumbJsonLd } from "@/components/pom/JsonLd";
+
+// Below-the-fold sections are code-split with React.lazy.
+// The browser downloads these chunks only after the initial paint is done,
+// which shrinks the main-thread parse/execute cost at startup and directly
+// improves TTI and INP scores.
+const Rooms = lazy(() => import("@/components/pom/Rooms").then((m) => ({ default: m.Rooms })));
+const WhyChoose = lazy(() => import("@/components/pom/WhyChoose").then((m) => ({ default: m.WhyChoose })));
+const Amenities = lazy(() => import("@/components/pom/Amenities").then((m) => ({ default: m.Amenities })));
+const Statistics = lazy(() => import("@/components/pom/Statistics").then((m) => ({ default: m.Statistics })));
+const Lifestyle = lazy(() => import("@/components/pom/Lifestyle").then((m) => ({ default: m.Lifestyle })));
+const Gallery = lazy(() => import("@/components/pom/Gallery").then((m) => ({ default: m.Gallery })));
+const Location = lazy(() => import("@/components/pom/Location").then((m) => ({ default: m.Location })));
+const Testimonial = lazy(() => import("@/components/pom/Testimonial").then((m) => ({ default: m.Testimonial })));
+const LongTerm = lazy(() => import("@/components/pom/LongTerm").then((m) => ({ default: m.LongTerm })));
+const About = lazy(() => import("@/components/pom/About").then((m) => ({ default: m.About })));
+const FAQ = lazy(() => import("@/components/pom/FAQ").then((m) => ({ default: m.FAQ })));
+const Offer = lazy(() => import("@/components/pom/Offer").then((m) => ({ default: m.Offer })));
 
 const FAQ_DATA = [
   { q: "What types of apartments are available at POM'S Penthouse?", a: "We offer 1 BHK, 2 BHK, 3 BHK, and Studio apartments, as well as Single, Double, and Twin bed rooms — all fully furnished in Lakeside, Pokhara." },
@@ -27,7 +35,10 @@ const FAQ_DATA = [
 ];
 
 export const Route = createFileRoute("/")({
-  ssr: false,
+  // ssr: false was removed — TanStack Start will now server-render the page.
+  // This gives crawlers and first-time visitors a fully-formed HTML document,
+  // dramatically improving LCP because content is in the initial HTML payload
+  // rather than appearing after client-side JS executes.
   head: () => ({
     meta: [
       { title: "POM'S Penthouse — Luxury Serviced Apartments in Lakeside, Pokhara" },
@@ -54,23 +65,60 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+// Minimal skeleton shown while a below-fold chunk is loading.
+// height matches the approximate section height so there is no CLS when
+// the real content swaps in. bg-background keeps it invisible against the page.
+function SectionSkeleton() {
+  return <div className="w-full py-24 bg-background" aria-hidden="true" />;
+}
+
 function Index() {
   return (
     <PageLayout>
+      <FAQJsonLd data={FAQ_DATA} />
+      <BreadcrumbJsonLd />
+
+      {/* ── Above fold — eagerly loaded ── */}
       <Hero />
       <Residence />
-      <Rooms />
-      <WhyChoose />
-      <Amenities />
-      <Statistics />
-      <Lifestyle />
-      <Gallery preview />
-      <Location />
-      <Testimonial />
-      <LongTerm />
-      <About />
-      <FAQ />
-      <Offer />
+
+      {/* ── Below fold — code-split + content-visibility: auto ── */}
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><Rooms /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><WhyChoose /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><Amenities /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><Statistics /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><Lifestyle /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><Gallery preview /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><Location /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><Testimonial /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><LongTerm /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><About /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><FAQ /></div>
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <div className="section-offscreen"><Offer /></div>
+      </Suspense>
     </PageLayout>
   );
 }

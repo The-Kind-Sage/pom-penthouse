@@ -103,10 +103,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "canonical", href: "https://pom-penthouse.vercel.app" },
       { rel: "alternate", hrefLang: "en", href: "https://pom-penthouse.vercel.app" },
       { rel: "alternate", hrefLang: "ne", href: "https://pom-penthouse.vercel.app" },
+
+      // ── Performance: preconnect to font origins ──────────────────────────
+      // Establishes TCP+TLS connections to Google Fonts CDN before the
+      // browser discovers the @import — shaves ~150–300 ms off font load time.
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+
+      // ── Load the display + body fonts ───────────────────────────────────
+      // Using a single combined stylesheet request (fewer round trips).
+      // display=swap is baked into the URL so the browser renders fallback
+      // text immediately and swaps in the web font when it arrives —
+      // preventing invisible text (FOIT) which hurts LCP.
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap",
+      },
     ],
-    scripts: [
-      { src: "https://widgets.sociablekit.com/google-reviews/widget.js", async: true },
-    ],
+    scripts: [],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -115,6 +129,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  // Defer the third-party reviews widget until after hydration is complete.
+  // Loading it in <head> scripts blocks the render pipeline on every page
+  // load. This useEffect approach means it only runs client-side, after
+  // React has hydrated and the page is already interactive.
+  useEffect(() => {
+    // Guard: don't add a duplicate script if it somehow ran already
+    if (document.querySelector('script[src*="sociablekit"]')) return;
+    const s = document.createElement("script");
+    s.src = "https://widgets.sociablekit.com/google-reviews/widget.js";
+    s.async = true;
+    document.body.appendChild(s);
+    return () => {
+      // Clean up on unmount (dev HMR cycles)
+      s.remove();
+    };
+  }, []);
+
   return (
     <html lang="en">
       <head>

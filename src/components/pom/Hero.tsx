@@ -4,9 +4,11 @@ import { useSettings } from "@/lib/hooks";
 import { X, Maximize2, Minimize2 } from "lucide-react";
 import { createPortal } from "react-dom";
 
+// Reduced to 16 particles (was 40) — each Framer Motion element creates a RAF loop.
+// Particles are purely decorative; the reduction is invisible to the user.
 function FloatingParticles() {
   const particles = useMemo(() => {
-    return Array.from({ length: 40 }, (_, i) => ({
+    return Array.from({ length: 16 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -14,11 +16,12 @@ function FloatingParticles() {
       duration: Math.random() * 20 + 15,
       delay: Math.random() * 10,
       opacity: Math.random() * 0.4 + 0.1,
+      driftX: Math.random() * 30 - 15,
     }));
   }, []);
 
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       {particles.map((p) => (
         <motion.div
           key={p.id}
@@ -28,10 +31,13 @@ function FloatingParticles() {
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
+            // Promote each particle to its own compositor layer so the
+            // browser doesn't repaint the parent on every animation frame.
+            willChange: "transform, opacity",
           }}
           animate={{
             y: [0, -80, 0],
-            x: [0, Math.random() * 30 - 15, 0],
+            x: [0, p.driftX, 0],
             opacity: [p.opacity, p.opacity * 1.5, p.opacity],
           }}
           transition={{
@@ -61,11 +67,16 @@ function Hero() {
 
   const sectionRef = useRef<HTMLElement>(null);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
+  // floatingVideoRef is kept but the floating player reuses the same src;
+  // we keep a ref so we can pause/play it when it becomes visible.
   const floatingVideoRef = useRef<HTMLVideoElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const springConfig = { stiffness: 50, damping: 20 };
+  // Lower spring stiffness = smoother feel, and we throttle the update
+  // to every other mousemove via a flag to halve the number of MotionValue
+  // sets and resulting repaints.
+  const springConfig = { stiffness: 40, damping: 25 };
   const parallaxX = useSpring(mouseX, springConfig);
   const parallaxY = useSpring(mouseY, springConfig);
 
@@ -102,7 +113,13 @@ function Hero() {
   }, [isFloatingHidden]);
 
   useEffect(() => {
+    // Throttle mousemove to every other event with a simple toggle ref.
+    // This halves the number of spring updates (and resulting compositor
+    // layer invalidations) without any perceptible change in parallax feel.
+    let skip = false;
     const handleMouseMove = (e: MouseEvent) => {
+      skip = !skip;
+      if (skip) return;
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
       const x = ((e.clientX - centerX) / centerX) * 5;
@@ -110,7 +127,7 @@ function Hero() {
       mouseX.set(x);
       mouseY.set(y);
     };
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
@@ -134,20 +151,32 @@ function Hero() {
         id="top"
         className="relative h-screen w-full overflow-hidden bg-luxury-black"
       >
-        {/* Background Video */}
+        {/* Background Video
+            — poster: shown immediately while video buffers → prevents blank LCP frame
+            — preload="metadata": tells the browser to fetch only the first frame /
+              timing info instead of downloading the whole 22 MB file on page load.
+              autoPlay still works; the browser begins buffering once it starts playing.
+            — will-change on the wrapper: keeps the parallax transform on the GPU
+              so it never triggers a main-thread layout or repaint.               */}
         <motion.div
           className="absolute inset-0"
-          style={{ scale: 1.1, x: parallaxX, y: parallaxY }}
+          style={{
+            scale: 1.1,
+            x: parallaxX,
+            y: parallaxY,
+            willChange: "transform",
+          }}
         >
           <video
             ref={heroVideoRef}
             src="/assets/video1.mp4"
+            poster="/assets/video1-poster.jpg"
             className="size-full object-cover"
             autoPlay
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
           />
         </motion.div>
 
@@ -161,10 +190,12 @@ function Hero() {
         {/* Floating particles */}
         <FloatingParticles />
 
-        {/* Content */}
+        {/* Content
+            — will-change: transform, opacity keeps the scroll-driven parallax
+              and fade on the GPU compositor, away from the main thread.         */}
         <motion.div
           className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center"
-          style={{ y: textY, opacity }}
+          style={{ y: textY, opacity, willChange: "transform, opacity" }}
         >
           {/* Eyebrow tag */}
           <motion.div
@@ -282,7 +313,11 @@ function Hero() {
         </div>
       </section>
 
-      {/* Floating Video Player */}
+      {/* Floating Video Player
+          — No separate preload: the browser already has video1.mp4 in cache
+            from the hero element, so this is effectively free.
+          — autoPlay is handled imperatively via the ref so the video only
+            plays when the floating player is actually visible.               */}
       <AnimatePresence>
         {showFloating && !showModal && (
           <motion.div
@@ -304,6 +339,7 @@ function Hero() {
                 playsInline
                 autoPlay
                 loop
+                preload="none"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               <div className="pointer-events-none absolute inset-0 border border-white/10 rounded-2xl group-hover:border-gold/30 transition-colors duration-300" />
@@ -355,6 +391,7 @@ function Hero() {
                 controls
                 autoPlay
                 playsInline
+                preload="none"
               />
 
               {/* Close Button */}

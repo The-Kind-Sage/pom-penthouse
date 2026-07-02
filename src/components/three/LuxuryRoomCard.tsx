@@ -24,6 +24,8 @@ function LuxuryRoomCard({ image, title, description, price, features, onBook }: 
           alt={title}
           loading="lazy"
           decoding="async"
+          width={800}
+          height={600}
           className="size-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />

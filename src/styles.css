@@ -363,3 +363,88 @@ canvas {
 [data-r3f] {
   outline: none;
 }
+
+/* ─── Gallery card CSS-tilt ────────────────────────────────────────────────
+   The tilt is driven by --rx / --ry custom properties written directly from
+   a pointermove handler (no React state, no Framer Motion values).
+   will-change: transform tells the browser to promote this element to its
+   own compositor layer up-front so the 3D rotation never triggers a repaint.
+   The transition gives a smooth spring-like return on pointer leave.
+   ─────────────────────────────────────────────────────────────────────────── */
+.gallery-card {
+  --rx: 0deg;
+  --ry: 0deg;
+  transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.15s ease-out;
+  will-change: transform;
+}
+.gallery-card:hover {
+  /* Reset transition speed on enter so it feels snappy while tracking */
+  transition: transform 0.05s linear;
+}
+
+/* ─── Core Web Vitals: animation GPU promotion ──────────────────────────────
+   Elements using kenburns or float animations are promoted to their own
+   compositor layers. This means the animation runs entirely on the GPU
+   thread and never triggers a main-thread layout or paint.
+
+   IMPORTANT: will-change has memory cost — only apply it to elements
+   that are actively animating, not to entire sections.
+   ─────────────────────────────────────────────────────────────────────────── */
+.kenburns {
+  animation: kenburns 25s infinite alternate ease-in-out;
+  will-change: transform;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+  will-change: opacity;
+}
+
+/* Scroll indicator bounce in Hero */
+[class*="scroll"] .animate-bounce,
+.hero-scroll-bounce {
+  will-change: transform;
+}
+
+/* ─── font-display: swap ────────────────────────────────────────────────────
+   Ensures text is visible with the fallback font while web fonts load.
+   Without this, browsers can hide text for up to 3 s (FOIT), which directly
+   worsens LCP. The Google Fonts URL in __root.tsx already includes
+   display=swap; this @font-face rule covers any locally declared fonts.
+   ─────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Playfair Display";
+  font-display: swap;
+  src: local("Playfair Display");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-display: swap;
+  src: local("Inter");
+}
+
+/* ─── Content-visibility for off-screen sections ────────────────────────────
+   content-visibility: auto tells the browser to skip rendering work for
+   sections that are outside the viewport. The browser still lays them out
+   (so scrollbar height is correct) but defers paint and compositing until
+   the section is about to scroll into view.
+
+   contain-intrinsic-size provides a size estimate so the browser can
+   calculate scroll height without rendering. Use a conservative value
+   (actual sections are typically 500–900px tall).
+
+   Apply only to full-width section elements below the fold — NOT to
+   elements that contain position:fixed/sticky children (that would break
+   their stacking context).
+   ─────────────────────────────────────────────────────────────────────────── */
+.section-offscreen {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}

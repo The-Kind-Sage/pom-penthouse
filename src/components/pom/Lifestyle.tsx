@@ -44,7 +44,13 @@ export function Lifestyle() {
                   <motion.img
                     whileHover={{ scale: 1.03 }}
                     transition={{ duration: 0.6 }}
-                    src={item.image} alt={item.title} loading="lazy" className="aspect-[4/3] w-full object-cover"
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    decoding="async"
+                    width={800}
+                    height={600}
+                    className="aspect-[4/3] w-full object-cover"
                   />
                 </motion.div>
               )}
