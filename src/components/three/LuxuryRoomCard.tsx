@@ -26,10 +26,10 @@ function LuxuryRoomCard({ image, title, description, price, features, onBook }: 
           decoding="async"
           className="size-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/80 via-luxury-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
         <div className="absolute inset-x-5 bottom-5 text-white">
-          <h3 className="font-display text-xl font-medium">{title}</h3>
-          <p className="mt-1 text-xs text-white/60">{description}</p>
+          <h3 className="font-display text-xl font-medium drop-shadow-lg">{title}</h3>
+          <p className="mt-1 text-xs text-white/90 drop-shadow-md">{description}</p>
         </div>
       </div>
       <div className="flex flex-1 flex-col p-6">
