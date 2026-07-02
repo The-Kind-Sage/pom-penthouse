@@ -61,7 +61,6 @@ function GalleryImage({
 
   return (
     <motion.figure
-      // @ts-expect-error — motion.figure does accept ref
       ref={ref}
       variants={blurIn}
       onPointerMove={handlePointerMove}

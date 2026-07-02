@@ -5,7 +5,7 @@ import { Hero } from "@/components/pom/Hero";
 // Above-the-fold sections are imported eagerly so they ship in the initial
 // bundle and render without any dynamic-import waterfall.
 import { Residence } from "@/components/pom/Residence";
-import { FAQJsonLd, BreadcrumbJsonLd } from "@/components/pom/JsonLd";
+import { FAQJsonLd } from "@/components/pom/JsonLd";
 
 // Below-the-fold sections are code-split with React.lazy.
 // The browser downloads these chunks only after the initial paint is done,
@@ -35,10 +35,11 @@ const FAQ_DATA = [
 ];
 
 export const Route = createFileRoute("/")({
-  // ssr: false was removed — TanStack Start will now server-render the page.
-  // This gives crawlers and first-time visitors a fully-formed HTML document,
-  // dramatically improving LCP because content is in the initial HTML payload
-  // rather than appearing after client-side JS executes.
+  // ssr: false keeps client-side rendering — same as the original.
+  // Removing it broke components that use browser APIs (window, document)
+  // during the server render pass. SSR can be re-enabled later once each
+  // section component is audited for SSR safety.
+  ssr: false,
   head: () => ({
     meta: [
       { title: "POM'S Penthouse — Luxury Serviced Apartments in Lakeside, Pokhara" },
@@ -75,8 +76,7 @@ function SectionSkeleton() {
 function Index() {
   return (
     <PageLayout>
-      <FAQJsonLd data={FAQ_DATA} />
-      <BreadcrumbJsonLd />
+      <FAQJsonLd items={FAQ_DATA} />
 
       {/* ── Above fold — eagerly loaded ── */}
       <Hero />
