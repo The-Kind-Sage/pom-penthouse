@@ -1,5 +1,6 @@
 import { useState, useRef, type ReactNode } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 interface LuxuryRoomCardProps {
   image: string;
@@ -18,11 +19,11 @@ function LuxuryRoomCard({ image, title, description, price, features, onBook }: 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), {
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [6, -6]), {
     stiffness: 300,
     damping: 30,
   });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), {
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), {
     stiffness: 300,
     damping: 30,
   });
@@ -55,76 +56,70 @@ function LuxuryRoomCard({ image, title, description, price, features, onBook }: 
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="group relative overflow-hidden rounded-2xl bg-background will-change-transform"
+      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.03] backdrop-blur-xl will-change-transform transition-all duration-500 hover:border-gold/30 hover:shadow-[0_20px_60px_-15px_rgba(201,168,108,0.15)]"
     >
-      {/* Image container with parallax */}
-      <div className="relative aspect-[4/3] overflow-hidden">
+      {/* Image container */}
+      <div className="relative aspect-[16/10] overflow-hidden">
         <motion.img
           src={image}
           alt={title}
-          className="size-full object-cover transition-transform duration-700 ease-out"
+          className="size-full object-cover"
           style={{
-            scale: useSpring(isHovered ? 1.1 : 1, { stiffness: 200, damping: 25 }),
+            scale: useSpring(isHovered ? 1.08 : 1, { stiffness: 200, damping: 25 }),
           }}
         />
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/80 via-luxury-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
         {/* Gold shimmer on hover */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 0.15 : 0 }}
-          transition={{ duration: 0.5 }}
-          className="absolute inset-0 bg-gradient-to-br from-gold/30 via-transparent to-gold/10"
+          animate={{ opacity: isHovered ? 0.2 : 0 }}
+          transition={{ duration: 0.6 }}
+          className="absolute inset-0 bg-gradient-to-br from-gold/20 via-transparent to-gold/5"
         />
 
-        {/* Price badge */}
-        <div className="absolute right-4 top-4 rounded-full bg-luxury-black/60 px-4 py-2 backdrop-blur-md">
-          <span className="text-xs font-semibold text-gold">{price}</span>
+        {/* Price badge - top left */}
+        <div className="absolute left-5 top-5">
+          <div className="rounded-full bg-black/40 px-4 py-1.5 backdrop-blur-md border border-white/10">
+            <span className="text-sm font-semibold text-gold">{price}<span className="text-[10px] text-white/50 ml-1">/night</span></span>
+          </div>
         </div>
 
-        {/* Hover reveal overlay */}
+        {/* View Details indicator - top right */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.4 }}
-          className="absolute inset-0 flex items-center justify-center bg-luxury-black/40 backdrop-blur-[2px]"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1 : 0.8 }}
+          transition={{ duration: 0.3 }}
+          className="absolute right-5 top-5"
         >
-          <motion.button
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: isHovered ? 0 : 20, opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            onClick={onBook}
-            className="rounded-full bg-gold px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_30px_rgba(201,168,108,0.4)]"
-          >
-            Book Now
-          </motion.button>
+          <div className="size-9 rounded-full bg-gold/90 flex items-center justify-center">
+            <ArrowRight className="size-4 text-black -rotate-45" />
+          </div>
         </motion.div>
+
+        {/* Title overlay at bottom of image */}
+        <div className="absolute inset-x-0 bottom-0 p-5">
+          <h3 className="font-display text-2xl font-medium text-white drop-shadow-lg">
+            {title}
+          </h3>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="relative p-6">
+      <div className="p-5 pt-4">
         {/* Gold accent line */}
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: isHovered ? "3rem" : "1.5rem" }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-4 h-px bg-gold"
-        />
+        <div className="mb-4 h-px bg-gradient-to-r from-gold/60 via-gold/30 to-transparent" />
 
-        <h3 className="font-display text-2xl font-medium text-luxury-black dark:text-white">
-          {title}
-        </h3>
-
-        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{description}</p>
+        <p className="text-[13px] text-white/50 leading-relaxed line-clamp-2">{description}</p>
 
         {/* Features */}
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-1.5">
           {features.map((feature) => (
             <span
               key={feature}
-              className="rounded-full bg-muted px-3 py-1 text-[10px] uppercase tracking-wider text-muted-foreground transition-colors duration-300 group-hover:bg-gold/10 group-hover:text-gold"
+              className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white/50 transition-all duration-300 group-hover:border-gold/20 group-hover:text-gold/70"
             >
               {feature}
             </span>
@@ -133,12 +128,13 @@ function LuxuryRoomCard({ image, title, description, price, features, onBook }: 
 
         {/* Book Now button */}
         <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={onBook}
-          className="mt-5 w-full rounded-full bg-gold px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:bg-gold/90 hover:shadow-[0_0_30px_rgba(201,168,108,0.3)]"
+          className="mt-5 w-full rounded-full border border-gold/40 bg-gold/10 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold transition-all duration-500 hover:bg-gold hover:text-black hover:shadow-[0_0_40px_rgba(201,168,108,0.3)] hover:border-gold flex items-center justify-center gap-2"
         >
           Book Now
+          <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
         </motion.button>
       </div>
 
@@ -147,7 +143,7 @@ function LuxuryRoomCard({ image, title, description, price, features, onBook }: 
         initial={{ opacity: 0 }}
         animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.5 }}
-        className="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(201,168,108,0.3),0_0_60px_-15px_rgba(201,168,108,0.2)]"
+        className="pointer-events-none absolute inset-0 rounded-3xl shadow-[inset_0_0_0_1px_rgba(201,168,108,0.2)]"
       />
     </motion.div>
   );
